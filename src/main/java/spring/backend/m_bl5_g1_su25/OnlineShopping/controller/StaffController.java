@@ -2,7 +2,6 @@ package spring.backend.m_bl5_g1_su25.OnlineShopping.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +19,11 @@ public class StaffController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @GetMapping("/dashboard")
     public String staffDashboard(Authentication authentication, Model model) {
-        model.addAttribute("username", authentication.getName());
+        // Get user from database to get actual name
+        userService.findByEmail(authentication.getName())
+                .ifPresent(user -> model.addAttribute("name", user.getName()));
         model.addAttribute("role", "STAFF");
         return "staff/staff-main-screen";
     }
@@ -52,56 +50,22 @@ public class StaffController {
             newUser.setPassword(password); // Will be encoded in UserService
 
             // Set role based on selection
-            switch (role.toUpperCase()) {
-                case "STAFF":
-                    newUser.setRole(User.UserRole.STAFF);
-                    break;
-                case "DELIVERER":
-                    newUser.setRole(User.UserRole.DELIVERER);
-                    break;
-                case "CUSTOMER":
-                default:
-                    newUser.setRole(User.UserRole.CUSTOMER);
-                    break;
-            }
+            User.UserRole userRole = switch (role.toUpperCase()) {
+                case "STAFF" -> User.UserRole.STAFF;
+                case "DELIVERER" -> User.UserRole.DELIVERER;
+                case "CUSTOMER" -> User.UserRole.CUSTOMER;
+                default -> User.UserRole.CUSTOMER;
+            };
+            newUser.setRole(userRole);
 
             userService.registerUser(newUser);
             redirectAttributes.addFlashAttribute("success",
-                "Account created successfully for " + name + " with role " + role + ". Email: " + email + ", Password: " + password);
+                "Account created successfully for " + name + " with role " + role);
 
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 
         return "redirect:/staff/create-account";
-    }
-
-    // Thêm endpoint để tạo tài khoản admin đầu tiên
-    @GetMapping("/create-initial-admin")
-    public String createInitialAdmin(RedirectAttributes redirectAttributes) {
-        try {
-            // Kiểm tra xem đã có admin chưa
-            if (userService.findByEmail("admin@smartshop.com").isPresent()) {
-                redirectAttributes.addFlashAttribute("error", "Admin account already exists!");
-                return "redirect:/staff/dashboard";
-            }
-
-            User adminUser = new User();
-            adminUser.setName("System Admin");
-            adminUser.setEmail("admin@smartshop.com");
-            adminUser.setPhoneNumber("0123456789");
-            adminUser.setAddress("Smart Shop HQ");
-            adminUser.setPassword("admin123");
-            adminUser.setRole(User.UserRole.STAFF);
-
-            userService.registerUser(adminUser);
-            redirectAttributes.addFlashAttribute("success",
-                "Initial admin account created! Email: admin@smartshop.com, Password: admin123");
-
-        } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
-        }
-
-        return "redirect:/staff/dashboard";
     }
 }

@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.Authorized.Login;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.Authorized.Logout;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.service.CustomUserDetailsService;
 
 @Configuration
@@ -18,6 +20,12 @@ public class SecurityConfig {
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
+
+    @Autowired
+    private Login loginHandler;
+
+    @Autowired
+    private Logout logoutHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -42,30 +50,13 @@ public class SecurityConfig {
                 .loginPage("/login")
                 .usernameParameter("username") // Email is used as username
                 .passwordParameter("password")
-                .successHandler((request, response, authentication) -> {
-                    // Redirect based on user role after successful login
-                    String role = authentication.getAuthorities().iterator().next().getAuthority();
-                    switch (role) {
-                        case "ROLE_STAFF":
-                            response.sendRedirect("/staff/dashboard");
-                            break;
-                        case "ROLE_DELIVERER":
-                            response.sendRedirect("/deliverer/dashboard");
-                            break;
-                        case "ROLE_CUSTOMER":
-                            response.sendRedirect("/dashboard");
-                            break;
-                        default:
-                            response.sendRedirect("/dashboard");
-                            break;
-                    }
-                })
+                .successHandler(loginHandler)
                 .failureUrl("/login?error=true")
                 .permitAll()
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout=true")
+                .logoutSuccessHandler(logoutHandler)
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
