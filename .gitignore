@@ -1,0 +1,87 @@
+# ----------------------
+# Maven
+# ----------------------
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+**/mvnw
+**/mvnw.cmd
+
+# ----------------------
+# Gradle
+# ----------------------
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+**/gradlew
+**/gradlew.bat
+
+# ----------------------
+# Spring Boot
+# ----------------------
+# Logs
+*.log
+
+# Spring Boot dev tools restart files
+.spring-boot-devtools.properties
+spring-boot-devtools.properties
+
+# ----------------------
+# IntelliJ IDEA
+# ----------------------
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# ----------------------
+# Eclipse
+# ----------------------
+.project
+.classpath
+.settings/
+bin/
+
+# ----------------------
+# VS Code
+# ----------------------
+.vscode/
+
+# ----------------------
+# OS-specific
+# ----------------------
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# ----------------------
+# Other
+# ----------------------
+# Java
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Backup files
+*.bak
+*.tmp
+*.swp
+
+# ----------------------
+# Sensitive configuration
+# ----------------------
+# Keep local environment files out of Git
+application-*.properties
+application-*.yml
+.env
