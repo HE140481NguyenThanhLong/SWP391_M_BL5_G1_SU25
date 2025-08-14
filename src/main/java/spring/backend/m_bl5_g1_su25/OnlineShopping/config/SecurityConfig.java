@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .requestMatchers("/signup", "/login", "/css/**", "/js/**", "/images/**").permitAll()
                 .requestMatchers("/", "/dashboard").permitAll()
                 .requestMatchers("/notifications/**").permitAll()
+                    .requestMatchers("/product/**").permitAll()
 
                 // Role-based access control
                 .requestMatchers("/staff/**").hasRole("STAFF")
