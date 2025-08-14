@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Shop - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold">Smart Shop</h1>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <!-- Notification Bell -->
+                    <div class="relative">
+                        <button id="notificationBtn" class="relative hover:text-blue-200 focus:outline-none">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-3.5-3.5a7 7 0 1 0-9.9 0L10 17h5a2 2 0 0 1 0 4H9a2 2 0 0 1 0-4z"/>
+                            </svg>
+                            <!-- Notification badge -->
+                            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                        </button>
+                        <!-- Notification dropdown -->
+                        <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg z-50">
+                            <div class="py-2">
+                                <div class="px-4 py-2 text-sm text-gray-700 border-b">
+                                    <strong>Notifications</strong>
+                                </div>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <div class="font-medium">Welcome to Smart Shop!</div>
+                                    <div class="text-xs text-gray-500">Discover amazing products and deals today</div>
+                                </a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <div class="font-medium">New features available</div>
+                                    <div class="text-xs text-gray-500">Check out our latest updates and improvements</div>
+                                </a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <div class="font-medium">Special offers</div>
+                                    <div class="text-xs text-gray-500">Limited time discounts on popular items</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Simple navigation for everyone -->
+                    <a href="/dashboard" class="hover:text-blue-200">Home</a>
+                    <a href="/login" class="hover:text-blue-200">Login</a>
+                    <a href="/signup" class="bg-blue-700 px-3 py-1 rounded hover:bg-blue-800 transition-colors">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content - Empty -->
+    <div class="container mx-auto px-4 py-8 flex-grow" >
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Welcome to Smart Shop!</h2>
+            <p class="text-gray-600">Your one-stop destination for online shopping</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center p-4 mt-16">
+        <p>&copy; 2025 Smart Shop. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Notification functionality
+        document.getElementById('notificationBtn').addEventListener('click', function() {
+            const dropdown = document.getElementById('notificationDropdown');
+            dropdown.classList.toggle('hidden');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('notificationDropdown');
+            const button = document.getElementById('notificationBtn');
+
+            if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
