@@ -17,41 +17,26 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // Đăng ký user mới
+    // Register new user
     public User registerUser(User user) {
-        // Kiểm tra email đã tồn tại chưa
+        // Check if email already exists
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Email already exists!");
         }
 
-        // Mã hóa password
+        // Encode password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        // Lưu user vào database
+        // Save user to database
         return userRepository.save(user);
     }
 
-    // Đăng nhập user bằng email
-    public User loginUser(String email, String password) {
-        Optional<User> userOpt = userRepository.findByEmail(email);
-
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            // Kiểm tra password
-            if (passwordEncoder.matches(password, user.getPassword())) {
-                return user;
-            }
-        }
-
-        throw new RuntimeException("Invalid email or password!");
-    }
-
-    // Tìm user theo email
+    // Find user by email
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
-    // Cập nhật thông tin user
+    // Update user information
     public User save(User user) {
         return userRepository.save(user);
     }
