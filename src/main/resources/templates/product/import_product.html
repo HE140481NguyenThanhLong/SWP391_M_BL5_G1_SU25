@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Shop - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+<!-- Navigation -->
+<nav class="bg-blue-600 text-white shadow-lg">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center py-4">
+            <div class="flex items-center space-x-4">
+                <h1 class="text-2xl font-bold">Smart Shop</h1>
+            </div>
+            <div class="flex items-center space-x-6">
+                <!-- Notification Bell -->
+                <div class="relative">
+                    <button id="notificationBtn" class="relative hover:text-blue-200 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-3.5-3.5a7 7 0 1 0-9.9 0L10 17h5a2 2 0 0 1 0 4H9a2 2 0 0 1 0-4z"/>
+                        </svg>
+                        <!-- Notification badge -->
+                        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                    </button>
+                    <!-- Notification dropdown -->
+                    <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg z-50">
+                        <div class="py-2">
+                            <div class="px-4 py-2 text-sm text-gray-700 border-b">
+                                <strong>Notifications</strong>
+                            </div>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <div class="font-medium">Welcome to Smart Shop!</div>
+                                <div class="text-xs text-gray-500">Discover amazing products and deals today</div>
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <div class="font-medium">New features available</div>
+                                <div class="text-xs text-gray-500">Check out our latest updates and improvements</div>
+                            </a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <div class="font-medium">Special offers</div>
+                                <div class="text-xs text-gray-500">Limited time discounts on popular items</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simple navigation for everyone -->
+                <a href="/dashboard" class="hover:text-blue-200">Home</a>
+                <a href="/login" class="hover:text-blue-200">Login</a>
+                <a href="/signup" class="bg-blue-700 px-3 py-1 rounded hover:bg-blue-800 transition-colors">Sign Up</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content - Empty -->
+<main class="container mx-auto px-4 py-8 flex-grow">
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-600 mb-4" aria-label="Breadcrumb">
+        <ol class="inline-flex space-x-1">
+            <li><a href="#" class="text-blue-600 hover:underline">Home</a></li>
+            <li><span>/</span></li>
+            <li><a href="#" class="text-blue-600 hover:underline">Product</a></li>
+            <li><span>/</span></li>
+            <li><a href="#" class="text-blue-600 hover:underline">Product List</a></li>
+            <li><span>/</span></li>
+            <li class="text-gray-500">Import</li>
+        </ol>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8 flex-grow">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Import ProDuck</h2>
+
+
+
+            <button onclick="openPopup()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded">Chọn sản phẩm theo nhà cung cấp</button>
+        </div>
+
+        <!-- Danh sách sản phẩm đã chọn -->
+        <div class="bg-white rounded-lg shadow-md p-6 mt-6">
+            <h3 class="text-xl font-bold mb-4">Danh sách sản phẩm đã chọn</h3>
+            <table class="w-full border" id="selectedTable">
+                <thead>
+                <tr class="bg-gray-100">
+                    <th class="border px-2 py-1">Tên</th>
+                    <th class="border px-2 py-1">Giá</th>
+                    <th class="border px-2 py-1">Số lượng</th>
+                    <th class="border px-2 py-1">Thành tiền</th>
+                    <th class="border px-2 py-1">Xóa</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <p class="mt-4 font-bold">Tổng tiền: <span id="totalPrice">0</span> VND</p>
+            <button onclick="confirmSelection()" class="mt-4 px-4 py-2 bg-green-600 text-white rounded">Xác nhận</button>
+        </div>
+    </div>
+
+    <!-- Popup chọn sản phẩm -->
+    <div id="popup" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-1/2">
+            <h3 class="text-lg font-bold mb-4">Chọn sản phẩm</h3>
+            <label>Nhà cung cấp:
+                <select class="border p-1 rounded" id="supplierSelect" onchange="loadProducts()">
+                    <option value="">-- Chọn nhà cung cấp --</option>
+                    <option value="supplier1">Nhà cung cấp 1</option>
+                    <option value="supplier2">Nhà cung cấp 2</option>
+                </select>
+            </label>
+
+            <table class="w-full border mt-4" id="productTable">
+                <thead>
+                <tr class="bg-gray-100">
+                    <th class="border px-2 py-1">Chọn</th>
+                    <th class="border px-2 py-1">Tên</th>
+                    <th class="border px-2 py-1">Giá</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <div class="mt-4 flex justify-end space-x-2">
+                <button onclick="addSelectedProducts()" class="px-4 py-2 bg-blue-600 text-white rounded">Thêm vào danh sách</button>
+                <button onclick="closePopup()" class="px-4 py-2 bg-gray-400 text-white rounded">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+</main>
+<!-- Footer -->
+<footer class="bg-gray-800 text-white text-center p-4 mt-16">
+    <p>&copy; 2025 Smart Shop. All rights reserved.</p>
+</footer>
+
+<!-- JavaScript -->
+<script>
+    // Notification functionality
+    document.getElementById('notificationBtn').addEventListener('click', function() {
+        const dropdown = document.getElementById('notificationDropdown');
+        dropdown.classList.toggle('hidden');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('notificationDropdown');
+        const button = document.getElementById('notificationBtn');
+
+        if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.classList.add('hidden');
+        }
+    });
+    const productData = {
+        supplier1: [
+            {name: "SP A1", price: 100000},
+            {name: "SP A2", price: 150000},
+        ],
+        supplier2: [
+            {name: "SP B1", price: 200000},
+            {name: "SP B2", price: 250000},
+        ]
+    };
+
+    function openPopup() {
+        document.getElementById("popup").classList.remove("hidden");
+    }
+
+    function closePopup() {
+        document.getElementById("popup").classList.add("hidden");
+    }
+
+    function loadProducts() {
+        const supplier = document.getElementById("supplierSelect").value;
+        const tbody = document.querySelector("#productTable tbody");
+        tbody.innerHTML = "";
+        if (supplier && productData[supplier]) {
+            productData[supplier].forEach((p, i) => {
+                const row = `<tr>
+                    <td class="border px-2 py-1"><input type="checkbox" data-name="${p.name}" data-price="${p.price}"></td>
+                    <td class="border px-2 py-1">${p.name}</td>
+                    <td class="border px-2 py-1">${p.price}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+    }
+
+    function addSelectedProducts() {
+        const checkboxes = document.querySelectorAll("#productTable input[type='checkbox']:checked");
+        const selectedTableBody = document.querySelector("#selectedTable tbody");
+        checkboxes.forEach(cb => {
+            const name = cb.dataset.name;
+            const price = parseInt(cb.dataset.price);
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td class="border px-2 py-1">${name}</td>
+                <td class="border px-2 py-1">${price}</td>
+                <td class="border px-2 py-1"><input type="number" value="1" min="1" class="w-16" onchange="updateTotal()"></td>
+                <td class="border px-2 py-1">${price}</td>
+                <td class="border px-2 py-1"><button onclick="removeRow(this)" class="bg-red-500 text-white px-2 py-1 rounded">X</button></td>
+            `;
+            selectedTableBody.appendChild(row);
+        });
+        updateTotal();
+        closePopup();
+    }
+
+    function removeRow(btn) {
+        btn.parentElement.parentElement.remove();
+        updateTotal();
+    }
+
+    function updateTotal() {
+        let total = 0;
+        document.querySelectorAll("#selectedTable tbody tr").forEach(row => {
+            const price = parseInt(row.children[1].textContent);
+            const qty = parseInt(row.children[2].querySelector("input").value);
+            const subtotal = price * qty;
+            row.children[3].textContent = subtotal;
+            total += subtotal;
+        });
+        document.getElementById("totalPrice").textContent = total;
+    }
+
+    function confirmSelection() {
+        let products = [];
+        document.querySelectorAll("#selectedTable tbody tr").forEach(row => {
+            products.push({
+                name: row.children[0].textContent,
+                price: parseInt(row.children[1].textContent),
+                quantity: parseInt(row.children[2].querySelector("input").value)
+            });
+        });
+        alert("Xác nhận nhập hàng:\n" + JSON.stringify(products, null, 2));
+    }
+</script>
+</body>
+</html>
