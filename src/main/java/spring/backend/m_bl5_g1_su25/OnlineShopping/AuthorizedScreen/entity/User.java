@@ -1,52 +1,69 @@
-package spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.Enum.Role;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.Enum.Status;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Getter
-@Setter
-
-@Builder
+@Table(name = "users",
+       indexes = {
+           @Index(name = "idx_user_email", columnList = "email"),
+           @Index(name = "idx_user_role", columnList = "role")
+       })
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="Users")
-
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer user_id;
-    @Column(nullable = false, unique = true, length = 50)
-    String username;
-    @Column(nullable = false, unique = true, length = 100)
-    String email;
-    @Column(nullable = false, length = 255)
-    String password;
+    @Column(name = "id")
+    private Long id;
 
-    @Column(nullable = false,length = 10)
-    @Enumerated(EnumType.STRING)
-    Role role = Role.CUSTOMER;
+    @Column(name = "name", nullable = false, length = 100)
+    @NotBlank(message = "Name is required")
+    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
+    private String name;
 
-    @Column(nullable = false,length = 10)
+    @Column(name = "email", unique = true, nullable = false, length = 255)
+    @NotBlank(message = "Email is required")
+    @Email(message = "Please provide a valid email address")
+    private String email;
+
+    @Column(name = "password", nullable = false, length = 255)
+    @NotBlank(message = "Password is required")
+    @Size(min = 6, message = "Password must be at least 6 characters")
+    private String password;
+
+    @Column(name = "phone_number", nullable = false, length = 20)
+    @NotBlank(message = "Phone number is required")
+    private String phoneNumber;
+
+    @Column(name = "address", nullable = false, length = 500)
+    @NotBlank(message = "Address is required")
+    private String address;
+
     @Enumerated(EnumType.STRING)
-    Status status = Status.ACTIVE;
+    @Column(name = "role", nullable = false, length = 20)
+    private UserRole role = UserRole.CUSTOMER;
 
     @CreationTimestamp
-    @Column(nullable = false,updatable = false)
-    LocalDateTime createdAt;
-    @UpdateTimestamp
-    @Column(nullable = false,updatable = false)
-    LocalDateTime updatedAt;
-    @Column(nullable = false)
-    Boolean isDeleted = false;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    public enum UserRole {
+        CUSTOMER, STAFF
+    }
 }
