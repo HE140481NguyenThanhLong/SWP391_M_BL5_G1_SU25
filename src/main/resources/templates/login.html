@@ -44,14 +44,13 @@
             </div>
 
             <!-- Login Form -->
-            <form action="/login" method="post" class="space-y-4" autocomplete="off">
-
+            <form action="/login" method="post" class="space-y-4">
                 <!-- Email -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                     <input type="email" name="email" id="email"
                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                           placeholder="Enter your email" required autocomplete="off">
+                           placeholder="Enter your email" required>
                 </div>
 
                 <!-- Password with Show/Hide Toggle -->
@@ -60,7 +59,7 @@
                     <div class="relative">
                         <input type="password" name="password" id="password"
                                class="mt-1 block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                               placeholder="Enter password" required autocomplete="off">
+                               placeholder="Enter password" required>
                         <button type="button" id="togglePassword"
                                 class="absolute inset-y-0 right-0 pr-3 flex items-center">
                             <svg id="eyeIcon" class="h-5 w-5 text-gray-400 hover:text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,7 +88,7 @@
 
                 <!-- Submit Button -->
                 <button type="submit" id="loginBtn"
-                        class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50">
                     <span id="loginBtnText">Sign In</span>
                     <svg id="loginSpinner" class="hidden animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -100,26 +99,47 @@
 
             <!-- Demo Account Info -->
             <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
-                <h3 class="text-sm font-medium text-yellow-800">Test Accounts:</h3>
+                <h3 class="text-sm font-medium text-yellow-800">Test Accounts (Auto-created by DataLoader):</h3>
                 <div class="text-sm text-yellow-700 space-y-2 mt-2">
                     <div class="flex justify-between items-center">
-                        <span><strong>STAFF:</strong> staff@smartshop.com / staff123</span>
-                        <button type="button" onclick="fillLogin('staff@smartshop.com', 'staff123')"
-                                class="text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">Fill</button>
+                        <span><strong>ADMIN:</strong> admin@test.com / 123456</span>
+                        <button type="button" onclick="fillLogin('admin@test.com', '123456')"
+                                class="text-xs bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition-colors">Fill</button>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span><strong>CUSTOMER:</strong> customer@smartshop.com / customer123</span>
-                        <button type="button" onclick="fillLogin('customer@smartshop.com', 'customer123')"
-                                class="text-xs bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Fill</button>
+                        <span><strong>STAFF:</strong> staff@test.com / 123456</span>
+                        <button type="button" onclick="fillLogin('staff@test.com', '123456')"
+                                class="text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition-colors">Fill</button>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span><strong>CUSTOMER:</strong> customer@test.com / 123456</span>
+                        <button type="button" onclick="fillLogin('customer@test.com', '123456')"
+                                class="text-xs bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 transition-colors">Fill</button>
                     </div>
                 </div>
                 <div class="text-xs text-yellow-600 mt-2">
-                    <p>💡 These accounts are automatically created for testing purposes.</p>
+                    <p>💡 These accounts are automatically created by DataLoader on app startup.</p>
+                    <p>🔒 Passwords are BCrypt encoded in database for security.</p>
                 </div>
             </div>
 
+            <!-- Sign Up Link -->
+            <div class="text-center mt-4">
+                <p class="text-sm text-gray-600">
+                    Don't have an account?
+                    <a href="/signup" class="text-blue-600 hover:text-blue-800">Create account here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center p-4 mt-16">
+        <p>&copy; 2025 Smart Shop. All rights reserved.</p>
+    </footer>
+
     <script>
-        // Toggle password visibility
+        // Toggle password visibility - SINGLE IMPLEMENTATION
         document.getElementById('togglePassword').addEventListener('click', function() {
             const passwordField = document.getElementById('password');
             const eyeIcon = document.getElementById('eyeIcon');
@@ -138,8 +158,125 @@
             }
         });
 
-        // Enhanced form submission with loading state
-        document.querySelector('form').addEventListener('submit', function() {
+        // Enhanced Remember Me checkbox with visual feedback
+        document.getElementById('rememberMe').addEventListener('change', function() {
+            const isChecked = this.checked;
+            const label = this.nextElementSibling;
+
+            if (isChecked) {
+                label.innerHTML = '<span class="text-blue-600 font-medium">Remember me for 30 days ✓</span>';
+                showRememberMeInfo();
+            } else {
+                label.textContent = 'Remember me for 30 days';
+            }
+        });
+
+        // Show remember me information tooltip
+        function showRememberMeInfo() {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'absolute z-50 bg-gray-800 text-white text-xs rounded py-1 px-2 mt-1 shadow-lg';
+            tooltip.innerHTML = '🔒 We\'ll keep you logged in securely on this device';
+
+            const rememberMeDiv = document.getElementById('rememberMe').parentElement;
+            rememberMeDiv.style.position = 'relative';
+            rememberMeDiv.appendChild(tooltip);
+
+            // Fade in animation
+            tooltip.style.opacity = '0';
+            tooltip.style.transition = 'opacity 0.3s ease-in-out';
+            setTimeout(() => tooltip.style.opacity = '1', 10);
+
+            // Remove tooltip after 3 seconds with fade out
+            setTimeout(() => {
+                tooltip.style.opacity = '0';
+                setTimeout(() => {
+                    if (tooltip.parentNode) {
+                        tooltip.parentNode.removeChild(tooltip);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Track login attempts for security and UX improvement
+        function trackLoginAttempt() {
+            try {
+                const attempts = parseInt(sessionStorage.getItem('loginAttempts') || '0');
+                const newAttempts = attempts + 1;
+
+                sessionStorage.setItem('loginAttempts', newAttempts.toString());
+                sessionStorage.setItem('lastLoginAttempt', new Date().toISOString());
+
+                // Show warning after 3 failed attempts
+                if (newAttempts >= 3) {
+                    const warningDiv = document.createElement('div');
+                    warningDiv.className = 'bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 rounded mb-4';
+                    warningDiv.innerHTML = `
+                        <div class="flex items-center">
+                            <svg class="h-5 w-5 text-orange-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Multiple login attempts detected. Please check your credentials.</span>
+                        </div>
+                    `;
+
+                    const form = document.querySelector('form');
+                    form.parentNode.insertBefore(warningDiv, form);
+
+                    // Remove warning after 10 seconds
+                    setTimeout(() => {
+                        if (warningDiv.parentNode) {
+                            warningDiv.parentNode.removeChild(warningDiv);
+                        }
+                    }, 10000);
+                }
+
+                console.log(`Login attempt #${newAttempts} tracked`);
+            } catch (e) {
+                console.warn('Could not track login attempt:', e);
+            }
+        }
+
+        // Show success notification when user is redirected from registration
+        function showRegistrationSuccess() {
+            if (window.location.search.includes('registered=true')) {
+                const successDiv = document.createElement('div');
+                successDiv.className = 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 animate-pulse';
+                successDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <svg class="h-5 w-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        <div>
+                            <p class="font-medium">Account created successfully!</p>
+                            <p class="text-sm">You can now login with your new credentials.</p>
+                        </div>
+                    </div>
+                `;
+
+                const form = document.querySelector('form');
+                form.parentNode.insertBefore(successDiv, form);
+
+                // Auto-focus email field for better UX
+                const emailField = document.getElementById('email');
+                if (emailField) {
+                    emailField.focus();
+                }
+
+                // Remove success message after 8 seconds
+                setTimeout(() => {
+                    successDiv.style.transition = 'opacity 0.5s ease-out';
+                    successDiv.style.opacity = '0';
+                    setTimeout(() => {
+                        if (successDiv.parentNode) {
+                            successDiv.parentNode.removeChild(successDiv);
+                        }
+                    }, 500);
+                }, 8000);
+            }
+        }
+
+        // Form submission with loading state and attempt tracking
+        document.querySelector('form').addEventListener('submit', function(e) {
             const loginBtn = document.getElementById('loginBtn');
             const loginBtnText = document.getElementById('loginBtnText');
             const loginSpinner = document.getElementById('loginSpinner');
@@ -149,138 +286,90 @@
             loginBtnText.textContent = 'Signing in...';
             loginSpinner.classList.remove('hidden');
 
-            // Re-enable after 5 seconds as fallback
+            // Track login attempt
+            trackLoginAttempt();
+
+            // Re-enable after 10 seconds as fallback (increased from 5s)
             setTimeout(() => {
                 loginBtn.disabled = false;
                 loginBtnText.textContent = 'Sign In';
                 loginSpinner.classList.add('hidden');
-            }, 5000);
+            }, 10000);
         });
 
-        // Remember me checkbox enhancement
-        document.getElementById('rememberMe').addEventListener('change', function() {
-            const isChecked = this.checked;
-            const label = this.nextElementSibling;
+        // Fill demo credentials with visual feedback
+        function fillLogin(email, password) {
+            const emailField = document.getElementById('email');
+            const passwordField = document.getElementById('password');
 
-            if (isChecked) {
-                label.innerHTML = '<span class="text-blue-600 font-medium">Remember me for 30 days ✓</span>';
-                // Show info tooltip
-                showRememberMeInfo();
-            } else {
-                label.textContent = 'Remember me for 30 days';
-            }
-        });
+            emailField.value = email;
+            passwordField.value = password;
 
-        // Show remember me information
-        function showRememberMeInfo() {
-            // Create temporary tooltip
+            // Visual feedback - highlight filled fields
+            emailField.classList.add('border-green-400', 'bg-green-50');
+            passwordField.classList.add('border-green-400', 'bg-green-50');
+
+            // Remove highlight after 2 seconds
+            setTimeout(() => {
+                emailField.classList.remove('border-green-400', 'bg-green-50');
+                passwordField.classList.remove('border-green-400', 'bg-green-50');
+            }, 2000);
+
+            // Show success tooltip
             const tooltip = document.createElement('div');
-            tooltip.className = 'absolute z-50 bg-gray-800 text-white text-xs rounded py-1 px-2 mt-1';
-            tooltip.textContent = 'We\'ll keep you logged in on this device';
+            tooltip.className = 'fixed top-4 right-4 bg-green-600 text-white px-4 py-2 rounded shadow-lg z-50';
+            tooltip.innerHTML = `
+                <div class="flex items-center">
+                    <svg class="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span>Test account filled! Click Sign In</span>
+                </div>
+            `;
 
-            const rememberMeDiv = document.getElementById('rememberMe').parentElement;
-            rememberMeDiv.style.position = 'relative';
-            rememberMeDiv.appendChild(tooltip);
+            document.body.appendChild(tooltip);
 
             // Remove tooltip after 3 seconds
             setTimeout(() => {
-                if (tooltip.parentNode) {
-                    tooltip.parentNode.removeChild(tooltip);
-                }
+                tooltip.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
+                tooltip.style.opacity = '0';
+                tooltip.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (tooltip.parentNode) {
+                        tooltip.parentNode.removeChild(tooltip);
+                    }
+                }, 300);
             }, 3000);
         }
 
         // Forgot password functionality
         function showForgotPassword() {
-            alert('Forgot password functionality will be implemented soon.\n\nPlease contact support for assistance.');
+            alert('Forgot password functionality will be implemented soon.\n\nFor now, you can use the test accounts provided below.');
         }
 
-        // Store login attempt for security tracking
-        function trackLoginAttempt() {
-            const attempts = parseInt(sessionStorage.getItem('loginAttempts') || '0');
-            sessionStorage.setItem('loginAttempts', (attempts + 1).toString());
-            sessionStorage.setItem('lastLoginAttempt', new Date().toISOString());
-        }
-
-        // Fill demo credentials
-        function fillLogin(email, password) {
-            document.getElementById('email').value = email;
-            document.getElementById('password').value = password;
-        }
-
-        // Initialize page
+        // Enhanced page initialization
         document.addEventListener('DOMContentLoaded', function() {
-            // Auto-focus email field if empty
+            // Auto-focus email field on page load
             const emailField = document.getElementById('email');
             if (emailField && !emailField.value) {
                 emailField.focus();
             }
 
-            // Clear any existing errors on input
+            // Show registration success if coming from signup
+            showRegistrationSuccess();
+
+            // Clear error styling on input
             document.querySelectorAll('input').forEach(input => {
                 input.addEventListener('input', function() {
-                    this.classList.remove('border-red-300');
-                    const errorDiv = this.parentNode.querySelector('.text-red-600');
-                    if (errorDiv) {
-                        errorDiv.remove();
-                    }
+                    this.classList.remove('border-red-300', 'bg-red-50');
                 });
             });
 
-            // Track login attempts
-            document.querySelector('form').addEventListener('submit', trackLoginAttempt);
+            // Reset login attempts on successful page load (not from error)
+            if (!window.location.search.includes('error')) {
+                sessionStorage.removeItem('loginAttempts');
+            }
         });
-
-        // Show registration success notification
-        function showRegistrationSuccess() {
-            const emailField = document.getElementById('username');
-            const passwordField = document.getElementById('password');
-
-            // Highlight the auto-filled fields
-            if (emailField.value) {
-                emailField.classList.add('border-green-400', 'bg-green-50');
-                setTimeout(() => {
-                    emailField.classList.remove('border-green-400', 'bg-green-50');
-                }, 3000);
-            }
-
-            if (passwordField.value) {
-                passwordField.classList.add('border-green-400', 'bg-green-50');
-                setTimeout(() => {
-                    passwordField.classList.remove('border-green-400', 'bg-green-50');
-                }, 3000);
-            }
-
-            // Show tooltip
-            const loginBtn = document.getElementById('loginBtn');
-            const tooltip = document.createElement('div');
-            tooltip.className = 'absolute z-50 bg-green-800 text-white text-sm rounded py-2 px-3 mt-2 transform -translate-x-1/2 left-1/2';
-            tooltip.innerHTML = 'Your credentials have been filled automatically!<br>Click "Sign In" to continue.';
-
-            loginBtn.parentElement.style.position = 'relative';
-            loginBtn.parentElement.appendChild(tooltip);
-
-            // Remove tooltip after 4 seconds
-            setTimeout(() => {
-                if (tooltip.parentNode) {
-                    tooltip.parentNode.removeChild(tooltip);
-                }
-            }, 4000);
-        }
     </script>
-            <!-- Sign Up Link -->
-            <div class="text-center mt-4">
-                <p class="text-sm text-gray-600">
-                    Don't have an account?
-                    <a href="/signup" class="text-blue-600 hover:text-blue-800">Create account here</a>
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white text-center p-4 mt-16">
-        <p>&copy; 2025 Smart Shop. All rights reserved.</p>
-    </footer>
 </body>
 </html>

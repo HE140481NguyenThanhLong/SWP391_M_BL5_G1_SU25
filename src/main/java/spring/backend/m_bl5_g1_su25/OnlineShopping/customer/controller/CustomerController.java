@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.service.AuthService;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.user.User;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
 
 @Controller
 @RequestMapping("/customer")
@@ -22,7 +22,7 @@ public class CustomerController {
         User user = authService.findByEmail(authentication.getName());
 
         model.addAttribute("user", user);
-        model.addAttribute("username", user.getName());
+        model.addAttribute("username", user.getUsername());
         model.addAttribute("role", user.getRole());
 
         return "customer/customer-dashboard";

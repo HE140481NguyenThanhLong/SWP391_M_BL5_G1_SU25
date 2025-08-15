@@ -7,50 +7,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50">
-    <!-- Navigation - Dynamic styling based on role -->
-    <nav th:class="${user.role.name() == 'CUSTOMER'} ? 'bg-indigo-600 text-white shadow-lg' : 'bg-green-600 text-white shadow-lg'">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white shadow-lg">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center space-x-4">
                     <h1 class="text-2xl font-bold">Smart Shop</h1>
                 </div>
                 <div class="flex items-center space-x-6">
-                    <!-- Notification Bell -->
-                    <div class="relative">
-                        <button id="notificationBtn" th:class="${user.role.name() == 'CUSTOMER'} ? 'relative hover:text-indigo-200 focus:outline-none' : 'relative hover:text-green-200 focus:outline-none'">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-3.5-3.5a7 7 0 1 0-9.9 0L10 17h5a2 2 0 0 1 0 4H9a2 2 0 0 1 0-4z"/>
-                            </svg>
-                            <!-- Notification badge -->
-                            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">1</span>
-                        </button>
-                        <!-- Notification dropdown -->
-                        <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg z-50">
-                            <div class="py-2">
-                                <div class="px-4 py-2 text-sm text-gray-700 border-b">
-                                    <strong>Notifications</strong>
-                                </div>
-                                <!-- Empty notifications -->
-                                <div class="px-4 py-6 text-center text-gray-500 text-sm">
-                                    No notifications
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- User section - only show if authenticated -->
                     <div sec:authorize="isAuthenticated()">
-                        <span th:class="${user.role.name() == 'CUSTOMER'} ? 'text-indigo-200' : 'text-green-200'">
-                            Welcome, <span th:text="${user.name}" class="font-semibold">User</span>
+                        <span class="text-blue-200">
+                            Welcome, <span th:text="${user.username}" class="font-semibold">User</span>
                         </span>
-                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/dashboard' : '/staff/dashboard'"
-                           th:class="${user.role.name() == 'CUSTOMER'} ? 'hover:text-indigo-200' : 'hover:text-green-200'">Home</a>
-                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/orders' : '/staff/orders'"
-                           th:class="${user.role.name() == 'CUSTOMER'} ? 'hover:text-indigo-200' : 'hover:text-green-200'">My Orders</a>
+                        <a href="/dashboard" class="hover:text-blue-200">Home</a>
                         <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/profile' : '/staff/profile'"
-                           th:class="${user.role.name() == 'CUSTOMER'} ? 'hover:text-indigo-200' : 'hover:text-green-200'">Profile</a>
-                        <a href="/logout"
-                           th:class="${user.role.name() == 'CUSTOMER'} ? 'bg-indigo-700 px-3 py-1 rounded hover:bg-indigo-800 transition-colors' : 'bg-green-700 px-3 py-1 rounded hover:bg-green-800 transition-colors'">Logout</a>
+                           class="hover:text-blue-200">Profile</a>
+                        <a href="/logout" class="bg-blue-700 px-3 py-1 rounded hover:bg-blue-800 transition-colors">Logout</a>
                     </div>
                 </div>
             </div>
@@ -75,14 +47,13 @@
 
         <!-- Profile Content -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
             <!-- Profile Info -->
             <div class="lg:col-span-2">
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-xl font-semibold text-gray-900">Personal Information</h3>
                         <button id="editProfileBtn" onclick="toggleEditMode()"
-                                th:class="${user.role.name() == 'CUSTOMER'} ? 'bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors' : 'bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors'">
+                                class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
                             Edit Profile
                         </button>
                     </div>
@@ -91,24 +62,37 @@
                     <div id="viewMode">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                                <p class="text-gray-900 bg-gray-50 p-3 rounded-md" th:text="${user.name}">Name</p>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                                <p class="text-gray-900 bg-gray-50 p-3 rounded-md" th:text="${user.username}">Username</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                                 <p class="text-gray-900 bg-gray-50 p-3 rounded-md" th:text="${user.email}">Email</p>
                             </div>
-                            <div>
+                            <!-- Show Customer/Staff specific fields -->
+                            <div th:if="${firstname != null}">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                                <p class="text-gray-900 bg-gray-50 p-3 rounded-md" th:text="${firstname}">First Name</p>
+                            </div>
+                            <div th:if="${lastname != null}">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                                <p class="text-gray-900 bg-gray-50 p-3 rounded-md" th:text="${lastname}">Last Name</p>
+                            </div>
+                            <div th:if="${phoneNumber != null}">
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                                <p class="text-gray-900 bg-gray-50 p-3 rounded-md" th:text="${user.phoneNumber}">Phone</p>
+                                <p class="text-gray-900 bg-gray-50 p-3 rounded-md" th:text="${phoneNumber}">Phone Number</p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
                                 <p class="text-gray-900 bg-gray-50 p-3 rounded-md" th:text="${user.role}">Role</p>
                             </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                <p class="text-gray-900 bg-gray-50 p-3 rounded-md" th:text="${user.status}">Status</p>
+                            </div>
                             <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
-                                <p class="text-gray-900 bg-gray-50 p-3 rounded-md" th:text="${user.address}">Address</p>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Account Created</label>
+                                <p class="text-gray-900 bg-gray-50 p-3 rounded-md" th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy HH:mm')}">Created At</p>
                             </div>
                         </div>
                     </div>
@@ -116,24 +100,37 @@
                     <!-- Edit Mode -->
                     <div id="editMode" class="hidden">
                         <form th:action="${user.role.name() == 'CUSTOMER'} ? '/customer/profile/update' : '/staff/profile/update'"
-                              th:object="${user}" method="post" class="space-y-6">
+                              method="post" class="space-y-6">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                                    <input type="text" th:field="*{name}" id="name"
-                                           th:class="${user.role.name() == 'CUSTOMER'} ? 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' : 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500'"
+                                    <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                                    <input type="text" name="username" id="username" th:value="${user.username}"
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                            required>
                                 </div>
                                 <div>
                                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                                    <input type="email" th:field="*{email}" id="email"
-                                           th:class="${user.role.name() == 'CUSTOMER'} ? 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' : 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500'"
+                                    <input type="email" name="email" id="email" th:value="${user.email}"
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                            required>
                                 </div>
-                                <div>
+                                <!-- Customer/Staff specific fields -->
+                                <div th:if="${firstname != null}">
+                                    <label for="firstname" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                                    <input type="text" name="firstname" id="firstname" th:value="${firstname}"
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                           required>
+                                </div>
+                                <div th:if="${lastname != null}">
+                                    <label for="lastname" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                                    <input type="text" name="lastname" id="lastname" th:value="${lastname}"
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                           required>
+                                </div>
+                                <div th:if="${phoneNumber != null}">
                                     <label for="phoneNumber" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                                    <input type="text" th:field="*{phoneNumber}" id="phoneNumber"
-                                           th:class="${user.role.name() == 'CUSTOMER'} ? 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' : 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500'"
+                                    <input type="tel" name="phoneNumber" id="phoneNumber" th:value="${phoneNumber}"
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                            required>
                                 </div>
                                 <div>
@@ -141,20 +138,21 @@
                                     <input type="text" th:value="${user.role}" readonly
                                            class="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md text-gray-500 cursor-not-allowed">
                                 </div>
-                                <div class="md:col-span-2">
-                                    <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Address</label>
-                                    <textarea th:field="*{address}" id="address" rows="3"
-                                              th:class="${user.role.name() == 'CUSTOMER'} ? 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' : 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500'"
-                                              required></textarea>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                    <input type="text" th:value="${user.status}" readonly
+                                           class="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md text-gray-500 cursor-not-allowed">
                                 </div>
                             </div>
 
-                            <div class="flex space-x-4">
-                                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors">
-                                    Save Changes
-                                </button>
-                                <button type="button" onclick="toggleEditMode()" class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors">
+                            <div class="flex justify-end space-x-4">
+                                <button type="button" onclick="toggleEditMode()"
+                                        class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors">
                                     Cancel
+                                </button>
+                                <button type="submit"
+                                        class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                                    Save Changes
                                 </button>
                             </div>
                         </form>
@@ -162,50 +160,22 @@
                 </div>
             </div>
 
-            <!-- Sidebar -->
+            <!-- Profile Stats -->
             <div class="space-y-6">
-                <!-- Profile Actions -->
                 <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Account Actions</h3>
-                    <div class="space-y-3">
-                        <button onclick="changePassword()" class="w-full bg-yellow-600 text-white px-4 py-2 rounded-md hover:bg-yellow-700 transition-colors">
-                            Change Password
-                        </button>
-                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/orders' : '/staff/orders'"
-                           class="block w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-center">
-                            View My Orders
-                        </a>
-                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/dashboard' : '/staff/dashboard'"
-                           th:class="${user.role.name() == 'CUSTOMER'} ? 'block w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors text-center' : 'block w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors text-center'">
-                            Back to Dashboard
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Account Info - Dynamic content based on role -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4"
-                        th:text="${user.role.name() == 'CUSTOMER'} ? 'Account Information' : 'Staff Information'">Account Information</h3>
-                    <div class="space-y-3 text-sm">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Account Information</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Account Type:</span>
+                            <span class="font-medium" th:text="${user.role}">Role</span>
+                        </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Account Status:</span>
-                            <span class="text-green-600 font-medium">Active</span>
+                            <span class="font-medium text-green-600" th:text="${user.status}">Active</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Member Since:</span>
-                            <span class="text-gray-900">Aug 2025</span>
-                        </div>
-                        <div class="flex justify-between" th:if="${user.role.name() == 'CUSTOMER'}">
-                            <span class="text-gray-600">Total Orders:</span>
-                            <span class="text-gray-900">12</span>
-                        </div>
-                        <div class="flex justify-between" th:if="${user.role.name() == 'STAFF'}">
-                            <span class="text-gray-600">Tasks This Month:</span>
-                            <span class="text-gray-900">24</span>
-                        </div>
-                        <div class="flex justify-between" th:if="${user.role.name() == 'STAFF'}">
-                            <span class="text-gray-600">Performance:</span>
-                            <span class="text-green-600 font-medium">Excellent</span>
+                            <span class="font-medium" th:text="${#temporals.format(user.createdAt, 'MMM yyyy')}">Date</span>
                         </div>
                     </div>
                 </div>
@@ -213,12 +183,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white text-center p-4 mt-16">
-        <p>&copy; 2025 Smart Shop Portal. All rights reserved.</p>
-    </footer>
-
-    <!-- JavaScript -->
     <script>
         function toggleEditMode() {
             const viewMode = document.getElementById('viewMode');
@@ -237,28 +201,6 @@
                 editBtn.textContent = 'Cancel Edit';
             }
         }
-
-        function changePassword() {
-            alert('Change Password functionality will be implemented later.');
-            // TODO: Navigate to change password page
-        }
-
-        // Notification functionality
-        document.getElementById('notificationBtn').addEventListener('click', function() {
-            const dropdown = document.getElementById('notificationDropdown');
-            dropdown.classList.toggle('hidden');
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('notificationDropdown');
-            const button = document.getElementById('notificationBtn');
-
-            if (!button.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.add('hidden');
-            }
-        });
     </script>
-
 </body>
 </html>

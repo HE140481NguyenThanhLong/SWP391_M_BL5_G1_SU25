@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.repository.UserRepository;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.user.User;
 
 import java.util.Collection;
 import java.util.Collections;

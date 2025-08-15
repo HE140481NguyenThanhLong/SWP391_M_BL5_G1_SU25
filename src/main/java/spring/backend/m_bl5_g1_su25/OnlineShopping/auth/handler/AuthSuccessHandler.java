@@ -20,7 +20,7 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
                                       HttpServletResponse response,
                                       Authentication authentication) throws IOException, ServletException {
 
-        // Get user role from authorities
+        // Get User role from authorities
         String role = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()

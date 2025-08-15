@@ -21,7 +21,7 @@ public class ProductList {
         this.productService = productService;
     }
 
-    @GetMapping
+    @GetMapping("/products")
     public String listProducts(Model model) {
         List<ProductResponse> productResponses = productService.toProductResponse();
         model.addAttribute("productResponses", productResponses);

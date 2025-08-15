@@ -7,6 +7,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
+    @Mapping(target = "id", source = "product_id")
     @Mapping(target = "name",source = "name")
     @Mapping(target = "description",source="description")
     @Mapping(target="price",source="price")

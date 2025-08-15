@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.user.User;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
 
 @Getter
 @Setter
@@ -33,5 +33,5 @@ public class RegisterRequest {
     @NotBlank(message = "Address is required")
     String address;
 
-    User.UserRole role = User.UserRole.CUSTOMER;
+    User.Role role = User.Role.CUSTOMER;
 }

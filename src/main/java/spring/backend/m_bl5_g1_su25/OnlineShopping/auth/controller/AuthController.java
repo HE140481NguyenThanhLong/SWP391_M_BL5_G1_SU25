@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.dto.RegisterRequest;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.service.AuthService;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.user.User;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,7 +20,7 @@ public class AuthController {
     private final AuthService authService;
 
     // Root path - redirect to dashboard
-    @GetMapping("/")
+    @GetMapping({"/", ""})
     public String home() {
         return "redirect:/dashboard";
     }
@@ -72,14 +72,14 @@ public class AuthController {
     // Dashboard - hiển thị trang chung hoặc guest dashboard
     @GetMapping("/dashboard")
     public String dashboard(Authentication authentication, Model model) {
-        // Nếu user đã authenticated, hiển thị thông tin user
+        // Nếu User đã authenticated, hiển thị thông tin User
         if (authentication != null && authentication.isAuthenticated() &&
             !authentication.getName().equals("anonymousUser")) {
 
             try {
                 User user = authService.findByEmail(authentication.getName());
                 model.addAttribute("isGuest", false);
-                model.addAttribute("username", user.getName());
+                model.addAttribute("username", user.getUsername());
                 model.addAttribute("role", user.getRole().toString());
                 model.addAttribute("email", user.getEmail());
                 return "dashboard";

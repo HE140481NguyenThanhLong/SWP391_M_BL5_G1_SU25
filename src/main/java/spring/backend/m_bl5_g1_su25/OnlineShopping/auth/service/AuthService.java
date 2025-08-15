@@ -5,8 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.dto.RegisterRequest;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.repository.UserRepository;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.user.User;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.user.entity.Customer;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.user.entity.Staff;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.user.repository.CustomerRepository;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.user.repository.StaffRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +18,8 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.user.User;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
+    private final StaffRepository staffRepository;
     private final PasswordEncoder passwordEncoder;
 
     public User register(RegisterRequest request) {
@@ -22,19 +28,57 @@ public class AuthService {
             throw new RuntimeException("Email already exists");
         }
 
-        // Create new user
-        User user = new User();
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setPhoneNumber(request.getPhoneNumber());
-        user.setAddress(request.getAddress());
-        user.setRole(request.getRole());
+        // Create new user với thông tin cơ bản
+        User user = User.builder()
+                .username(request.getName()) // Sử dụng name từ request làm username
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(request.getRole())
+                .status(User.Status.ACTIVE)
+                .isDeleted(false)
+                .build();
 
         User savedUser = userRepository.save(user);
-        log.info("User registered successfully: {} ({})", savedUser.getName(), savedUser.getEmail());
 
+        // Tạo Customer hoặc Staff entity tương ứng dựa trên role
+        createUserProfile(savedUser, request);
+
+        log.info("User registered successfully: {} ({})", savedUser.getUsername(), savedUser.getEmail());
         return savedUser;
+    }
+
+    private void createUserProfile(User user, RegisterRequest request) {
+        // Tách firstName và lastName từ name
+        String[] nameParts = request.getName().trim().split("\\s+", 2);
+        String firstName = nameParts[0];
+        String lastName = nameParts.length > 1 ? nameParts[1] : "";
+
+        switch (user.getRole()) {
+            case CUSTOMER -> {
+                Customer customer = Customer.builder()
+                        .user(user)
+                        .firstname(firstName)
+                        .lastname(lastName)
+                        .phoneNumber(request.getPhoneNumber() != null ? request.getPhoneNumber() : "")
+                        .build();
+                customerRepository.save(customer); // FIX: Actually save the customer
+                log.info("Customer profile created for user: {}", user.getUsername());
+            }
+            case STAFF -> {
+                Staff staff = Staff.builder()
+                        .user(user)
+                        .firstname(firstName)
+                        .lastname(lastName)
+                        .phoneNumber(request.getPhoneNumber() != null ? request.getPhoneNumber() : "")
+                        .build();
+                staffRepository.save(staff); // FIX: Actually save the staff
+                log.info("Staff profile created for user: {}", user.getUsername());
+            }
+            case ADMIN -> {
+                // Admin không cần profile riêng
+                log.info("Admin user created: {}", user.getUsername());
+            }
+        }
     }
 
     public User findByEmail(String email) {
@@ -44,5 +88,12 @@ public class AuthService {
 
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    // Method để lấy thông tin đầy đủ của user
+    public String getFullUserInfo(User user) {
+        // TODO: Implement logic để lấy thông tin từ Customer/Staff entity
+        // Hiện tại chỉ trả về username
+        return user.getUsername();
     }
 }

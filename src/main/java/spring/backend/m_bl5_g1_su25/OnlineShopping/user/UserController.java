@@ -1,15 +1,20 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.user;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.service.AuthService;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.repository.UserRepository;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.user.entity.Customer;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.user.entity.Staff;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.user.repository.CustomerRepository;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.user.repository.StaffRepository;
+
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -17,82 +22,115 @@ public class UserController {
 
     private final AuthService authService;
     private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
+    private final StaffRepository staffRepository;
 
     @GetMapping({"/customer/profile", "/staff/profile"})
     public String showProfile(Authentication authentication, Model model) {
         User user = authService.findByEmail(authentication.getName());
 
         model.addAttribute("user", user);
-        model.addAttribute("username", user.getName());
-        model.addAttribute("email", user.getEmail());
-        model.addAttribute("phoneNumber", user.getPhoneNumber());
-        model.addAttribute("address", user.getAddress());
+
+        // Load Customer/Staff profile based on role
+        if (user.getRole() == User.Role.CUSTOMER) {
+            Optional<Customer> customerOpt = customerRepository.findById(user.getUser_id());
+            if (customerOpt.isPresent()) {
+                Customer customer = customerOpt.get();
+                model.addAttribute("profile", customer);
+                model.addAttribute("firstname", customer.getFirstname()); // Correct getter
+                model.addAttribute("lastname", customer.getLastname());   // Correct getter
+                model.addAttribute("phoneNumber", customer.getPhoneNumber()); // Correct getter
+            }
+        } else if (user.getRole() == User.Role.STAFF) {
+            Optional<Staff> staffOpt = staffRepository.findById(user.getUser_id());
+            if (staffOpt.isPresent()) {
+                Staff staff = staffOpt.get();
+                model.addAttribute("profile", staff);
+                model.addAttribute("firstname", staff.getFirstname()); // Correct getter
+                model.addAttribute("lastname", staff.getLastname());   // Correct getter
+                model.addAttribute("phoneNumber", staff.getPhoneNumber()); // Correct getter
+            }
+        }
 
         return "shared/profile";
     }
 
     @PostMapping({"/customer/profile/update", "/staff/profile/update"})
-    public String updateProfile(@RequestParam("name") String name,
+    public String updateProfile(@RequestParam("username") String username,
                                @RequestParam("email") String email,
-                               @RequestParam("phoneNumber") String phoneNumber,
-                               @RequestParam("address") String address,
+                               @RequestParam(value = "firstname", required = false) String firstname,
+                               @RequestParam(value = "lastname", required = false) String lastname,
+                               @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
                                Authentication authentication,
                                RedirectAttributes redirectAttributes,
                                Model model) {
 
-        // Validation thủ công cho các field cần thiết
+        // Validation
         StringBuilder errors = new StringBuilder();
 
-        if (name == null || name.trim().length() < 2 || name.trim().length() > 100) {
-            errors.append("Name must be between 2 and 100 characters; ");
+        if (username == null || username.trim().length() < 2 || username.trim().length() > 50) {
+            errors.append("Username must be between 2 and 50 characters; ");
         }
 
         if (email == null || email.trim().isEmpty() || !email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             errors.append("Please provide a valid email address; ");
         }
 
-        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
-            errors.append("Phone number is required; ");
+        if (firstname != null && (firstname.trim().length() < 2 || firstname.trim().length() > 50)) {
+            errors.append("First name must be between 2 and 50 characters; ");
         }
 
-        if (address == null || address.trim().isEmpty()) {
-            errors.append("Address is required; ");
+        if (lastname != null && (lastname.trim().length() < 2 || lastname.trim().length() > 50)) {
+            errors.append("Last name must be between 2 and 50 characters; ");
         }
 
-        if (errors.length() > 0) {
-            // Có lỗi validation - hiển thị lại form với lỗi
+        if (phoneNumber != null && (phoneNumber.trim().length() < 10 || phoneNumber.trim().length() > 15)) {
+            errors.append("Phone number must be between 10 and 15 characters; ");
+        }
+
+        if (!errors.isEmpty()) {
             User currentUser = authService.findByEmail(authentication.getName());
-
             model.addAttribute("user", currentUser);
-            model.addAttribute("username", currentUser.getName());
-            model.addAttribute("email", currentUser.getEmail());
-            model.addAttribute("phoneNumber", currentUser.getPhoneNumber());
-            model.addAttribute("address", currentUser.getAddress());
             model.addAttribute("error", "Please fix the following errors: " + errors.toString());
-
             return "shared/profile";
         }
 
         try {
-            // Lấy user hiện tại từ database
+            // Update User entity
             User currentUser = authService.findByEmail(authentication.getName());
 
-            // Check if email đã thay đổi và có tồn tại chưa
-            if (!currentUser.getEmail().equals(email.trim()) &&
-                authService.existsByEmail(email.trim())) {
+            // Check if email changed and already exists
+            if (!currentUser.getEmail().equals(email.trim()) && authService.existsByEmail(email.trim())) {
                 redirectAttributes.addFlashAttribute("error", "Email already exists");
                 return getRedirectPath(authentication);
             }
 
-            // Chỉ cập nhật 4 trường này, không động vào password và role
-            currentUser.setName(name.trim());
+            currentUser.setUsername(username.trim());
             currentUser.setEmail(email.trim());
-            currentUser.setPhoneNumber(phoneNumber.trim());
-            currentUser.setAddress(address.trim());
-
             userRepository.save(currentUser);
-            redirectAttributes.addFlashAttribute("success", "Profile updated successfully!");
 
+            // Update Customer/Staff profile
+            if (currentUser.getRole() == User.Role.CUSTOMER && firstname != null && lastname != null && phoneNumber != null) {
+                Optional<Customer> customerOpt = customerRepository.findById(currentUser.getUser_id());
+                if (customerOpt.isPresent()) {
+                    Customer customer = customerOpt.get();
+                    customer.setFirstname(firstname.trim());
+                    customer.setLastname(lastname.trim());
+                    customer.setPhoneNumber(phoneNumber.trim());
+                    customerRepository.save(customer);
+                }
+            } else if (currentUser.getRole() == User.Role.STAFF && firstname != null && lastname != null && phoneNumber != null) {
+                Optional<Staff> staffOpt = staffRepository.findById(currentUser.getUser_id());
+                if (staffOpt.isPresent()) {
+                    Staff staff = staffOpt.get();
+                    staff.setFirstname(firstname.trim());
+                    staff.setLastname(lastname.trim());
+                    staff.setPhoneNumber(phoneNumber.trim());
+                    staffRepository.save(staff);
+                }
+            }
+
+            redirectAttributes.addFlashAttribute("success", "Profile updated successfully!");
             return getRedirectPath(authentication);
 
         } catch (Exception e) {
