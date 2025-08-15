@@ -1,24 +1,60 @@
 server:
-  port: 8080
+  port: ${PORT:8081}  # Sử dụng biến môi trường PORT, fallback về 8081
+  shutdown: graceful  # Graceful shutdown để tránh port bị treo
   servlet:
-    context-path: /rms
+    session:
+      timeout: 30m  # Session timeout 30 phút (ngắn hơn để đảm bảo đóng browser = logout)
+      cookie:
+        max-age: 30m  # Cookie session chỉ tồn tại 30 phút
+        same-site: lax
+        secure: false  # Set true nếu dùng HTTPS
+        http-only: true  # Bảo mật, không cho JS access
 
 spring:
+  application:
+    name: SWP391-Online-Shopping
+
+  lifecycle:
+    timeout-per-shutdown-phase: 10s  # Thời gian chờ để shutdown gracefully
+
+  # Session store configuration để đảm bảo session không persistent
+  session:
+    store-type: none  # Không lưu session vào disk/database
+
+  # Azure SQL Database Configuration - Standard Setup
   datasource:
-    url: "jdbc:sqlserver://localhost:1433;database=SWP391_BL5_SU25;trustServerCertificate=true"
-    username: sa
-    password: sa
+    url: jdbc:sqlserver://g1-swp391-bl5-su25.database.windows.net:1433;database=G1_SWP391;encrypt=true;trustServerCertificate=true;loginTimeout=30;
+    username: group1
+    password: AHT8zf7LooEBNuV
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    hikari:
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      maximum-pool-size: 10
+      minimum-idle: 5
+
+  # JPA/Hibernate Configuration - Azure SQL Optimized
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: update  # Changed back to update to preserve existing data
+    show-sql: false  # Changed back to false to reduce log noise
     properties:
       hibernate:
-        format_sql: true
-        default_schema: dbo
+        dialect: org.hibernate.dialect.SQLServerDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        format_sql: false  # Disabled to reduce log noise
 
-    database-platform: org.hibernate.dialect.SQLServerDialect
-    logging:
-      level:
-        org.hibernate.SQL: DEBUG
-        org.hibernate.tool.schema: DEBUG
+  # Thymeleaf Configuration
+  thymeleaf:
+    cache: false
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
+    org.springframework.jdbc: WARN

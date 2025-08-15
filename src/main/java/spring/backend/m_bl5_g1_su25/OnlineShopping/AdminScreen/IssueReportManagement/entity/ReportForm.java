@@ -1,49 +1,62 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.AdminScreen.IssueReportManagement.entity;
 
 import jakarta.persistence.*;
-import jakarta.persistence.Table;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AdminScreen.IssueReportManagement.enums.IssueType;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AdminScreen.IssueReportManagement.enums.ReportStatus;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity.User;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.user.User;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
-@Getter
-@Setter
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "report_issues",
+        indexes = {
+                @Index(name = "idx_report_user", columnList = "user_id"),
+                @Index(name = "idx_report_status", columnList = "status"),
+                @Index(name = "idx_report_type", columnList = "issue_type"),
+                @Index(name = "idx_report_created", columnList = "created_at")
+        })
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Table(name="ReportIssue")
 public class ReportForm {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     Integer report_id;
+    @Column(name = "report_id")
+    private Long reportId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-    User user;
+    private User user;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 10, nullable = false)
-    IssueType issueType = IssueType.PRODUCT_ISSUE;
+    @Column(name = "issue_type", nullable = false, length = 30)
+    private IssueType issueType = IssueType.PRODUCT_ISSUE;
 
-    @Column( nullable = false, length = 1000)
-     String description;
+    @Column(name = "description", nullable = false, length = 1000)
+    @NotBlank(message = "Description is required")
+    @Size(min = 10, max = 1000, message = "Description must be between 10 and 1000 characters")
+    private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 10, nullable = false)
-    ReportStatus status = ReportStatus.OPENED;
+    @Column(name = "status", nullable = false, length = 20)
+    private ReportStatus status = ReportStatus.OPENED;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    LocalDateTime createdAt;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
-    LocalDateTime resolvedAt;
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
+    @Column(name = "resolved_at")
+    private LocalDateTime resolvedAt;
 }

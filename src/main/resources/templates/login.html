@@ -24,6 +24,16 @@
         <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
             <h2 class="text-2xl font-bold text-center mb-6">Login to Smart Shop</h2>
 
+            <!-- Success message for registration -->
+            <div th:if="${param.registered}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                <div class="flex items-center">
+                    <svg class="h-5 w-5 text-green-400 mr-2" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span th:text="${success}"></span>
+                </div>
+            </div>
+
             <!-- Error Messages -->
             <div th:if="${param.error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
                 <span>Invalid email or password</span>
@@ -33,17 +43,13 @@
                 <span>You have been logged out successfully</span>
             </div>
 
-            <div th:if="${success}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                <span th:text="${success}"></span>
-            </div>
-
             <!-- Login Form -->
-            <form th:action="@{/login}" method="post" class="space-y-4" autocomplete="off">
+            <form action="/login" method="post" class="space-y-4" autocomplete="off">
 
                 <!-- Email -->
                 <div>
-                    <label for="username" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" name="username" id="username"
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" name="email" id="email"
                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                            placeholder="Enter your email" required autocomplete="off">
                 </div>
@@ -57,7 +63,7 @@
                                placeholder="Enter password" required autocomplete="off">
                         <button type="button" id="togglePassword"
                                 class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                            <svg id="eyeIcon" class="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg id="eyeIcon" class="h-5 w-5 text-gray-400 hover:text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                             </svg>
@@ -66,34 +72,40 @@
                 </div>
 
                 <!-- Remember Me -->
-                <div class="flex items-center">
-                    <input type="checkbox" name="remember-me" id="remember-me"
-                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                    <label for="remember-me" class="ml-2 block text-sm text-gray-900">
-                        Remember me
-                    </label>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input type="checkbox" name="remember-me" id="rememberMe"
+                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="rememberMe" class="ml-2 block text-sm text-gray-900">
+                            Remember me for 30 days
+                        </label>
+                    </div>
+                    <div class="text-sm">
+                        <a href="#" class="font-medium text-blue-600 hover:text-blue-500" onclick="showForgotPassword()">
+                            Forgot your password?
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit"
-                        class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    Login
+                <button type="submit" id="loginBtn"
+                        class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                    <span id="loginBtnText">Sign In</span>
+                    <svg id="loginSpinner" class="hidden animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
                 </button>
             </form>
 
             <!-- Demo Account Info -->
             <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
                 <h3 class="text-sm font-medium text-yellow-800">Test Accounts:</h3>
-                <div class="text-sm text-yellow-700 space-y-2">
+                <div class="text-sm text-yellow-700 space-y-2 mt-2">
                     <div class="flex justify-between items-center">
                         <span><strong>STAFF:</strong> staff@smartshop.com / staff123</span>
                         <button type="button" onclick="fillLogin('staff@smartshop.com', 'staff123')"
                                 class="text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">Fill</button>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span><strong>DELIVERER:</strong> deliverer@smartshop.com / delivery123</span>
-                        <button type="button" onclick="fillLogin('deliverer@smartshop.com', 'delivery123')"
-                                class="text-xs bg-orange-500 text-white px-2 py-1 rounded hover:bg-orange-600">Fill</button>
                     </div>
                     <div class="flex justify-between items-center">
                         <span><strong>CUSTOMER:</strong> customer@smartshop.com / customer123</span>
@@ -101,18 +113,12 @@
                                 class="text-xs bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">Fill</button>
                     </div>
                 </div>
-                <div class="mt-2 text-xs text-yellow-600">
-                    Create accounts at <a href="/init" class="underline">/init</a> if they don't exist
+                <div class="text-xs text-yellow-600 mt-2">
+                    <p>💡 These accounts are automatically created for testing purposes.</p>
                 </div>
             </div>
 
     <script>
-        // Fill login form with test credentials
-        function fillLogin(email, password) {
-            document.getElementById('username').value = email;
-            document.getElementById('password').value = password;
-        }
-
         // Toggle password visibility
         document.getElementById('togglePassword').addEventListener('click', function() {
             const passwordField = document.getElementById('password');
@@ -132,11 +138,135 @@
             }
         });
 
-        // Prevent autofill
-        window.addEventListener('load', function() {
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
+        // Enhanced form submission with loading state
+        document.querySelector('form').addEventListener('submit', function() {
+            const loginBtn = document.getElementById('loginBtn');
+            const loginBtnText = document.getElementById('loginBtnText');
+            const loginSpinner = document.getElementById('loginSpinner');
+
+            // Show loading state
+            loginBtn.disabled = true;
+            loginBtnText.textContent = 'Signing in...';
+            loginSpinner.classList.remove('hidden');
+
+            // Re-enable after 5 seconds as fallback
+            setTimeout(() => {
+                loginBtn.disabled = false;
+                loginBtnText.textContent = 'Sign In';
+                loginSpinner.classList.add('hidden');
+            }, 5000);
         });
+
+        // Remember me checkbox enhancement
+        document.getElementById('rememberMe').addEventListener('change', function() {
+            const isChecked = this.checked;
+            const label = this.nextElementSibling;
+
+            if (isChecked) {
+                label.innerHTML = '<span class="text-blue-600 font-medium">Remember me for 30 days ✓</span>';
+                // Show info tooltip
+                showRememberMeInfo();
+            } else {
+                label.textContent = 'Remember me for 30 days';
+            }
+        });
+
+        // Show remember me information
+        function showRememberMeInfo() {
+            // Create temporary tooltip
+            const tooltip = document.createElement('div');
+            tooltip.className = 'absolute z-50 bg-gray-800 text-white text-xs rounded py-1 px-2 mt-1';
+            tooltip.textContent = 'We\'ll keep you logged in on this device';
+
+            const rememberMeDiv = document.getElementById('rememberMe').parentElement;
+            rememberMeDiv.style.position = 'relative';
+            rememberMeDiv.appendChild(tooltip);
+
+            // Remove tooltip after 3 seconds
+            setTimeout(() => {
+                if (tooltip.parentNode) {
+                    tooltip.parentNode.removeChild(tooltip);
+                }
+            }, 3000);
+        }
+
+        // Forgot password functionality
+        function showForgotPassword() {
+            alert('Forgot password functionality will be implemented soon.\n\nPlease contact support for assistance.');
+        }
+
+        // Store login attempt for security tracking
+        function trackLoginAttempt() {
+            const attempts = parseInt(sessionStorage.getItem('loginAttempts') || '0');
+            sessionStorage.setItem('loginAttempts', (attempts + 1).toString());
+            sessionStorage.setItem('lastLoginAttempt', new Date().toISOString());
+        }
+
+        // Fill demo credentials
+        function fillLogin(email, password) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-focus email field if empty
+            const emailField = document.getElementById('email');
+            if (emailField && !emailField.value) {
+                emailField.focus();
+            }
+
+            // Clear any existing errors on input
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('input', function() {
+                    this.classList.remove('border-red-300');
+                    const errorDiv = this.parentNode.querySelector('.text-red-600');
+                    if (errorDiv) {
+                        errorDiv.remove();
+                    }
+                });
+            });
+
+            // Track login attempts
+            document.querySelector('form').addEventListener('submit', trackLoginAttempt);
+        });
+
+        // Show registration success notification
+        function showRegistrationSuccess() {
+            const emailField = document.getElementById('username');
+            const passwordField = document.getElementById('password');
+
+            // Highlight the auto-filled fields
+            if (emailField.value) {
+                emailField.classList.add('border-green-400', 'bg-green-50');
+                setTimeout(() => {
+                    emailField.classList.remove('border-green-400', 'bg-green-50');
+                }, 3000);
+            }
+
+            if (passwordField.value) {
+                passwordField.classList.add('border-green-400', 'bg-green-50');
+                setTimeout(() => {
+                    passwordField.classList.remove('border-green-400', 'bg-green-50');
+                }, 3000);
+            }
+
+            // Show tooltip
+            const loginBtn = document.getElementById('loginBtn');
+            const tooltip = document.createElement('div');
+            tooltip.className = 'absolute z-50 bg-green-800 text-white text-sm rounded py-2 px-3 mt-2 transform -translate-x-1/2 left-1/2';
+            tooltip.innerHTML = 'Your credentials have been filled automatically!<br>Click "Sign In" to continue.';
+
+            loginBtn.parentElement.style.position = 'relative';
+            loginBtn.parentElement.appendChild(tooltip);
+
+            // Remove tooltip after 4 seconds
+            setTimeout(() => {
+                if (tooltip.parentNode) {
+                    tooltip.parentNode.removeChild(tooltip);
+                }
+            }, 4000);
+        }
     </script>
             <!-- Sign Up Link -->
             <div class="text-center mt-4">

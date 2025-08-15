@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gray-50">
     <!-- Navigation - Dynamic styling based on role -->
-    <nav th:class="${user.role.name() == 'CUSTOMER'} ? 'bg-indigo-600 text-white shadow-lg' : 'bg-orange-600 text-white shadow-lg'">
+    <nav th:class="${user.role.name() == 'CUSTOMER'} ? 'bg-indigo-600 text-white shadow-lg' : 'bg-green-600 text-white shadow-lg'">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center space-x-4">
@@ -17,7 +17,7 @@
                 <div class="flex items-center space-x-6">
                     <!-- Notification Bell -->
                     <div class="relative">
-                        <button id="notificationBtn" th:class="${user.role.name() == 'CUSTOMER'} ? 'relative hover:text-indigo-200 focus:outline-none' : 'relative hover:text-orange-200 focus:outline-none'">
+                        <button id="notificationBtn" th:class="${user.role.name() == 'CUSTOMER'} ? 'relative hover:text-indigo-200 focus:outline-none' : 'relative hover:text-green-200 focus:outline-none'">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-3.5-3.5a7 7 0 1 0-9.9 0L10 17h5a2 2 0 0 1 0 4H9a2 2 0 0 1 0-4z"/>
                             </svg>
@@ -40,17 +40,17 @@
 
                     <!-- User section - only show if authenticated -->
                     <div sec:authorize="isAuthenticated()">
-                        <span th:class="${user.role.name() == 'CUSTOMER'} ? 'text-indigo-200' : 'text-orange-200'">
+                        <span th:class="${user.role.name() == 'CUSTOMER'} ? 'text-indigo-200' : 'text-green-200'">
                             Welcome, <span th:text="${user.name}" class="font-semibold">User</span>
                         </span>
-                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/dashboard' : '/deliverer/dashboard'"
-                           th:class="${user.role.name() == 'CUSTOMER'} ? 'hover:text-indigo-200' : 'hover:text-orange-200'">Home</a>
-                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/orders' : '/deliverer/orders'"
-                           th:class="${user.role.name() == 'CUSTOMER'} ? 'hover:text-indigo-200' : 'hover:text-orange-200'">My Orders</a>
-                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/profile' : '/deliverer/profile'"
-                           th:class="${user.role.name() == 'CUSTOMER'} ? 'hover:text-indigo-200' : 'hover:text-orange-200'">Profile</a>
+                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/dashboard' : '/staff/dashboard'"
+                           th:class="${user.role.name() == 'CUSTOMER'} ? 'hover:text-indigo-200' : 'hover:text-green-200'">Home</a>
+                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/orders' : '/staff/orders'"
+                           th:class="${user.role.name() == 'CUSTOMER'} ? 'hover:text-indigo-200' : 'hover:text-green-200'">My Orders</a>
+                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/profile' : '/staff/profile'"
+                           th:class="${user.role.name() == 'CUSTOMER'} ? 'hover:text-indigo-200' : 'hover:text-green-200'">Profile</a>
                         <a href="/logout"
-                           th:class="${user.role.name() == 'CUSTOMER'} ? 'bg-indigo-700 px-3 py-1 rounded hover:bg-indigo-800 transition-colors' : 'bg-orange-700 px-3 py-1 rounded hover:bg-orange-800 transition-colors'">Logout</a>
+                           th:class="${user.role.name() == 'CUSTOMER'} ? 'bg-indigo-700 px-3 py-1 rounded hover:bg-indigo-800 transition-colors' : 'bg-green-700 px-3 py-1 rounded hover:bg-green-800 transition-colors'">Logout</a>
                     </div>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-xl font-semibold text-gray-900">Personal Information</h3>
                         <button id="editProfileBtn" onclick="toggleEditMode()"
-                                th:class="${user.role.name() == 'CUSTOMER'} ? 'bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors' : 'bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition-colors'">
+                                th:class="${user.role.name() == 'CUSTOMER'} ? 'bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors' : 'bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors'">
                             Edit Profile
                         </button>
                     </div>
@@ -115,25 +115,25 @@
 
                     <!-- Edit Mode -->
                     <div id="editMode" class="hidden">
-                        <form th:action="${user.role.name() == 'CUSTOMER'} ? '/customer/profile/update' : '/deliverer/profile/update'"
+                        <form th:action="${user.role.name() == 'CUSTOMER'} ? '/customer/profile/update' : '/staff/profile/update'"
                               th:object="${user}" method="post" class="space-y-6">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                                     <input type="text" th:field="*{name}" id="name"
-                                           th:class="${user.role.name() == 'CUSTOMER'} ? 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' : 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500'"
+                                           th:class="${user.role.name() == 'CUSTOMER'} ? 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' : 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500'"
                                            required>
                                 </div>
                                 <div>
                                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                                     <input type="email" th:field="*{email}" id="email"
-                                           th:class="${user.role.name() == 'CUSTOMER'} ? 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' : 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500'"
+                                           th:class="${user.role.name() == 'CUSTOMER'} ? 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' : 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500'"
                                            required>
                                 </div>
                                 <div>
                                     <label for="phoneNumber" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                                     <input type="text" th:field="*{phoneNumber}" id="phoneNumber"
-                                           th:class="${user.role.name() == 'CUSTOMER'} ? 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' : 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500'"
+                                           th:class="${user.role.name() == 'CUSTOMER'} ? 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' : 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500'"
                                            required>
                                 </div>
                                 <div>
@@ -144,7 +144,7 @@
                                 <div class="md:col-span-2">
                                     <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Address</label>
                                     <textarea th:field="*{address}" id="address" rows="3"
-                                              th:class="${user.role.name() == 'CUSTOMER'} ? 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' : 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500'"
+                                              th:class="${user.role.name() == 'CUSTOMER'} ? 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' : 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500'"
                                               required></textarea>
                                 </div>
                             </div>
@@ -171,12 +171,12 @@
                         <button onclick="changePassword()" class="w-full bg-yellow-600 text-white px-4 py-2 rounded-md hover:bg-yellow-700 transition-colors">
                             Change Password
                         </button>
-                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/orders' : '/deliverer/orders'"
+                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/orders' : '/staff/orders'"
                            class="block w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-center">
                             View My Orders
                         </a>
-                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/dashboard' : '/deliverer/dashboard'"
-                           th:class="${user.role.name() == 'CUSTOMER'} ? 'block w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors text-center' : 'block w-full bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition-colors text-center'">
+                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/dashboard' : '/staff/dashboard'"
+                           th:class="${user.role.name() == 'CUSTOMER'} ? 'block w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors text-center' : 'block w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors text-center'">
                             Back to Dashboard
                         </a>
                     </div>
@@ -185,7 +185,7 @@
                 <!-- Account Info - Dynamic content based on role -->
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4"
-                        th:text="${user.role.name() == 'CUSTOMER'} ? 'Account Information' : 'Delivery Information'">Account Information</h3>
+                        th:text="${user.role.name() == 'CUSTOMER'} ? 'Account Information' : 'Staff Information'">Account Information</h3>
                     <div class="space-y-3 text-sm">
                         <div class="flex justify-between">
                             <span class="text-gray-600">Account Status:</span>
@@ -199,13 +199,13 @@
                             <span class="text-gray-600">Total Orders:</span>
                             <span class="text-gray-900">12</span>
                         </div>
-                        <div class="flex justify-between" th:if="${user.role.name() == 'DELIVERER'}">
-                            <span class="text-gray-600">Deliveries This Month:</span>
-                            <span class="text-gray-900">156</span>
+                        <div class="flex justify-between" th:if="${user.role.name() == 'STAFF'}">
+                            <span class="text-gray-600">Tasks This Month:</span>
+                            <span class="text-gray-900">24</span>
                         </div>
-                        <div class="flex justify-between" th:if="${user.role.name() == 'DELIVERER'}">
-                            <span class="text-gray-600">Success Rate:</span>
-                            <span class="text-green-600 font-medium">98.5%</span>
+                        <div class="flex justify-between" th:if="${user.role.name() == 'STAFF'}">
+                            <span class="text-gray-600">Performance:</span>
+                            <span class="text-green-600 font-medium">Excellent</span>
                         </div>
                     </div>
                 </div>
