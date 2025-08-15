@@ -31,14 +31,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
-                // Public access
-                .requestMatchers("/signup", "/login", "/css/**", "/js/**", "/images/**").permitAll()
-                .requestMatchers("/", "/dashboard").permitAll()
-                .requestMatchers("/notifications/**").permitAll()
+                // Public access for dashboard and static resources
+                .requestMatchers("/", "/dashboard", "/signup", "/login").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
 
                 // Role-based access control
                 .requestMatchers("/staff/**").hasRole("STAFF")
-                .requestMatchers("/deliverer/**").hasRole("DELIVERER")
                 .requestMatchers("/customer/**").hasRole("CUSTOMER")
 
                 // Profile access for authenticated users
@@ -48,17 +46,24 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .usernameParameter("username") // Email is used as username
+                .usernameParameter("username")
                 .passwordParameter("password")
                 .successHandler(loginHandler)
                 .failureUrl("/login?error=true")
                 .permitAll()
             )
+            .rememberMe(remember -> remember
+                .key("smartshop-remember-me-key")
+                .tokenValiditySeconds(86400 * 7) // 7 days
+                .userDetailsService(userDetailsService)
+                .rememberMeParameter("remember-me")
+            )
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessHandler(logoutHandler)
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
+                .deleteCookies("JSESSIONID", "remember-me")
+                .clearAuthentication(true)
                 .permitAll()
             )
             .sessionManagement(session -> session

@@ -1,14 +1,43 @@
 server:
-  port: 8080
-  servlet:
-    context-path: /rms
+  port: 8081
 
 spring:
+  application:
+    name: SWP391-Online-Shopping
+
+  # Azure SQL Database Configuration - Standard Setup
   datasource:
-    url: "jdbc:sqlserver://localhost:1433;database=SWP391_BL5_SU25;trustServerCertificate=true"
-    username: sa
-    password: sa
+    url: jdbc:sqlserver://g1-swp391-bl5-su25.database.windows.net:1433;database=G1_SWP391;encrypt=true;trustServerCertificate=true;loginTimeout=30;
+    username: group1
+    password: AHT8zf7LooEBNuV
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    hikari:
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      maximum-pool-size: 10
+      minimum-idle: 5
+
+  # JPA/Hibernate Configuration - Azure SQL Optimized
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+  # Thymeleaf Configuration
+  thymeleaf:
+    cache: false
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    org.springframework.security: INFO
+    org.hibernate.SQL: DEBUG
+    org.springframework.jdbc: DEBUG

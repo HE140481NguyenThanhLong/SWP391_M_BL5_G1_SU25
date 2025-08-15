@@ -27,14 +27,14 @@ public class Login implements AuthenticationSuccessHandler {
         // Get user role from authentication
         String role = authentication.getAuthorities().iterator().next().getAuthority();
 
-        // Redirect based on user role
+        // Redirect based on user role (only STAFF and CUSTOMER)
         String redirectUrl = switch (role) {
             case "ROLE_STAFF" -> "/staff/dashboard";
-            case "ROLE_DELIVERER" -> "/deliverer/dashboard";
             case "ROLE_CUSTOMER" -> "/dashboard";
-            default -> "/dashboard";
+            default -> "/dashboard"; // Default to public dashboard
         };
 
+        // Simple redirect without context path
         response.sendRedirect(redirectUrl);
     }
 }

@@ -49,10 +49,9 @@ public class StaffController {
             newUser.setAddress(address);
             newUser.setPassword(password); // Will be encoded in UserService
 
-            // Set role based on selection
+            // Set role based on selection (only STAFF and CUSTOMER allowed)
             User.UserRole userRole = switch (role.toUpperCase()) {
                 case "STAFF" -> User.UserRole.STAFF;
-                case "DELIVERER" -> User.UserRole.DELIVERER;
                 case "CUSTOMER" -> User.UserRole.CUSTOMER;
                 default -> User.UserRole.CUSTOMER;
             };
