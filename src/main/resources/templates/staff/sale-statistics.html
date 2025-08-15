@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sale Statistics - Smart Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation -->
+    <nav class="bg-green-600 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold">Smart Shop</h1>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <!-- Notification Bell -->
+                    <div class="relative">
+                        <button id="notificationBtn" class="relative hover:text-green-200 focus:outline-none">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-3.5-3.5a7 7 0 1 0-9.9 0L10 17h5a2 2 0 0 1 0 4H9a2 2 0 0 1 0-4z"/>
+                            </svg>
+                            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                        </button>
+                    </div>
+
+                    <!-- User section -->
+                    <div sec:authorize="isAuthenticated()">
+                        <span class="text-green-200">Welcome, Staff</span>
+                        <a href="/staff/dashboard" class="hover:text-green-200">Home</a>
+                        <a href="/profile" class="hover:text-green-200">Profile</a>
+                        <a href="/logout" class="bg-green-700 px-3 py-1 rounded hover:bg-green-800 transition-colors">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto mt-8 px-4">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Sale Statistics</h2>
+
+            <!-- Breadcrumb -->
+            <nav class="mb-6">
+                <ol class="flex space-x-2 text-sm text-gray-600">
+                    <li><a href="/staff/dashboard" class="hover:text-green-600">Dashboard</a></li>
+                    <li>/</li>
+                    <li class="text-gray-800">Sale Statistics</li>
+                </ol>
+            </nav>
+
+            <!-- Content Area -->
+            <div class="min-h-96">
+                <!-- Sale Statistics content will go here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center p-4 mt-16">
+        <p>&copy; 2025 Smart Shop. All rights reserved.</p>
+    </footer>
+</body>
+</html>
