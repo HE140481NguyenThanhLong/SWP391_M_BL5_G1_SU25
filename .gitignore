@@ -82,6 +82,6 @@ Desktop.ini
 # Sensitive configuration
 # ----------------------
 # Keep local environment files out of Git
-application-*.properties
-application-*.yml
+application.properties
+application.yaml
 .env
