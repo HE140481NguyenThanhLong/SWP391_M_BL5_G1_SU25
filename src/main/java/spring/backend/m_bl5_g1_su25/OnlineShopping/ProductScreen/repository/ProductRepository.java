@@ -1,0 +1,34 @@
+package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
+
+import java.util.List;
+
+public interface ProductRepository extends JpaRepository<Product, Integer> {
+
+    @Query("""
+    SELECT DISTINCT p 
+    FROM Product p 
+    LEFT JOIN p.categories c
+    WHERE (:search IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%')))
+      AND (
+           :category IS NULL OR :category = '' 
+           OR LOWER(c.name) = LOWER(:category)
+           OR (:category = 'LOW_STOCK' AND p.quantity BETWEEN 1 AND 5)
+           OR (:category = 'OUT_OF_STOCK' AND p.quantity = 0)
+      )
+""")
+    Page<Product> searchProducts(String search, String category, Pageable pageable);
+
+    long countByQuantityGreaterThan(int qty);
+    long countByQuantityBetween(int min, int max);
+    long countByQuantity(int qty);
+    // Thêm phương thức tùy chỉnh để lấy danh sách nhà cung cấp duy nhất
+    @Query("SELECT DISTINCT p.supplier FROM Product p WHERE p.supplier IS NOT NULL")
+    List<String> findAllSuppliers();
+
+}

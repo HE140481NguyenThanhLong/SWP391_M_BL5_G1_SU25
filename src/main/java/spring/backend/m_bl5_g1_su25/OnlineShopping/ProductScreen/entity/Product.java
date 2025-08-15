@@ -31,6 +31,8 @@ public class Product {
     @Column(nullable = false, precision = 18, scale = 2)
     BigDecimal price;
     @Column()
+    String supplier;
+    @Column()
     Integer quantity;
     @Column(nullable = false)
     Integer sales_count=0;
@@ -53,5 +55,9 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories = new HashSet<>();
+    @Column(nullable = false, precision = 18, scale = 2)
+    BigDecimal importPrice;
 
+    @Column(nullable = false, precision = 18, scale = 2)
+    BigDecimal salePrice;
 }
