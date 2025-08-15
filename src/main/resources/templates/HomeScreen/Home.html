@@ -1,12 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<!-- Background wrapper -->
+<body class="min-h-screen overflow-x-hidden bg-gray-50 dark:bg-gray-900">
+
+<div th:replace="Header/header::header"/>
+<main
+        class="ml-14 p-6 transition-[margin] duration-300
+         peer-hover:ml-72 peer-focus-within:ml-72 bg-transparent"
+>
 <section
         class="relative rounded-2xl border border-gray-200 bg-gradient-to-br from-indigo-50 via-white to-white p-6 md:p-8 dark:border-gray-700 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800"
 >
@@ -29,7 +34,8 @@
                 <!-- Collapsible Filters (Flowbite Accordion) -->
                 <div id="filter-accordion" data-accordion="collapse"
                      class="divide-y divide-gray-200 dark:divide-gray-700">
-
+                    <button class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">
+                        <a th:href="@{/guest/getRecent}">Recent Upload</a></button>
                     <!-- Category (single checkbox) -->
                     <h3 id="acc-cat-heading">
                         <button type="button"
@@ -106,12 +112,12 @@
 
             <div id="product-grid" class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
                 <!-- Single Product Card -->
-                <article
+                <article th:each="product : ${products}"
                         class="group relative overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800"
                         data-category="Headphones" data-price="89" data-added="2025-08-10"
                 >
                     <div class="overflow-hidden">
-                        <img
+                        <img th:src="${product.imageUrl}"
                                 src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop"
                                 alt="Wireless Headphones"
                                 class="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -119,10 +125,10 @@
                     </div>
                     <div class="p-4">
                         <div class="mb-1 flex items-start justify-between gap-3">
-                            <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100">Wireless Headphones</h3>
-                            <span class="shrink-0 rounded-md bg-indigo-50 px-2.5 py-1 text-sm font-medium text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200">$89.00</span>
+                            <h3 th:text="${product.name}" class="text-base font-semibold text-gray-900 dark:text-gray-100">Wireless Headphones</h3>
+                            <span th:text="${product.price}" class="shrink-0 rounded-md bg-indigo-50 px-2.5 py-1 text-sm font-medium text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200">$89.00</span>
                         </div>
-                        <p class="text-sm text-gray-600 dark:text-gray-300">Noise-cancelling, 30h battery, ultra-soft cushions.</p>
+                        <p th:text="${product.description}" class="text-sm text-gray-600 dark:text-gray-300">Noise-cancelling, 30h battery, ultra-soft cushions.</p>
 
                         <!-- Add to cart (POST to backend) -->
                         <form action="/cart/add" method="post" class="mt-4">
@@ -142,7 +148,80 @@
             </div>
         </section>
     </div>
+<!--   Pagination section -->
+    <div class="flex justify-center items-center mt-4">
+        <div th:if="${totalPages > 0}" class="flex flex-col items-center mt-4">
+            <!-- Help text -->
+            <span class="text-sm text-gray-700 dark:text-gray-400">
+      Showing <span class="font-semibold text-gray-900 dark:text-white" th:text="${content.size()}"></span> of
+      <span class="font-semibold text-gray-900 dark:text-white" th:text="${totalItems}"></span> Entries
+    </span>
+
+            <!-- Pagination buttons -->
+            <div class="inline-flex mt-2 xs:mt-0">
+                <!-- Previous Button -->
+                <a th:if="${currentPage > 0}"
+                   th:href="@{/guest    (page=${currentPage - 1}, size=${pageSize})}"
+                   class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-700 rounded-l hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700">
+                    <svg class="w-3.5 h-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                         fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                              stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
+                    </svg>
+                    Prev
+                </a>
+                <span th:unless="${currentPage > 0}"
+                      class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-400 rounded-l dark:bg-blue-500 cursor-not-allowed">
+        <svg class="w-3.5 h-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+             viewBox="0 0 14 10">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13 5H1m0 0 4 4M1 5l4-4"/>
+        </svg>
+        Prev
+      </span>
+
+                <!-- Page number indicators -->
+                <div class="flex">
+                    <div th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                         th:if="${i >= currentPage - 2 && i <= currentPage + 2}"
+                         class="hidden md:flex">
+                        <a th:if="${i != currentPage}"
+                           th:href="@{/guest/jobGuest(page=${i}, size=${pageSize})}"
+                           class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                           th:text="${i + 1}">
+                        </a>
+                        <span th:if="${i == currentPage}"
+                              class="flex items-center justify-center px-4 h-10 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+                              th:text="${i + 1}">
+          </span>
+                    </div>
+                </div>
+
+                <!-- Next Button -->
+                <a th:if="${currentPage < totalPages - 1}"
+                   th:href="@{/guest/jobGuest(page=${currentPage + 1}, size=${pageSize})}"
+                   class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-700 border-0 border-l border-gray-700 rounded-r hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700">
+                    Next
+                    <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                         fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                              stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                    </svg>
+                </a>
+                <span th:unless="${currentPage < totalPages - 1}"
+                      class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-400 border-0 border-l border-gray-700 rounded-r dark:bg-blue-500 cursor-not-allowed">
+        Next
+        <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+             viewBox="0 0 14 10">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M1 5h12m0 0L9 1m4 4L9 9"/>
+        </svg>
+      </span>
+            </div>
+        </div>
+    </div>
 </section>
+</main>
 
 <!-- Root popup container -->
 <!--<div id="new-product-popup"-->
