@@ -8,6 +8,5 @@ public class MBl5G1Su25Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MBl5G1Su25Application.class, args);
-		//test branch
 	}
 }
