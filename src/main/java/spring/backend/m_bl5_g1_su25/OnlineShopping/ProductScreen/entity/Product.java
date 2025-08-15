@@ -40,11 +40,11 @@ public class Product {
     @Column(columnDefinition = "NVARCHAR(255)")
      String imageUrl;
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(nullable = false)
+    @Column()
     LocalDateTime updatedAt;
     @ManyToMany
     @JoinTable(
