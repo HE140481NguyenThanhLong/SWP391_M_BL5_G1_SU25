@@ -95,12 +95,18 @@
                         </li>
 
                         <!-- Page numbers -->
+<!--                        <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}">-->
+<!--                            <a th:href="@{/cart(pageNo=${pageNum}, pageSize=${cartItems.size}, orderBy=${orderBy}, isDesc=${isDesc})}"-->
+<!--                               th:text="${pageNum + 1}"-->
+<!--                               th:classappend="${pageNum} == ${currentPage} ?-->
+<!--                   'z-10 flex h-8 items-center justify-center border border-primary-300 bg-primary-50 px-3 leading-tight text-primary-600' :-->
+<!--                   'flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 hover:dark:bg-gray-700 hover:dark:text-white'">-->
+<!--                            </a>-->
+<!--                        </li>-->
                         <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}">
                             <a th:href="@{/cart(pageNo=${pageNum}, pageSize=${cartItems.size}, orderBy=${orderBy}, isDesc=${isDesc})}"
                                th:text="${pageNum + 1}"
-                               th:classappend="${pageNum} == ${currentPage} ?
-                   'z-10 flex h-8 items-center justify-center border border-primary-300 bg-primary-50 px-3 leading-tight text-primary-600' :
-                   'flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 hover:dark:bg-gray-700 hover:dark:text-white'">
+                               th:classappend="${pageNum == currentPage} ? 'z-10 flex h-8 items-center justify-center border border-primary-300 bg-primary-50 px-3 leading-tight text-primary-600' : 'flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 hover:dark:bg-gray-700 hover:dark:text-white'">
                             </a>
                         </li>
 
