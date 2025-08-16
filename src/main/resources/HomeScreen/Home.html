@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<!-- Background wrapper -->
+<section
+        class="relative rounded-2xl border border-gray-200 bg-gradient-to-br from-indigo-50 via-white to-white p-6 md:p-8 dark:border-gray-700 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800"
+>
+    <!-- optional soft accent blobs (remove if you want plain bg) -->
+    <div aria-hidden="true"
+         class="pointer-events-none absolute inset-0 opacity-70 [background:radial-gradient(40rem_40rem_at_-10%_-10%,rgba(99,102,241,0.12),transparent_60%),radial-gradient(32rem_32rem_at_110%_110%,rgba(16,185,129,0.10),transparent_60%)]">
+    </div>
+
+    <!-- Your content (unchanged, but with tag fixes) -->
+    <div class="relative grid grid-cols-1 gap-6 lg:grid-cols-12">
+        <!-- Sidebar Filter (form submits to backend) -->
+        <aside class="lg:col-span-3">
+            <form action="/products" method="get"
+                  class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-800">
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Filters</h2>
+                    <a href="/products" class="text-sm text-indigo-600 hover:underline dark:text-indigo-400">Clear</a>
+                </div>
+
+                <!-- Collapsible Filters (Flowbite Accordion) -->
+                <div id="filter-accordion" data-accordion="collapse"
+                     class="divide-y divide-gray-200 dark:divide-gray-700">
+
+                    <!-- Category (single checkbox) -->
+                    <h3 id="acc-cat-heading">
+                        <button type="button"
+                                class="flex w-full items-center justify-between rounded-lg p-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+                                data-accordion-target="#acc-cat-body" aria-expanded="true" aria-controls="acc-cat-body">
+                            <span>Category</span>
+                            <svg data-accordion-icon class="h-4 w-4 shrink-0 transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                    </h3>
+                    <div id="acc-cat-body" class="" aria-labelledby="acc-cat-heading">
+                        <div class="p-3 pt-0">
+                            <label class="flex items-center gap-2">
+                                <input id="cat-option" name="category" type="checkbox" value="Headphones"
+                                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700" />
+                                <span class="text-sm text-gray-700 dark:text-gray-300">Headphones</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Price (single checkbox) -->
+                    <h3 id="acc-price-heading">
+                        <button type="button"
+                                class="flex w-full items-center justify-between rounded-lg p-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+                                data-accordion-target="#acc-price-body" aria-expanded="false" aria-controls="acc-price-body">
+                            <span>Price</span>
+                            <svg data-accordion-icon class="h-4 w-4 shrink-0 transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                    </h3>
+                    <div id="acc-price-body" class="hidden" aria-labelledby="acc-price-heading">
+                        <div class="p-3 pt-0">
+                            <label class="flex items-center gap-2">
+                                <input id="price-range" name="price" type="checkbox" value="0-100"
+                                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700" />
+                                <span class="text-sm text-gray-700 dark:text-gray-300">$0 – $100</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Time (single checkbox) -->
+                    <h3 id="acc-time-heading">
+                        <button type="button"
+                                class="flex w-full items-center justify-between rounded-lg p-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
+                                data-accordion-target="#acc-time-body" aria-expanded="false" aria-controls="acc-time-body">
+                            <span>Time</span>
+                            <svg data-accordion-icon class="h-4 w-4 shrink-0 transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                    </h3>
+                    <div id="acc-time-body" class="hidden" aria-labelledby="acc-time-heading">
+                        <div class="p-3 pt-0">
+                            <label class="flex items-center gap-2">
+                                <input id="time-window" name="time" type="checkbox" value="7d"
+                                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700" />
+                                <span class="text-sm text-gray-700 dark:text-gray-300">Last 7 days</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit filters -->
+                <div class="mt-4">
+                    <button type="submit"
+                            class="inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        Apply filters
+                    </button>
+                </div>
+            </form>
+        </aside>
+
+        <!-- Products (single card; duplicate with Thymeleaf later) -->
+        <section class="lg:col-span-9">
+            <div class="mb-4 flex items-center justify-between">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Products</h2>
+            </div>
+
+            <div id="product-grid" class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                <!-- Single Product Card -->
+                <article
+                        class="group relative overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800"
+                        data-category="Headphones" data-price="89" data-added="2025-08-10"
+                >
+                    <div class="overflow-hidden">
+                        <img
+                                src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop"
+                                alt="Wireless Headphones"
+                                class="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                loading="lazy" />
+                    </div>
+                    <div class="p-4">
+                        <div class="mb-1 flex items-start justify-between gap-3">
+                            <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100">Wireless Headphones</h3>
+                            <span class="shrink-0 rounded-md bg-indigo-50 px-2.5 py-1 text-sm font-medium text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200">$89.00</span>
+                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Noise-cancelling, 30h battery, ultra-soft cushions.</p>
+
+                        <!-- Add to cart (POST to backend) -->
+                        <form action="/cart/add" method="post" class="mt-4">
+                            <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
+                            <input type="hidden" name="productId" value="123" />
+                            <input type="hidden" name="quantity" value="1" />
+                            <button type="submit"
+                                    class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l3-8H6.4M7 13l-1.6-8M7 13l-2 9m12-9l-2 9M9 22a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                                </svg>
+                                Add to cart
+                            </button>
+                        </form>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </div>
+</section>
+
+<!-- Root popup container -->
+<!--<div id="new-product-popup"-->
+<!--     class="fixed inset-0 z-50 flex items-center justify-center p-4"-->
+<!--     role="dialog" aria-modal="true" aria-labelledby="new-product-heading"-->
+<!--     th:if="${newProduct != null and (param.np == null or param.np != '0')}" >-->
+
+<!--    &lt;!&ndash; Backdrop: clicking it "closes" by reloading with np=0 &ndash;&gt;-->
+<!--    <a th:href="@{?np=0}" class="absolute inset-0 bg-black/50" aria-label="Close"></a>-->
+
+<!--    &lt;!&ndash; Modal &ndash;&gt;-->
+<!--    <div class="relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-800">-->
+<!--        <h2 id="new-product-heading" class="sr-only" th:text="'New product: ' + ${newProduct.name}">New product</h2>-->
+
+<!--        &lt;!&ndash; Click image to open product detail &ndash;&gt;-->
+<!--        <a th:href="@{/products/{id}(id=${newProduct.id})}" class="block">-->
+<!--            <img th:src="${newProduct.imageUrl}" th:alt="${newProduct.name}"-->
+<!--                 class="h-auto w-full object-cover" loading="lazy" />-->
+<!--        </a>-->
+
+<!--        &lt;!&ndash; Close (ensure it's above everything) &ndash;&gt;-->
+<!--        <a th:href="@{?np=0}"-->
+<!--           class="absolute right-3 top-3 z-20 inline-flex rounded-full bg-white/90 p-2 text-gray-700 shadow hover:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-900/70 dark:text-gray-200">-->
+<!--            <span class="sr-only">Close</span>-->
+<!--            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">-->
+<!--                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>-->
+<!--            </svg>-->
+<!--        </a>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+</body>
+</html>
