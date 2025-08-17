@@ -7,369 +7,119 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
-    <!-- Navigation -->
-    <nav class="bg-blue-600 text-white p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Smart Shop</h1>
-            <div class="space-x-4">
-                <a href="/dashboard" class="hover:text-blue-200">Home</a>
-                <a href="/login" class="hover:text-blue-200">Login</a>
-                <a href="/signup" class="hover:text-blue-200">Sign Up</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="container mx-auto mt-8 px-4">
-        <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-2xl font-bold text-center mb-6">Login to Smart Shop</h2>
-
-            <!-- Success message for registration -->
-            <div th:if="${param.registered}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                <div class="flex items-center">
-                    <svg class="h-5 w-5 text-green-400 mr-2" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span th:text="${success}"></span>
-                </div>
-            </div>
-
-            <!-- Error Messages -->
-            <div th:if="${param.error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                <span>Invalid email or password</span>
-            </div>
-
-            <div th:if="${param.logout}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                <span>You have been logged out successfully</span>
-            </div>
-
-            <!-- Login Form -->
-            <form action="/login" method="post" class="space-y-4">
-                <!-- Email -->
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" name="email" id="email"
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                           placeholder="Enter your email" required>
-                </div>
-
-                <!-- Password with Show/Hide Toggle -->
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <div class="relative">
-                        <input type="password" name="password" id="password"
-                               class="mt-1 block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                               placeholder="Enter password" required>
-                        <button type="button" id="togglePassword"
-                                class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                            <svg id="eyeIcon" class="h-5 w-5 text-gray-400 hover:text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Remember Me -->
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <input type="checkbox" name="remember-me" id="rememberMe"
-                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                        <label for="rememberMe" class="ml-2 block text-sm text-gray-900">
-                            Remember me for 30 days
-                        </label>
-                    </div>
-                    <div class="text-sm">
-                        <a href="#" class="font-medium text-blue-600 hover:text-blue-500" onclick="showForgotPassword()">
-                            Forgot your password?
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit" id="loginBtn"
-                        class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50">
-                    <span id="loginBtnText">Sign In</span>
-                    <svg id="loginSpinner" class="hidden animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 714 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                </button>
-            </form>
-
-            <!-- Demo Account Info -->
-            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
-                <h3 class="text-sm font-medium text-yellow-800">Test Accounts (Auto-created by DataLoader):</h3>
-                <div class="text-sm text-yellow-700 space-y-2 mt-2">
-                    <div class="flex justify-between items-center">
-                        <span><strong>ADMIN:</strong> admin@test.com / 123456</span>
-                        <button type="button" onclick="fillLogin('admin@test.com', '123456')"
-                                class="text-xs bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition-colors">Fill</button>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span><strong>STAFF:</strong> staff@test.com / 123456</span>
-                        <button type="button" onclick="fillLogin('staff@test.com', '123456')"
-                                class="text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition-colors">Fill</button>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span><strong>CUSTOMER:</strong> customer@test.com / 123456</span>
-                        <button type="button" onclick="fillLogin('customer@test.com', '123456')"
-                                class="text-xs bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 transition-colors">Fill</button>
-                    </div>
-                </div>
-                <div class="text-xs text-yellow-600 mt-2">
-                    <p>💡 These accounts are automatically created by DataLoader on app startup.</p>
-                    <p>🔒 Passwords are BCrypt encoded in database for security.</p>
-                </div>
-            </div>
-
-            <!-- Sign Up Link -->
-            <div class="text-center mt-4">
-                <p class="text-sm text-gray-600">
-                    Don't have an account?
-                    <a href="/signup" class="text-blue-600 hover:text-blue-800">Create account here</a>
-                </p>
-            </div>
+<!-- Navigation -->
+<nav class="bg-blue-600 text-white p-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Smart Shop</h1>
+        <div class="space-x-4">
+            <a href="/dashboard" class="hover:text-blue-200">Home</a>
+            <a href="/login" class="hover:text-blue-200">Login</a>
+            <a href="/signup" class="hover:text-blue-200">Sign Up</a>
         </div>
     </div>
+</nav>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white text-center p-4 mt-16">
-        <p>&copy; 2025 Smart Shop. All rights reserved.</p>
-    </footer>
+<!-- Main Content -->
+<div class="container mx-auto mt-8 px-4">
+    <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-bold text-center mb-6">Login to Smart Shop</h2>
 
-    <script>
-        // Toggle password visibility - SINGLE IMPLEMENTATION
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            const passwordField = document.getElementById('password');
-            const eyeIcon = document.getElementById('eyeIcon');
+        <!-- Test Account Fill Buttons -->
+        <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <h3 class="text-sm font-medium text-blue-800 mb-3">🔧 Quick Login (Test Accounts)</h3>
+            <div class="grid grid-cols-1 gap-2">
+                <button type="button" onclick="fillLogin('admin@test.com', '123456')"
+                        class="text-xs bg-red-100 text-red-700 px-3 py-2 rounded hover:bg-red-200 transition-colors">
+                    👑 Admin Account
+                </button>
+                <button type="button" onclick="fillLogin('customer@test.com', '123456')"
+                        class="text-xs bg-green-100 text-green-700 px-3 py-2 rounded hover:bg-green-200 transition-colors">
+                    🛍️ Customer Account
+                </button>
+                <button type="button" onclick="fillLogin('staff@test.com', '123456')"
+                        class="text-xs bg-yellow-100 text-yellow-700 px-3 py-2 rounded hover:bg-yellow-200 transition-colors">
+                    👨‍💼 Staff Account
+                </button>
+            </div>
+            <p class="text-xs text-blue-600 mt-2">Click any button to auto-fill credentials</p>
+        </div>
 
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                eyeIcon.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L6.76 6.76m3.118 3.118l-2.82 2.822m7.242-2.822L18.18 7.64"></path>
-                `;
-            } else {
-                passwordField.type = 'password';
-                eyeIcon.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                `;
-            }
-        });
+        <!-- Success message for registration -->
+        <div th:if="${param.registered}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            <div class="flex items-center">
+                <svg class="h-5 w-5 text-green-400 mr-2" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                Account created successfully! Please login with your credentials.
+            </div>
+        </div>
 
-        // Enhanced Remember Me checkbox with visual feedback
-        document.getElementById('rememberMe').addEventListener('change', function() {
-            const isChecked = this.checked;
-            const label = this.nextElementSibling;
+        <!-- Error message -->
+        <div th:if="${param.error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            Invalid email or password. Please try again.
+        </div>
 
-            if (isChecked) {
-                label.innerHTML = '<span class="text-blue-600 font-medium">Remember me for 30 days ✓</span>';
-                showRememberMeInfo();
-            } else {
-                label.textContent = 'Remember me for 30 days';
-            }
-        });
+        <!-- Flash messages -->
+        <div th:if="${error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            <span th:text="${error}"></span>
+        </div>
 
-        // Show remember me information tooltip
-        function showRememberMeInfo() {
-            const tooltip = document.createElement('div');
-            tooltip.className = 'absolute z-50 bg-gray-800 text-white text-xs rounded py-1 px-2 mt-1 shadow-lg';
-            tooltip.innerHTML = '🔒 We\'ll keep you logged in securely on this device';
+        <div th:if="${success}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+            <span th:text="${success}"></span>
+        </div>
 
-            const rememberMeDiv = document.getElementById('rememberMe').parentElement;
-            rememberMeDiv.style.position = 'relative';
-            rememberMeDiv.appendChild(tooltip);
+        <!-- Login Form -->
+        <form method="post" action="/login" class="space-y-4">
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" id="email" name="email" required
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
 
-            // Fade in animation
-            tooltip.style.opacity = '0';
-            tooltip.style.transition = 'opacity 0.3s ease-in-out';
-            setTimeout(() => tooltip.style.opacity = '1', 10);
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <input type="password" id="password" name="password" required
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
 
-            // Remove tooltip after 3 seconds with fade out
-            setTimeout(() => {
-                tooltip.style.opacity = '0';
-                setTimeout(() => {
-                    if (tooltip.parentNode) {
-                        tooltip.parentNode.removeChild(tooltip);
-                    }
-                }, 300);
-            }, 3000);
-        }
+            <div class="flex items-center">
+                <input type="checkbox" id="remember-me" name="remember-me"
+                       class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                <label for="remember-me" class="ml-2 block text-sm text-gray-700">Remember me</label>
+            </div>
 
-        // Track login attempts for security and UX improvement
-        function trackLoginAttempt() {
-            try {
-                const attempts = parseInt(sessionStorage.getItem('loginAttempts') || '0');
-                const newAttempts = attempts + 1;
+            <button type="submit"
+                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                Login
+            </button>
+        </form>
 
-                sessionStorage.setItem('loginAttempts', newAttempts.toString());
-                sessionStorage.setItem('lastLoginAttempt', new Date().toISOString());
+        <div class="mt-6 text-center">
+            <p class="text-sm text-gray-600">
+                Don't have an account?
+                <a href="/signup" class="text-blue-600 hover:text-blue-500 font-medium">Sign up here</a>
+            </p>
+        </div>
+    </div>
+</div>
 
-                // Show warning after 3 failed attempts
-                if (newAttempts >= 3) {
-                    const warningDiv = document.createElement('div');
-                    warningDiv.className = 'bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 rounded mb-4';
-                    warningDiv.innerHTML = `
-                        <div class="flex items-center">
-                            <svg class="h-5 w-5 text-orange-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span>Multiple login attempts detected. Please check your credentials.</span>
-                        </div>
-                    `;
+<script>
+// Function to fill login form with test account credentials
+function fillLogin(email, password) {
+    document.getElementById('email').value = email;
+    document.getElementById('password').value = password;
+    // Add a visual feedback
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    emailInput.classList.add('bg-green-50', 'border-green-300');
+    passwordInput.classList.add('bg-green-50', 'border-green-300');
 
-                    const form = document.querySelector('form');
-                    form.parentNode.insertBefore(warningDiv, form);
-
-                    // Remove warning after 10 seconds
-                    setTimeout(() => {
-                        if (warningDiv.parentNode) {
-                            warningDiv.parentNode.removeChild(warningDiv);
-                        }
-                    }, 10000);
-                }
-
-                console.log(`Login attempt #${newAttempts} tracked`);
-            } catch (e) {
-                console.warn('Could not track login attempt:', e);
-            }
-        }
-
-        // Show success notification when user is redirected from registration
-        function showRegistrationSuccess() {
-            if (window.location.search.includes('registered=true')) {
-                const successDiv = document.createElement('div');
-                successDiv.className = 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 animate-pulse';
-                successDiv.innerHTML = `
-                    <div class="flex items-center">
-                        <svg class="h-5 w-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                        </svg>
-                        <div>
-                            <p class="font-medium">Account created successfully!</p>
-                            <p class="text-sm">You can now login with your new credentials.</p>
-                        </div>
-                    </div>
-                `;
-
-                const form = document.querySelector('form');
-                form.parentNode.insertBefore(successDiv, form);
-
-                // Auto-focus email field for better UX
-                const emailField = document.getElementById('email');
-                if (emailField) {
-                    emailField.focus();
-                }
-
-                // Remove success message after 8 seconds
-                setTimeout(() => {
-                    successDiv.style.transition = 'opacity 0.5s ease-out';
-                    successDiv.style.opacity = '0';
-                    setTimeout(() => {
-                        if (successDiv.parentNode) {
-                            successDiv.parentNode.removeChild(successDiv);
-                        }
-                    }, 500);
-                }, 8000);
-            }
-        }
-
-        // Form submission with loading state and attempt tracking
-        document.querySelector('form').addEventListener('submit', function(e) {
-            const loginBtn = document.getElementById('loginBtn');
-            const loginBtnText = document.getElementById('loginBtnText');
-            const loginSpinner = document.getElementById('loginSpinner');
-
-            // Show loading state
-            loginBtn.disabled = true;
-            loginBtnText.textContent = 'Signing in...';
-            loginSpinner.classList.remove('hidden');
-
-            // Track login attempt
-            trackLoginAttempt();
-
-            // Re-enable after 10 seconds as fallback (increased from 5s)
-            setTimeout(() => {
-                loginBtn.disabled = false;
-                loginBtnText.textContent = 'Sign In';
-                loginSpinner.classList.add('hidden');
-            }, 10000);
-        });
-
-        // Fill demo credentials with visual feedback
-        function fillLogin(email, password) {
-            const emailField = document.getElementById('email');
-            const passwordField = document.getElementById('password');
-
-            emailField.value = email;
-            passwordField.value = password;
-
-            // Visual feedback - highlight filled fields
-            emailField.classList.add('border-green-400', 'bg-green-50');
-            passwordField.classList.add('border-green-400', 'bg-green-50');
-
-            // Remove highlight after 2 seconds
-            setTimeout(() => {
-                emailField.classList.remove('border-green-400', 'bg-green-50');
-                passwordField.classList.remove('border-green-400', 'bg-green-50');
-            }, 2000);
-
-            // Show success tooltip
-            const tooltip = document.createElement('div');
-            tooltip.className = 'fixed top-4 right-4 bg-green-600 text-white px-4 py-2 rounded shadow-lg z-50';
-            tooltip.innerHTML = `
-                <div class="flex items-center">
-                    <svg class="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span>Test account filled! Click Sign In</span>
-                </div>
-            `;
-
-            document.body.appendChild(tooltip);
-
-            // Remove tooltip after 3 seconds
-            setTimeout(() => {
-                tooltip.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
-                tooltip.style.opacity = '0';
-                tooltip.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    if (tooltip.parentNode) {
-                        tooltip.parentNode.removeChild(tooltip);
-                    }
-                }, 300);
-            }, 3000);
-        }
-
-        // Forgot password functionality
-        function showForgotPassword() {
-            alert('Forgot password functionality will be implemented soon.\n\nFor now, you can use the test accounts provided below.');
-        }
-
-        // Enhanced page initialization
-        document.addEventListener('DOMContentLoaded', function() {
-            // Auto-focus email field on page load
-            const emailField = document.getElementById('email');
-            if (emailField && !emailField.value) {
-                emailField.focus();
-            }
-
-            // Show registration success if coming from signup
-            showRegistrationSuccess();
-
-            // Clear error styling on input
-            document.querySelectorAll('input').forEach(input => {
-                input.addEventListener('input', function() {
-                    this.classList.remove('border-red-300', 'bg-red-50');
-                });
-            });
-
-            // Reset login attempts on successful page load (not from error)
-            if (!window.location.search.includes('error')) {
-                sessionStorage.removeItem('loginAttempts');
-            }
-        });
-    </script>
+    // Remove the visual feedback after 2 seconds
+    setTimeout(() => {
+        emailInput.classList.remove('bg-green-50', 'border-green-300');
+        passwordInput.classList.remove('bg-green-50', 'border-green-300');
+    }, 2000);
+}
+</script>
 </body>
 </html>

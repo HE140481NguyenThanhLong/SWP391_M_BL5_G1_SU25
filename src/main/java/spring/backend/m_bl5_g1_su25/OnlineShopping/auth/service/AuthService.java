@@ -28,11 +28,15 @@ public class AuthService {
             throw new RuntimeException("Email already exists");
         }
 
+        // Create username by merging firstname and lastname
+        String username = request.getFirstname() + " " + request.getLastname();
+
         // Create new user với thông tin cơ bản
         User user = User.builder()
-                .username(request.getName()) // Sử dụng name từ request làm username
+                .username(username) // Merged firstname + lastname
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .address(request.getAddress()) // Add address field
                 .role(request.getRole())
                 .status(User.Status.ACTIVE)
                 .isDeleted(false)
@@ -48,30 +52,25 @@ public class AuthService {
     }
 
     private void createUserProfile(User user, RegisterRequest request) {
-        // Tách firstName và lastName từ name
-        String[] nameParts = request.getName().trim().split("\\s+", 2);
-        String firstName = nameParts[0];
-        String lastName = nameParts.length > 1 ? nameParts[1] : "";
-
         switch (user.getRole()) {
             case CUSTOMER -> {
                 Customer customer = Customer.builder()
                         .user(user)
-                        .firstname(firstName)
-                        .lastname(lastName)
+                        .firstname(request.getFirstname())  // Use firstname directly from request
+                        .lastname(request.getLastname())    // Use lastname directly from request
                         .phoneNumber(request.getPhoneNumber() != null ? request.getPhoneNumber() : "")
                         .build();
-                customerRepository.save(customer); // FIX: Actually save the customer
+                customerRepository.save(customer);
                 log.info("Customer profile created for user: {}", user.getUsername());
             }
             case STAFF -> {
                 Staff staff = Staff.builder()
                         .user(user)
-                        .firstname(firstName)
-                        .lastname(lastName)
+                        .firstname(request.getFirstname())  // Use firstname directly from request
+                        .lastname(request.getLastname())    // Use lastname directly from request
                         .phoneNumber(request.getPhoneNumber() != null ? request.getPhoneNumber() : "")
                         .build();
-                staffRepository.save(staff); // FIX: Actually save the staff
+                staffRepository.save(staff);
                 log.info("Staff profile created for user: {}", user.getUsername());
             }
             case ADMIN -> {

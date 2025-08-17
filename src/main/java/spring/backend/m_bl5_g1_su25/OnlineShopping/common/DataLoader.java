@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.repository.UserRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.user.entity.Customer;
@@ -23,112 +24,99 @@ public class DataLoader implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public void run(String... args) {
         log.info("Starting data initialization...");
-
         createTestAccounts();
-
         log.info("Data initialization completed!");
     }
 
     private void createTestAccounts() {
-        // Test Account 1: Admin
+        // Test Admin Account
         createTestUser(
-            "admin",
-            "admin@test.com",
-            "123456",
-            User.Role.ADMIN,
-            "Admin",
-            "User",
-            "0123456789"
+            "admin", "admin@test.com", "123456", User.Role.ADMIN,
+            "John", "Wilson", "0123456789",
+            "123 Admin Street, Ho Chi Minh City, Vietnam"
         );
 
-        // Test Account 2: Customer
+        // Test Customer Account
         createTestUser(
-            "customer",
-            "customer@test.com",
-            "123456",
-            User.Role.CUSTOMER,
-            "Test",
-            "Customer",
-            "0987654321"
+            "customer", "customer@test.com", "123456", User.Role.CUSTOMER,
+            "Alice", "Johnson", "0987654321",
+            "456 Customer Avenue, Hanoi, Vietnam"
         );
 
-        // Test Account 3: Staff
+        // Test Staff Account
         createTestUser(
-            "staff",
-            "staff@test.com",
-            "123456",
-            User.Role.STAFF,
-            "Test",
-            "Staff",
-            "0555666777"
+            "staff", "staff@test.com", "123456", User.Role.STAFF,
+            "Bob", "Thompson", "0555666777",
+            "789 Staff Boulevard, Da Nang, Vietnam"
         );
     }
 
-    private void createTestUser(String username, String email, String rawPassword,
-                               User.Role role, String firstname, String lastname, String phoneNumber) {
+    protected void createTestUser(String username, String email, String password, User.Role role,
+                               String firstname, String lastname, String phone, String address) {
 
-        // Kiểm tra xem user đã tồn tại chưa
         if (userRepository.existsByEmail(email)) {
             log.info("User with email {} already exists, skipping...", email);
             return;
         }
 
         try {
-            // Tạo User entity với password được encode
+            // Create and save user with auto-generated username from firstname + lastname (with space) - preserve original case
+            String autoUsername = firstname.trim() + " " + lastname.trim();
+
             User user = User.builder()
-                    .username(username)
-                    .email(email)
-                    .password(passwordEncoder.encode(rawPassword)) // Encode password
-                    .role(role)
-                    .status(User.Status.ACTIVE)
-                    .isDeleted(false)
-                    .build();
+                .username(autoUsername) // Use auto-generated username preserving case
+                .email(email)
+                .password(passwordEncoder.encode(password))
+                .address(address)
+                .role(role)
+                .status(User.Status.ACTIVE)
+                .isDeleted(false)
+                .build();
 
             User savedUser = userRepository.save(user);
-            log.info("Created test user: {} ({})", savedUser.getUsername(), savedUser.getEmail());
+            userRepository.flush(); // Force immediate persistence
+            log.info("Created test user: {} ({}) with auto-generated username from: {} {}",
+                     savedUser.getUsername(), savedUser.getEmail(), firstname, lastname);
 
-            // Tạo Customer hoặc Staff profile tương ứng
-            createUserProfile(savedUser, firstname, lastname, phoneNumber);
-
-        } catch (java.lang.Exception e) {
-            log.error("Error creating test user {}: {}", email, e.getMessage());
-        }
-    }
-
-    private void createUserProfile(User user, String firstname, String lastname, String phoneNumber) {
-        try {
-            switch (user.getRole()) {
+            // Create user profile based on role - ensure User is persisted first
+            switch (savedUser.getRole()) {
                 case CUSTOMER -> {
-                    // Với @MapsId, không cần set customer_id thủ công
                     Customer customer = Customer.builder()
-                            .user(user)  // Chỉ cần set user, @MapsId sẽ tự động set ID
-                            .firstname(firstname)
-                            .lastname(lastname)
-                            .phoneNumber(phoneNumber)
-                            .build();
-                    customerRepository.save(customer);
-                    log.info("Created customer profile for: {}", user.getUsername());
+                        .user(savedUser) // Don't set customer_id explicitly - @MapsId will handle it
+                        .firstname(firstname)
+                        .lastname(lastname)
+                        .phoneNumber(phone)
+                        .build();
+                    Customer savedCustomer = customerRepository.save(customer);
+                    customerRepository.flush(); // Force immediate persistence
+                    log.info("Created customer profile for: {} - ID: {}, FirstName: {}, LastName: {}",
+                             savedUser.getUsername(), savedCustomer.getCustomer_id(),
+                             savedCustomer.getFirstname(), savedCustomer.getLastname());
                 }
                 case STAFF -> {
-                    // Với @MapsId, không cần set staff_id thủ công
                     Staff staff = Staff.builder()
-                            .user(user)  // Chỉ cần set user, @MapsId sẽ tự động set ID
-                            .firstname(firstname)
-                            .lastname(lastname)
-                            .phoneNumber(phoneNumber)
-                            .build();
-                    staffRepository.save(staff);
-                    log.info("Created staff profile for: {}", user.getUsername());
+                        .user(savedUser) // Don't set staff_id explicitly - @MapsId will handle it
+                        .firstname(firstname)
+                        .lastname(lastname)
+                        .phoneNumber(phone)
+                        .build();
+                    Staff savedStaff = staffRepository.save(staff);
+                    staffRepository.flush(); // Force immediate persistence
+                    log.info("Created staff profile for: {} - ID: {}, FirstName: {}, LastName: {}",
+                             savedUser.getUsername(), savedStaff.getStaff_id(),
+                             savedStaff.getFirstname(), savedStaff.getLastname());
                 }
                 case ADMIN -> {
-                    // Admin không cần profile riêng
-                    log.info("Admin user created: {}", user.getUsername());
+                    log.info("Admin user created: {} - No profile needed", savedUser.getUsername());
                 }
             }
+
         } catch (java.lang.Exception e) {
-            log.error("Error creating profile for user {}: {}", user.getUsername(), e.getMessage());
+            log.error("Error creating test user {}: {}", email, e.getMessage(), e);
+            throw new RuntimeException("Failed to create test user: " + email, e);
         }
     }
 }

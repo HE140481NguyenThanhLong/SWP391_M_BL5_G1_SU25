@@ -77,18 +77,25 @@ public class AuthController {
             !authentication.getName().equals("anonymousUser")) {
 
             try {
-                User user = authService.findByEmail(authentication.getName());
+                String email = authentication.getName();
+                System.out.println("DEBUG: Authenticated user email: " + email);
+
+                User user = authService.findByEmail(email);
+                System.out.println("DEBUG: Found user: " + user.getUsername() + " with role: " + user.getRole());
+
                 model.addAttribute("isGuest", false);
                 model.addAttribute("username", user.getUsername());
                 model.addAttribute("role", user.getRole().toString());
                 model.addAttribute("email", user.getEmail());
                 return "dashboard";
             } catch (Exception e) {
-                // Nếu có lỗi, hiển thị guest dashboard
-                model.addAttribute("isGuest", true);
-                model.addAttribute("username", "Guest");
-                model.addAttribute("role", "GUEST");
-                return "dashboard";
+                // Log the error for debugging
+                System.err.println("ERROR: Failed to load user for email: " + authentication.getName());
+                System.err.println("ERROR: " + e.getMessage());
+                e.printStackTrace();
+
+                // Force logout if user lookup fails
+                return "redirect:/logout";
             }
         }
 

@@ -1,132 +1,197 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" class="h-full" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - Smart Shop</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
-    <!-- Navigation -->
-    <nav class="bg-blue-600 text-white p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Smart Shop</h1>
-            <div class="space-x-4">
-                <a href="/dashboard" class="hover:text-blue-200">Home</a>
-                <a href="/login" class="hover:text-blue-200">Login</a>
-                <a href="/signup" class="hover:text-blue-200">Sign Up</a>
-            </div>
-        </div>
-    </nav>
+<body class="h-full bg-gray-50">
 
-    <!-- Main Content -->
-    <div class="container mx-auto mt-8 px-4">
-        <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-2xl font-bold text-center mb-6">Create Account</h2>
+<!-- Top bar (mobile) -->
+<div class="sticky top-0 z-50 flex items-center gap-2 bg-white px-4 py-3 shadow-sm md:hidden dark:bg-gray-800">
+    <button
+            type="button"
+            class="inline-flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-gray-300 dark:hover:bg-gray-700"
+            aria-controls="app-sidebar"
+            data-drawer-target="app-sidebar"
+            data-drawer-toggle="app-sidebar"
+            aria-label="Open sidebar"
+    >
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+    <span class="font-semibold text-gray-800 dark:text-gray-100">Smart Shop</span>
+</div>
 
-            <!-- Error Messages -->
-            <div th:if="${error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                <span th:text="${error}"></span>
-            </div>
-
-            <!-- Signup Form -->
-            <form th:action="@{/signup}" th:object="${registerRequest}" method="post" class="space-y-4">
-
-                <!-- Name -->
-                <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
-                    <input type="text" th:field="*{name}" id="name"
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                           placeholder="Enter your full name" required>
-                    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-red-600 text-sm"></div>
-                </div>
-
-                <!-- Email -->
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" th:field="*{email}" id="email"
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                           placeholder="Enter your email" required>
-                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-600 text-sm"></div>
-                </div>
-
-                <!-- Phone Number -->
-                <div>
-                    <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                    <input type="text" th:field="*{phoneNumber}" id="phoneNumber"
-                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                           placeholder="Enter your phone number" required>
-                    <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="text-red-600 text-sm"></div>
-                </div>
-
-                <!-- Address -->
-                <div>
-                    <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
-                    <textarea th:field="*{address}" id="address" rows="3"
-                              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                              placeholder="Enter your address" required></textarea>
-                    <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="text-red-600 text-sm"></div>
-                </div>
-
-                <!-- Password -->
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <div class="relative">
-                        <input type="password" th:field="*{password}" id="password"
-                               class="mt-1 block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                               placeholder="Enter password (minimum 6 characters)" required>
-                        <button type="button" id="togglePassword"
-                                class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                            <svg id="eyeIcon" class="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                    <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-red-600 text-sm"></div>
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit"
-                        class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    Create Account
-                </button>
-            </form>
-
-            <!-- Login Link -->
-            <div class="text-center mt-4">
-                <p class="text-sm text-gray-600">
-                    Already have an account?
-                    <a href="/login" class="text-blue-600 hover:text-blue-800">Login here</a>
-                </p>
-            </div>
-        </div>
+<!-- Vertical Header / Sidebar -->
+<aside
+        id="app-sidebar"
+        class="fixed top-0 left-0 z-40 h-screen w-72 -translate-x-full overflow-y-auto border-r border-gray-200 bg-white p-4 transition-transform md:translate-x-0 dark:border-gray-700 dark:bg-gray-800"
+        tabindex="-1"
+        aria-label="Sidebar"
+>
+    <!-- Brand -->
+    <div class="mb-4 flex items-center justify-between">
+        <a href="/dashboard" class="flex items-center gap-2">
+            <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white font-bold">S</span>
+            <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">Smart Shop</span>
+        </a>
+        <button
+                type="button"
+                class="md:hidden inline-flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-gray-300 dark:hover:bg-gray-700"
+                data-drawer-hide="app-sidebar"
+                aria-label="Close menu"
+        >
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white text-center p-4 mt-16">
-        <p>&copy; 2025 Smart Shop. All rights reserved.</p>
-    </footer>
+    <!-- Primary Nav -->
+    <nav class="space-y-1.5">
+        <!-- Home -->
+        <a href="/dashboard" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+            <svg class="h-5 w-5 text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2V12H8v8a2 2 0 0 1-2 2H3z"/>
+            </svg>
+            <span>Home</span>
+        </a>
 
-    <script>
-        // Toggle password visibility
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            const passwordField = document.getElementById('password');
-            const eyeIcon = document.getElementById('eyeIcon');
+        <!-- Login -->
+        <a href="/login" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+            <svg class="h-5 w-5 text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7"/>
+            </svg>
+            <span>Login</span>
+        </a>
 
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                eyeIcon.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L6.76 6.76m3.118 3.118l-2.82 2.822m7.242-2.822L18.18 7.64"></path>
-                `;
-            } else {
-                passwordField.type = 'password';
-                eyeIcon.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                `;
-            }
-        });
-    </script>
+        <!-- Sign Up (current page) -->
+        <a href="/signup" class="group flex items-center gap-3 rounded-lg px-3 py-2 bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200">
+            <svg class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM3 20a6 6 0 0 1 12 0v1H3v-1z"/>
+            </svg>
+            <span>Sign Up</span>
+        </a>
+    </nav>
+</aside>
+
+<!-- Main Content -->
+<div class="md:ml-72 min-h-screen bg-gray-50 py-8">
+    <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8">
+        <h2 class="text-2xl font-bold text-center mb-6">Create Your Smart Shop Account</h2>
+
+        <!-- Error messages -->
+        <div th:if="${error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            <span th:text="${error}"></span>
+        </div>
+
+        <!-- Signup Form -->
+        <form th:action="@{/signup}" th:object="${registerRequest}" method="post" class="space-y-4">
+
+            <!-- First Name -->
+            <div>
+                <label for="firstname" class="block text-sm font-medium text-gray-700">First Name</label>
+                <input type="text" th:field="*{firstname}" id="firstname"
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="Enter your first name" required>
+                <div th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}" class="text-red-600 text-sm"></div>
+            </div>
+
+            <!-- Last Name -->
+            <div>
+                <label for="lastname" class="block text-sm font-medium text-gray-700">Last Name</label>
+                <input type="text" th:field="*{lastname}" id="lastname"
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="Enter your last name" required>
+                <div th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}" class="text-red-600 text-sm"></div>
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" th:field="*{email}" id="email"
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="Enter your email" required>
+                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-600 text-sm"></div>
+            </div>
+
+            <!-- Phone Number -->
+            <div>
+                <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                <input type="text" th:field="*{phoneNumber}" id="phoneNumber"
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                       placeholder="Enter your phone number" required>
+                <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="text-red-600 text-sm"></div>
+            </div>
+
+            <!-- Address -->
+            <div>
+                <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                <textarea th:field="*{address}" id="address" rows="3"
+                          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                          placeholder="Enter your address" required></textarea>
+                <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="text-red-600 text-sm"></div>
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <div class="relative">
+                    <input type="password" th:field="*{password}" id="password"
+                           class="mt-1 block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                           placeholder="Enter password (minimum 6 characters)" required>
+                    <button type="button" id="togglePassword"
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                        <svg id="eyeIcon" class="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-red-600 text-sm"></div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit"
+                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Create Account
+            </button>
+        </form>
+
+        <!-- Login Link -->
+        <div class="text-center mt-4">
+            <p class="text-sm text-gray-600">
+                Already have an account?
+                <a href="/login" class="text-blue-600 hover:text-blue-800">Login here</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Flowbite JS -->
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+<script>
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        const passwordField = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            eyeIcon.innerHTML = `
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L6.76 6.76m3.118 3.118l-2.82 2.822m7.242-2.822L18.18 7.64"></path>
+            `;
+        } else {
+            passwordField.type = 'password';
+            eyeIcon.innerHTML = `
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+            `;
+        }
+    });
+</script>
 </body>
 </html>

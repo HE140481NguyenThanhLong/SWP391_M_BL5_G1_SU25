@@ -28,6 +28,8 @@ public class User {
     String email;
     @Column(nullable = false, length = 255)
     String password;
+    @Column(nullable = false, length = 500)
+    String address;
 
     @Column(nullable = false,length = 10)
     @Enumerated(EnumType.STRING)
