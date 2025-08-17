@@ -1,4 +1,4 @@
-package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.Controller;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -8,14 +8,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.Repository.ProductRepository;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.Service.CartItemService;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Category;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.ProductRepo;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.ProductRepository;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.CartItemService;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Cart_Items;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/cart")
@@ -24,10 +27,19 @@ public class CartController {
 
     private final CartItemService cartItemService;
     private final ProductRepository productRepository;
+    private final ProductRepo productRepo;
 
     @GetMapping("/product/{productId}")
     public String productDetail(@PathVariable Integer productId, Model model) {
         Product pro = productRepository.findById(productId).orElse(null);
+
+        if(pro != null) {
+            List<Integer> categoryIds = pro.getCategories().stream()
+                    .map(Category::getCategory_id) // lấy id
+                    .collect(Collectors.toList());
+            List<Product> products = productRepo.findProductsWithCategoriesByCategoryId(categoryIds);
+            model.addAttribute("products", products);
+        }
 
         model.addAttribute("productDetail", pro);
 
@@ -57,12 +69,16 @@ public class CartController {
                 .add(storePickup)
                 .add(tax);
 
+
+        List<Product> products = productRepo.findBestSeller();
+
         model.addAttribute("originalPrice", originalPrice);
         model.addAttribute("savings", savings);
         model.addAttribute("storePickup", storePickup);
         model.addAttribute("tax", tax);
         model.addAttribute("total", total);
 
+        model.addAttribute("products", products);
 
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("currentPage", pageNo);
@@ -72,38 +88,11 @@ public class CartController {
         return ("cart/cart");
     }
 
-    // View cart
-    @GetMapping("/{userId}")
-    public String viewCart(@PathVariable Integer userId, Model model) {
-        List<Cart_Items> cartItems = cartItemService.getCartByUser(userId);
-
-
-        BigDecimal originalPrice = cartItemService.getCartTotalPrice(userId);
-        BigDecimal savings = new BigDecimal("0");
-        BigDecimal storePickup = new BigDecimal("0");
-        BigDecimal tax = originalPrice.multiply(new BigDecimal("0.08"));
-
-        BigDecimal total = originalPrice.subtract(savings)
-                .add(storePickup)
-                .add(tax);
-
-        model.addAttribute("originalPrice", originalPrice);
-        model.addAttribute("savings", savings);
-        model.addAttribute("storePickup", storePickup);
-        model.addAttribute("tax", tax);
-        model.addAttribute("total", total);
-
-
-        model.addAttribute("cartItems", cartItems);
-        return "cart/cart"; // templates/cart/cart.html
-    }
-
     // Add to cart
     @PostMapping("/add")
-    public String addToCart(@RequestParam Integer userId,
-                            @RequestParam Integer productId,
+    public String addToCart(@RequestParam Integer productId,
                             @RequestParam(defaultValue = "1") Integer quantity) {
-        cartItemService.addToCart(userId, productId, quantity);
+        cartItemService.addToCart(4, productId, quantity);
         return "redirect:/cart";
     }
 
