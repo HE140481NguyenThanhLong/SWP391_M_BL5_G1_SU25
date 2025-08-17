@@ -176,17 +176,39 @@ public class ProductController {
 
 
     @GetMapping("/detailproduct/{id}")
-    public String detailProductInformation(@PathVariable Integer id, Model model) {
+    public String detailProductInformation(
+            @PathVariable Integer id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size,
+            Model model) {
+
         Optional<Product> productOptional = productService.findById(id);
         Product product = productOptional.orElse(null);
+
         if (product == null) {
             model.addAttribute("errorMessage", "Product not found with id: " + id);
             return "error/404";
         }
-        List<Product> relatedProducts = productService.findRelatedProducts(id);
+
+        // Lấy sản phẩm liên quan có phân trang
+        Page<Product> relatedProducts = productService.findRelatedProducts(id, page, size);
+
+        int totalPages = relatedProducts.getTotalPages();
+        List<Integer> pageNumbers = new ArrayList<>();
+        if (totalPages > 0) {
+            for (int i = 0; i < totalPages; i++) {
+                pageNumbers.add(i);
+            }
+        }
+
         model.addAttribute("product", product);
-        model.addAttribute("relatedProducts", relatedProducts);
+        model.addAttribute("relatedProducts", relatedProducts.getContent());
+        model.addAttribute("pageNumbers", pageNumbers);
+        model.addAttribute("currentPage", page);
+
         return "product/detail";
     }
+
+
 
 }

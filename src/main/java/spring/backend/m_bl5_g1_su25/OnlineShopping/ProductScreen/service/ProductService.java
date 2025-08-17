@@ -141,6 +141,9 @@ public class ProductService {
         }
         return productRepository.findByCategoriesIn(product.getCategories());
     }
-
+    public Page<Product> findRelatedProducts(Integer productId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findRelatedProducts(productId, pageable);
+    }
 
 }

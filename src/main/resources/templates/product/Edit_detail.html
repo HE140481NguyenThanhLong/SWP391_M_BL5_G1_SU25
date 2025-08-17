@@ -205,23 +205,47 @@
                             <input type="text" th:value="${product.createdAt}" name="product_id" class="w-full border rounded px-3 py-2" readonly>
                         </div>
                         <div>
-                            <label class="block text-gray-700 font-semibold mb-1">tồn kho</label>
-                            <input type="text" th:value="${product.quantity}" name="product_id" class="w-full border rounded px-3 py-2" readonly>
+                            <label class="block text-gray-700 font-semibold mb-1">Thương Hiệu</label>
+                            <input type="text" th:value="${product.brand}" name="product_id" class="w-full border rounded px-3 py-2" readonly>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-semibold mb-1">Nhà Cung Cấp</label>
+                            <input type="text" th:value="${product.supplier}" name="product_id" class="w-full border rounded px-3 py-2" readonly>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4 mb-3">
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-1">Số lượng đã bán</label>
-                            <input type="text" th:value="${#numbers.formatInteger(product.sales_count, 0, 'COMMA')}" readonly class="w-full border rounded px-3 py-2 bg-gray-100">
-                        </div>
                         <div>
                             <label class="block text-gray-700 font-semibold mb-1">Trạng thái</label>
                             <input type="text" th:value="${product.status}" name="product_id" class="w-full border rounded px-3 py-2" readonly>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="block text-gray-700 font-semibold mb-1">Mô tả</label>
-                        <textarea rows="4" name="description" class="w-full border rounded px-3 py-2" th:text="${product.description}"></textarea>
+                    <div class="bg-neutral-50 rounded-2xl p-6">
+                        <h3 class="font-semibold text-neutral-800 mb-4 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                            </svg>
+                            Thông tin kho
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-neutral-700 font-medium mb-2" >Tồn kho</label>
+                                <input type="number"  th:value="${product.quantity}" name="quantity" class="w-full border border-neutral-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required>
+                            </div>
+                            <div>
+                                <label class="block text-neutral-700 font-medium mb-2">Đã bán</label>
+                                <input type="text" th:value="${product.sales_count}" name="sales_count" class="w-full border border-neutral-300 rounded-xl px-4 py-3 bg-neutral-100 text-neutral-500" readonly>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="bg-neutral-50 rounded-2xl p-6">
+                        <h3 class="font-semibold text-neutral-800 mb-4 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Mô tả sản phẩm
+                        </h3>
+                        <textarea rows="6" name="description" placeholder="Nhập mô tả chi tiết về sản phẩm..." class="w-full border border-neutral-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none" th:text="${product.description}"></textarea>
                     </div>
                     <div class="mt-4 flex gap-2">
                         <button type="button" class="bg-gray-300 px-4 py-2 rounded" onclick="document.getElementById('myForm').reset()">

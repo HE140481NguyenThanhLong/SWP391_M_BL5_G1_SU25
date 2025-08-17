@@ -38,7 +38,11 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, JpaS
 
     @Query("SELECT p FROM Product p JOIN p.categories c WHERE c.name = :name")
     List<Product> findByCategories_Name(@Param("name") String name);
-
-
+    @Query("SELECT p FROM Product p JOIN p.categories c " +
+            "WHERE c IN (SELECT c2 FROM Product pr JOIN pr.categories c2 WHERE pr.product_id = :productId) " +
+            "AND p.product_id <> :productId")
+    Page<Product> findRelatedProducts(@Param("productId") Integer productId, Pageable pageable);
 
 }
+
+

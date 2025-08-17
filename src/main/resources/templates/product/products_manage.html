@@ -213,7 +213,10 @@
             <thead class="bg-gradient-to-r from-blue-50 to-indigo-50 text-gray-700">
             <tr>
                 <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Tên sản phẩm</th>
-                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Loại hàng</th>
+                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Mã Sản xuất</th>
+                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Thương Hiệu </th>
+                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Nhà Cung Cấp</th>
+                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Loại Sản Phẩm</th>
                 <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Ngày nhập</th>
                 <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Giá nhập</th>
                 <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">
@@ -223,9 +226,10 @@
                 </th>
                 <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">
                     <a th:href="@{/product(page=${currentPage}, search=${search}, category=${selectedCategory}, sortField='quantity', sortDir=${sortDir == 'asc' ? 'desc' : 'asc'})}">
-                        Số lượng <span th:text="${sortField == 'quantity' ? (sortDir == 'asc' ? '▲' : '▼') : ''}"></span>
+                        Tồn Kho <span th:text="${sortField == 'quantity' ? (sortDir == 'asc' ? '▲' : '▼') : ''}"></span>
                     </a>
                 </th>
+                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Số lượng đã bán</th>
                 <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Trạng thái</th>
             </tr>
             </thead>
@@ -234,6 +238,9 @@
                 class="hover:bg-blue-50 transition-colors duration-200 cursor-pointer"
                 th:onclick="|window.location.href='/product/detail/${product.product_id}'|">
                 <td class="py-4 px-6 text-gray-800 font-medium" th:text="${product.name}"></td>
+                <td class="py-4 px-6 text-gray-800 font-medium" th:text="${product.sku}"></td>
+                <td class="py-4 px-6 text-gray-800 font-medium" th:text="${product.brand}"></td>
+                <td class="py-4 px-6 text-gray-800 font-medium" th:text="${product.supplier}"></td>
                 <td class="py-4 px-6">
                 <span th:unless="${product.categories == null or product.categories.isEmpty()}"
                       th:each="cat, iterStat : ${product.categories}"
@@ -247,6 +254,7 @@
                 <td class="py-4 px-6 text-gray-600 text-sm"
                     th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
                 <td class="py-4 px-6 text-gray-600 text-sm" th:text="${product.quantity}"></td>
+                <td class="py-4 px-6 text-gray-600 text-sm" th:text="${product.soldCount}"></td>
                 <td class="py-4 px-6">
                 <span th:classappend="${product.quantity > 0} ? 'text-green-600' : 'text-red-600'"
                       th:text="${product.quantity > 0 ? 'Đang bán' : 'Hết hàng'}"

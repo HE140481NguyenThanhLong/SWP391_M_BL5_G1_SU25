@@ -73,7 +73,7 @@ public class Product {
     BigDecimal salePrice;
     private String brand;
     private double rating;
-    private double discount;
+    private int discount;
     private int stock;
     private String sku;
     private int reviewCount;  // thêm
