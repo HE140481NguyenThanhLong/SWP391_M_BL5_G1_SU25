@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.dto.RegisterRequest;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.repository.UserRepository;
@@ -94,5 +95,43 @@ public class AuthService {
         // TODO: Implement logic để lấy thông tin từ Customer/Staff entity
         // Hiện tại chỉ trả về username
         return user.getUsername();
+    }
+
+    // Password change functionality
+    @Transactional
+    public void changePassword(String email, String newPassword) {
+        try {
+            User user = findByEmail(email);
+
+            // Hash the new password using the same encoder as registration
+            String hashedPassword = passwordEncoder.encode(newPassword);
+
+            // Update user password
+            user.setPassword(hashedPassword);
+            userRepository.save(user);
+
+            log.info("Password changed successfully for user: {}", email);
+
+        } catch (Exception e) {
+            log.error("Failed to change password for user: {}. Error: {}", email, e.getMessage(), e);
+            throw new RuntimeException("Failed to change password. Please try again later.");
+        }
+    }
+
+    public void validatePasswordChangeRequest(String email, String newPassword, String confirmPassword) {
+        // Check if user exists
+        if (!existsByEmail(email)) {
+            throw new RuntimeException("User not found with this email address");
+        }
+
+        // Check if passwords match
+        if (!newPassword.equals(confirmPassword)) {
+            throw new RuntimeException("New password and confirmation password do not match");
+        }
+
+        // Check password strength (minimum 6 characters)
+        if (newPassword.length() < 6) {
+            throw new RuntimeException("Password must be at least 6 characters long");
+        }
     }
 }

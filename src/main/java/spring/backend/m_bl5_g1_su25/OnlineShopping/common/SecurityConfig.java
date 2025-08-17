@@ -30,6 +30,8 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/", "/login", "/signup", "/dashboard", "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/shared/change-password/**").permitAll()
+                .requestMatchers("/shared/forgot-password/**", "/shared/reset-password/**").permitAll()
                 .requestMatchers("/customer/**").hasAuthority("CUSTOMER")
                 .requestMatchers("/staff/**").hasAuthority("STAFF")
                 .anyRequest().authenticated()
