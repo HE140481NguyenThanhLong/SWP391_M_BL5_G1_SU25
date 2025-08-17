@@ -36,62 +36,41 @@
                      class="divide-y divide-gray-200 dark:divide-gray-700">
                     <button class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">
                         <a th:href="@{/guest/getRecent}">Recent Upload</a></button>
+                    <div class="mt-4">
+                        <label for="brand" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Brand
+                        </label>
+                        <select id="brand" name="brand"
+                                class="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm
+                 focus:border-indigo-500 focus:ring-indigo-500
+                 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200">
+                            <option value="">All brands</option>
+                            <option value="Sony">Sony</option>
+                            <option value="Logitech">Logitech</option>
+                            <option value="Razer">Razer</option>
+                            <option value="Apple">Apple</option>
+                        </select>
+                    </div>
                     <!-- Category (single checkbox) -->
-                    <h3 id="acc-cat-heading">
-                        <button type="button"
-                                class="flex w-full items-center justify-between rounded-lg p-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
-                                data-accordion-target="#acc-cat-body" aria-expanded="true" aria-controls="acc-cat-body">
-                            <span>Category</span>
-                            <svg data-accordion-icon class="h-4 w-4 shrink-0 transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
-                        </button>
-                    </h3>
-                    <div id="acc-cat-body" class="" aria-labelledby="acc-cat-heading">
-                        <div class="p-3 pt-0">
-                            <label class="flex items-center gap-2">
-                                <input id="cat-option" name="category" type="checkbox" value="Headphones"
-                                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700" />
-                                <span class="text-sm text-gray-700 dark:text-gray-300">Headphones</span>
-                            </label>
-                        </div>
+                    <div class="mt-4">
+                        <label for="brand" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Brand
+                        </label>
+                        <select id="category" name="brand"
+                                class="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm
+                 focus:border-indigo-500 focus:ring-indigo-500
+                 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200">
+                            <option value="">All brands</option>
+                            <option value="Sony">Sony</option>
+                            <option value="Logitech">Logitech</option>
+                            <option value="Razer">Razer</option>
+                            <option value="Apple">Apple</option>
+                        </select>
                     </div>
 
-                    <!-- Price (single checkbox) -->
-                    <h3 id="acc-price-heading">
-                        <button type="button"
-                                class="flex w-full items-center justify-between rounded-lg p-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
-                                data-accordion-target="#acc-price-body" aria-expanded="false" aria-controls="acc-price-body">
-                            <span>Price</span>
-                            <svg data-accordion-icon class="h-4 w-4 shrink-0 transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
-                        </button>
-                    </h3>
-                    <div id="acc-price-body" class="hidden" aria-labelledby="acc-price-heading">
-                        <div class="p-3 pt-0">
-                            <label class="flex items-center gap-2">
-                                <input id="price-range" name="price" type="checkbox" value="0-100"
-                                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700" />
-                                <span class="text-sm text-gray-700 dark:text-gray-300">$0 – $100</span>
-                            </label>
-                        </div>
-                    </div>
 
-                    <!-- Time (single checkbox) -->
-                    <h3 id="acc-time-heading">
-                        <button type="button"
-                                class="flex w-full items-center justify-between rounded-lg p-3 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700"
-                                data-accordion-target="#acc-time-body" aria-expanded="false" aria-controls="acc-time-body">
-                            <span>Time</span>
-                            <svg data-accordion-icon class="h-4 w-4 shrink-0 transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
-                        </button>
-                    </h3>
-                    <div id="acc-time-body" class="hidden" aria-labelledby="acc-time-heading">
-                        <div class="p-3 pt-0">
-                            <label class="flex items-center gap-2">
-                                <input id="time-window" name="time" type="checkbox" value="7d"
-                                       class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700" />
-                                <span class="text-sm text-gray-700 dark:text-gray-300">Last 7 days</span>
-                            </label>
-                        </div>
-                    </div>
+
+
                 </div>
 
                 <!-- Submit filters -->
@@ -186,7 +165,7 @@
                          th:if="${i >= currentPage - 2 && i <= currentPage + 2}"
                          class="hidden md:flex">
                         <a th:if="${i != currentPage}"
-                           th:href="@{/guest/jobGuest(page=${i}, size=${pageSize})}"
+                           th:href="@{/guest(page=${i}, size=${pageSize})}"
                            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                            th:text="${i + 1}">
                         </a>
@@ -199,7 +178,7 @@
 
                 <!-- Next Button -->
                 <a th:if="${currentPage < totalPages - 1}"
-                   th:href="@{/guest/jobGuest(page=${currentPage + 1}, size=${pageSize})}"
+                   th:href="@{/guest(page=${currentPage + 1}, size=${pageSize})}"
                    class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-700 border-0 border-l border-gray-700 rounded-r hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700">
                     Next
                     <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"

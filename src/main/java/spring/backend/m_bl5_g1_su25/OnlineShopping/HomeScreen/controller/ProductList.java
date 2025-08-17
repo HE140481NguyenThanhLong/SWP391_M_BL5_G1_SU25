@@ -33,10 +33,11 @@ public class ProductList {
             Pageable pageable = PageRequest.of(page, size);
             Page<ProductResponse> products =productService.findAllProduct(pageable);
             model.addAttribute("products", products);
-//            model.addAttribute("currentPage", page);
-//            model.addAttribute("totalPages", products.getTotalPages());
-//            model.addAttribute("totalItems", products.getTotalElements());
-//            model.addAttribute("pageSize", size);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", products.getTotalPages());
+            model.addAttribute("totalItems", products.getTotalElements());
+            model.addAttribute("pageSize", size);
+            model.addAttribute("content", products.getContent());
 
         return"HomeScreen/Home";
         }
