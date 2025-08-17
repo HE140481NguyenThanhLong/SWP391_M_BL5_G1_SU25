@@ -31,6 +31,14 @@ public class Product {
     String name;
     @Column(nullable = false,length = 255)
     String description;
+    @Column(length = 300)
+    String instruc;
+    @Column(length = 300)
+    String feature ;
+    @Column(length = 300)
+    String expiry ;
+    @Column(length = 300)
+    String origin;
     @Column(nullable = false, precision = 18, scale = 2)
     BigDecimal price;
     @Column()
@@ -70,4 +78,6 @@ public class Product {
     private String sku;
     private int reviewCount;  // thêm
     private int soldCount;
+
+
 }

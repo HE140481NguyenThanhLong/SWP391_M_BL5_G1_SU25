@@ -245,13 +245,13 @@
                             <svg class="w-6 h-6 text-primary mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            <span class="text-lg">Bổ sung canxi tự nhiên giúp xương chắc khỏe</span>
+                            <span class="text-lg"  th:text="${product.expiry}">Bổ sung canxi tự nhiên giúp xương chắc khỏe</span>
                         </li>
                         <!-- Thêm các đặc điểm khác nếu cần, có thể động hóa từ cơ sở dữ liệu -->
                     </ul>
                     <div class="bg-neutral-50 rounded-2xl p-8">
-                        <h4 class="font-semibold text-xl text-neutral-800 mb-4">Hướng dẫn sử dụng:</h4>
-                        <p class="text-lg">Lắc đều trước khi uống. Bảo quản nơi khô ráo, thoáng mát. Sau khi mở nắp nên sử dụng ngay.</p>
+                        <h4 class="font-semibold text-xl text-neutral-800 mb-4" >Hướng dẫn sử dụng:</h4>
+                        <p class="text-lg" th:text="${product.expiry}"></p>
                     </div>
                 </div>
             </div>
@@ -267,11 +267,11 @@
                             </div>
                             <div class="flex justify-between py-4 border-b border-neutral-100">
                                 <span class="text-neutral-600 text-lg">Dung tích:</span>
-                                <span class="font-semibold text-lg">200ml x 6 hộp</span>
+                                <span class="font-semibold text-lg" th:text="${product.feature}"></span>
                             </div>
                             <div class="flex justify-between py-4 border-b border-neutral-100">
                                 <span class="text-neutral-600 text-lg">Xuất xứ:</span>
-                                <span class="font-semibold text-lg">Việt Nam</span>
+                                <span class="font-semibold text-lg" th:text="${product.origin}">Việt Nam</span>
                             </div>
                         </div>
                     </div>
