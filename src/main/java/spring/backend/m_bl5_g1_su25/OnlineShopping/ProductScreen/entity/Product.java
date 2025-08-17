@@ -1,10 +1,13 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity;
 
+
+
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Category;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.enums.Status;
 
 import java.math.BigDecimal;
@@ -23,7 +26,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer product_id;
-    
+
     @Column(nullable = false,length = 255)
     String name;
     @Column(nullable = false,length = 255)
@@ -40,7 +43,7 @@ public class Product {
     @Column(nullable = false,length = 10)
     Status status = Status.IN_STOCK;
     @Column(columnDefinition = "NVARCHAR(255)")
-     String imageUrl;
+    String imageUrl;
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     LocalDateTime createdAt;
@@ -60,4 +63,11 @@ public class Product {
 
     @Column(nullable = false, precision = 18, scale = 2)
     BigDecimal salePrice;
+    private String brand;
+    private double rating;
+    private double discount;
+    private int stock;
+    private String sku;
+    private int reviewCount;  // thêm
+    private int soldCount;
 }

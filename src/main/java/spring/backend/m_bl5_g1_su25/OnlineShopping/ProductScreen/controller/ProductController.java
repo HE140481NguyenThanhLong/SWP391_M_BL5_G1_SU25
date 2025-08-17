@@ -9,14 +9,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Category;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.CategoryRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.ProductRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.ProductService;
 
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -27,7 +32,8 @@ public class ProductController {
     private ProductService productService;
     @Autowired
     private ProductRepository productRepository;
-
+    @Autowired
+    private CategoryRepository categoryRepository;
     @GetMapping
     public String listProducts(
             @RequestParam(defaultValue = "1") int page,
@@ -52,14 +58,14 @@ public class ProductController {
         model.addAttribute("stats", productService.getStats());
         model.addAttribute("categories", productService.getAllCategories());
 
-        return "product/product_list";
+        return "product/products_manage";
     }
 
     @GetMapping("/detail/{id}")
     public String detailProduct(@PathVariable Integer id, Model model) {
         Product product = productService.getProductById(id);
         model.addAttribute("product", product);
-        return "product/product_detail";
+        return "product/Edit_detail";
     }
     @PostMapping("/update/{id}")
     public String updateProduct(
@@ -119,4 +125,68 @@ public class ProductController {
         List<String> suppliers = productService.getAllSuppliers();
         model.addAttribute("suppliers", suppliers);
         return "product/import_product";
-    }}
+    }
+    @GetMapping("/list")
+    public String productList(
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) String supplier,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
+            @RequestParam(name = "category_id", required = false) Integer categoryId,
+            Model model
+    ) {
+        // Xác định tên category để hiển thị
+        String selectedCategory = "Tất cả sản phẩm";
+        if (categoryId != null) {
+            Category categoryEntity = categoryRepository.findById(categoryId).orElse(null);
+            if (categoryEntity != null) {
+                selectedCategory = categoryEntity.getName();
+            }
+        }
+
+        Page<Product> products = productService.filterProducts(
+                minPrice, maxPrice, supplier, categoryId, sortBy, page, size
+        );
+
+        int totalPages = products.getTotalPages();
+
+        // ✅ Tạo danh sách pageNumbers hiển thị quanh currentPage
+        List<Integer> pageNumbers = new ArrayList<>();
+        if (totalPages > 0) {
+            int start = Math.max(0, page - 2);
+            int end = Math.min(totalPages - 1, page + 2);
+            for (int i = start; i <= end; i++) {
+                pageNumbers.add(i);
+            }
+        }
+
+        // Truyền dữ liệu sang view
+        model.addAttribute("products", products.getContent());
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageNumbers", pageNumbers);
+        model.addAttribute("suppliers", productService.getSuppliers());
+        model.addAttribute("categories", productService.getAllCategories());
+        model.addAttribute("selectedCategory", selectedCategory);
+
+        return "product/list";
+    }
+
+
+    @GetMapping("/detailproduct/{id}")
+    public String detailProductInformation(@PathVariable Integer id, Model model) {
+        Optional<Product> productOptional = productService.findById(id);
+        Product product = productOptional.orElse(null);
+        if (product == null) {
+            model.addAttribute("errorMessage", "Product not found with id: " + id);
+            return "error/404";
+        }
+        List<Product> relatedProducts = productService.findRelatedProducts(id);
+        model.addAttribute("product", product);
+        model.addAttribute("relatedProducts", relatedProducts);
+        return "product/detail";
+    }
+
+}
