@@ -30,8 +30,8 @@ public class Order {
     @ManyToOne(optional = false)
     @JoinColumn(name="user_id",nullable = false)
     User user;
-//    @Column(columnDefinition = "DOUBLE",nullable = false)
-//    Double total;
+    @Column(nullable = false)
+    Double total;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false,length = 10)
     OrderStatus status = OrderStatus.PENDING;
@@ -48,5 +48,8 @@ public class Order {
     String shippingAddress;
     @OneToMany(mappedBy = "order")
     private Set<OrderDetail> orderDetails = new HashSet<>();
+
+    @Embedded
+    ShippingInformation shippingInformation;
 
 }

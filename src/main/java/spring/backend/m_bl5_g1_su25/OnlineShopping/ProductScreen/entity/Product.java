@@ -24,12 +24,12 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer product_id;
     
-    @Column(nullable = false,length = 255)
+    @Column(nullable = false,length = 255,columnDefinition = "NVARCHAR(255)")
     String name;
-    @Column(nullable = false,length = 255)
+    @Column(nullable = false,length = 255,columnDefinition = "NVARCHAR(255)")
     String description;
-    @Column(nullable = false, precision = 18, scale = 2)
-    BigDecimal price;
+    @Column(nullable = false)
+    Double price;
     @Column()
     Integer quantity;
     @Column(nullable = false)
@@ -46,12 +46,8 @@ public class Product {
     @UpdateTimestamp
     @Column()
     LocalDateTime updatedAt;
-    @ManyToMany
-    @JoinTable(
-            name = "product_category",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private Set<Category> categories = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id") // Tên cột khóa ngoại trong bảng product
+    private Category categories;
 
 }
