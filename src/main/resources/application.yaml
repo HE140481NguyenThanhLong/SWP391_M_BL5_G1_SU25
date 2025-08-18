@@ -29,9 +29,9 @@ spring:
     name: M_BL5_G1_SU25
 
   datasource:
-    url: jdbc:mysql://localhost:3306/smartshop?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    username: root
-    password: 123456
+    url: jdbc:mysql://localhost:6379/smartshop?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: admin
+    password: Dungnche140981
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
