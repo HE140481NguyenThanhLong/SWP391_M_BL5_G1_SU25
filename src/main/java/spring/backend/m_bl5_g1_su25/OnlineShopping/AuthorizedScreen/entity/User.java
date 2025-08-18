@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.Enum.Gender;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.Enum.Role;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.Enum.Status;
 
@@ -40,6 +41,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     Status status = Status.ACTIVE;
 
+    @Column(nullable = false,length = 10)
+    @Enumerated(EnumType.STRING)
+    Gender gender =Gender.MALE;
+
     @CreationTimestamp
     @Column(nullable = false,updatable = false)
     LocalDateTime createdAt;
@@ -48,5 +53,8 @@ public class User {
     LocalDateTime updatedAt;
     @Column(nullable = false)
     Boolean isDeleted = false;
+
+    @Column(nullable = false,length = 50)
+    String phoneNumber;
 
 }
