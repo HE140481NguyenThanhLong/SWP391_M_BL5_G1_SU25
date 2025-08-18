@@ -2,16 +2,13 @@ package spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.Enum.Status;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Cart_Items;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Integer> {
+public interface ProductCartRepository extends JpaRepository<Product, Integer> {
     // Tìm theo tên chứa từ khóa
     List<Product> findByNameContainingIgnoreCase(String keyword);
 

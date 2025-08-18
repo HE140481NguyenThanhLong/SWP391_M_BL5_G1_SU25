@@ -9,8 +9,8 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Cart_Items;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.Repository.CartItemRepository;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.Repository.ProductRepository;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.Repository.UserRepository;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.Repository.ProductCartRepository;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.Repository.UserRepositoryCart;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,8 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CartItemServiceImpl implements CartItemService{
     private final CartItemRepository cartItemRepository;
-    private final ProductRepository productRepository;
-    private final UserRepository userRepository;
+    private final ProductCartRepository productCartRepository;
+    private final UserRepositoryCart userRepository;
 
     @Override
     public Page<Cart_Items> getCartByUserPaging(Integer userId, Pageable pageable) {
@@ -70,7 +70,7 @@ public class CartItemServiceImpl implements CartItemService{
 public Cart_Items addToCart(Integer userId, Integer productId, Integer quantity) {
     User user = userRepository.findById(userId)
             .orElseThrow(() -> new RuntimeException("User not found"));
-    Product product = productRepository.findById(productId)
+    Product product = productCartRepository.findById(productId)
             .orElseThrow(() -> new RuntimeException("Product not found"));
 
     // Check if product already exists in cart

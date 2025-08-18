@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Category;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.Repository.ProductRepo;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.Repository.ProductRepository;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.Repository.ProductCartRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.service.CartItemService;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Cart_Items;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
@@ -25,12 +25,12 @@ import java.util.stream.Collectors;
 public class CartController {
 
     private final CartItemService cartItemService;
-    private final ProductRepository productRepository;
+    private final ProductCartRepository productCartRepository;
     private final ProductRepo productRepo;
 
     @GetMapping("/product/{productId}")
     public String productDetail(@PathVariable Integer productId, Model model) {
-        Product pro = productRepository.findById(productId).orElse(null);
+        Product pro = productCartRepository.findById(productId).orElse(null);
 
         if(pro != null) {
             List<Integer> categoryIds = pro.getCategories().stream()
