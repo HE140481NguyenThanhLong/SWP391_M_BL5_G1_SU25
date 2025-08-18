@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Cart_Items;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.CartItemsRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.ProductRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity.User;
 
