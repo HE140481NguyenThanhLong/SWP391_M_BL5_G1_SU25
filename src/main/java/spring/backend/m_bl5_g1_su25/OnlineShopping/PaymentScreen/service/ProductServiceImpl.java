@@ -1,12 +1,12 @@
-package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.service;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.dto.reponse.ProductResponse;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.mapper.ProductMapper;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.ProductRepo;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.dto.reponse.ProductResponse;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.mapper.ProductMapper;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.Repository.ProductRepo;
 
 import java.util.List;
 

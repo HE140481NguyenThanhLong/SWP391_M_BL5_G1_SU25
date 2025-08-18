@@ -1,8 +1,8 @@
-package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.mapper;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.dto.reponse.ProductResponse;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.dto.reponse.ProductResponse;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 
 @Mapper(componentModel = "spring")

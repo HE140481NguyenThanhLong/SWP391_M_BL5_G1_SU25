@@ -1,4 +1,4 @@
-package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.Repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.controller;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.Controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -9,15 +9,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Category;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.ProductRepo;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.ProductRepository;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.CartItemService;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.Repository.ProductRepo;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.Repository.ProductRepository;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.service.CartItemService;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Cart_Items;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller

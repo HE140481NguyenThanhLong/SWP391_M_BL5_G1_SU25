@@ -1,4 +1,4 @@
-package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.dto.reponse;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.dto.reponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

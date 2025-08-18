@@ -1,4 +1,4 @@
-package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -10,4 +10,8 @@ import java.util.List;
 public interface ProductRepo extends JpaRepository<Product, Long> {
     @Override
     List<Product> findAll();
+
+    List<Product> findProductsWithCategoriesByCategoryId(List<Integer> categoryIds);
+
+    List<Product> findBestSeller();
 }
