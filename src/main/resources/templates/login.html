@@ -6,76 +6,95 @@
     <title>Login - Smart Shop</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="h-full">
+<body class="h-full bg-gray-50">
 
-<!-- Include Header and modify specific parts -->
-<div th:replace="~{../Header/header :: header}">
-    <!-- Fallback content if fragment fails -->
-    <p>Header failed to load</p>
+<!-- Mobile Top Bar -->
+<div class="sticky top-0 z-50 flex items-center gap-2 bg-white px-4 py-3 shadow-sm md:hidden dark:bg-gray-800">
+    <button type="button"
+            class="inline-flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-gray-300 dark:hover:bg-gray-700"
+            aria-controls="app-sidebar"
+            data-drawer-target="app-sidebar"
+            data-drawer-toggle="app-sidebar"
+            aria-label="Open sidebar">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+    <span class="font-semibold text-gray-800 dark:text-gray-100">Smart Shop</span>
 </div>
 
-<!-- Override specific parts of the header for login page -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Remove search bar
-    const searchForm = document.querySelector('form.mb-4');
-    if (searchForm) {
-        searchForm.remove();
-    }
+<!-- Vertical Header / Sidebar -->
+<aside id="app-sidebar"
+       class="fixed top-0 left-0 z-40 h-screen w-72 -translate-x-full overflow-y-auto border-r border-gray-200 bg-white p-4 transition-transform md:translate-x-0 dark:border-gray-700 dark:bg-gray-800"
+       tabindex="-1" aria-label="Sidebar">
 
-    // Remove account dropdown section
-    const accountSection = document.querySelector('#user-menu-button')?.parentElement;
-    if (accountSection) {
-        accountSection.remove();
-    }
+    <!-- Brand -->
+    <div class="mb-4 flex items-center justify-between">
+        <a href="/dashboard" class="flex items-center gap-2">
+            <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white font-bold">S</span>
+            <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">Smart Shop</span>
+        </a>
+        <button type="button"
+                class="md:hidden inline-flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-gray-300 dark:hover:bg-gray-700"
+                data-drawer-hide="app-sidebar"
+                aria-label="Close menu">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+    </div>
 
-    // Update Home link to dashboard
-    const homeLink = document.querySelector('a[href="#home"]');
-    if (homeLink) {
-        homeLink.href = '/dashboard';
-    }
+    <!-- Primary Nav -->
+    <nav class="space-y-1.5">
+        <!-- Home -->
+        <a href="/dashboard" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+            <svg class="h-5 w-5 text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2V12H8v8a2 2 0 0 1-2 2H3z"/>
+            </svg>
+            <span>Home</span>
+        </a>
 
-    // Add login/signup links at bottom of sidebar
-    const sidebar = document.querySelector('#app-sidebar');
-    if (sidebar) {
-        const loginSignupSection = document.createElement('div');
-        loginSignupSection.className = 'mt-auto space-y-2';
-        loginSignupSection.innerHTML = `
-            <a href="/signup" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
-                <svg class="h-5 w-5 text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-                </svg>
-                <span>Sign Up</span>
-            </a>
-        `;
-        sidebar.appendChild(loginSignupSection);
-    }
-});
-</script>
+        <!-- Login -->
+        <a href="/login" class="group flex items-center gap-3 rounded-lg px-3 py-2 bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200">
+            <svg class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7"/>
+            </svg>
+            <span>Login</span>
+        </a>
+
+        <!-- Sign Up -->
+        <a href="/signup" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+            <svg class="h-5 w-5 text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM3 20a6 6 0 0 1 12 0v1H3v-1z"/>
+            </svg>
+            <span>Sign Up</span>
+        </a>
+    </nav>
+</aside>
 
 <!-- Main Content Area (Login Form) -->
 <div class="md:ml-72 min-h-screen flex items-center justify-center p-4 bg-gray-100">
     <div class="max-w-md w-full bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-2xl font-bold text-center mb-6">Login to Smart Shop</h2>
+        <h2 class="text-2xl font-bold text-center mb-6">Đăng nhập Smart Shop</h2>
 
         <!-- Test Account Fill Buttons -->
         <div class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-            <h3 class="text-sm font-medium text-blue-800 mb-3">🔧 Quick Login (Test Accounts)</h3>
+            <h3 class="text-sm font-medium text-blue-800 mb-3">🔧 Đăng nhập nhanh (Tài khoản test)</h3>
             <div class="grid grid-cols-1 gap-2">
                 <button type="button" onclick="fillLogin('admin@test.com', '123456')"
                         class="text-xs bg-red-100 text-red-700 px-3 py-2 rounded hover:bg-red-200 transition-colors">
-                    👑 Admin Account
+                    👑 Tài khoản Admin
                 </button>
                 <button type="button" onclick="fillLogin('customer@test.com', '123456')"
                         class="text-xs bg-green-100 text-green-700 px-3 py-2 rounded hover:bg-green-200 transition-colors">
-                    🛍️ Customer Account
+                    🛍️ Tài khoản Khách hàng
                 </button>
                 <button type="button" onclick="fillLogin('staff@test.com', '123456')"
                         class="text-xs bg-yellow-100 text-yellow-700 px-3 py-2 rounded hover:bg-yellow-200 transition-colors">
-                    👨‍💼 Staff Account
+                    👨‍💼 Tài khoản Nhân viên
                 </button>
             </div>
-            <p class="text-xs text-blue-600 mt-2">Click any button to auto-fill credentials</p>
+            <p class="text-xs text-blue-600 mt-2">Nhấn vào nút để tự động điền thông tin đăng nhập</p>
         </div>
 
         <!-- Success message for registration -->
@@ -84,13 +103,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 <svg class="h-5 w-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                 </svg>
-                Account created successfully! Please login with your credentials.
+                Tài khoản đã được tạo thành công! Vui lòng đăng nhập với thông tin tài khoản của bạn.
             </div>
         </div>
 
         <!-- Error message -->
         <div th:if="${param.error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            Invalid email or password. Please try again.
+            Email hoặc mật khẩu không đúng. Vui lòng thử lại.
         </div>
 
         <!-- Flash messages -->
@@ -111,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
 
             <div>
-                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Mật khẩu</label>
                 <input type="password" id="password" name="password" required
                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
             </div>
@@ -119,30 +138,32 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="flex items-center">
                 <input type="checkbox" id="remember-me" name="remember-me"
                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                <label for="remember-me" class="ml-2 block text-sm text-gray-700">Remember me</label>
+                <label for="remember-me" class="ml-2 block text-sm text-gray-700">Ghi nhớ đăng nhập</label>
             </div>
 
             <div class="text-right">
                 <a href="/shared/change-password" class="text-sm text-blue-600 hover:text-blue-500 font-medium">
-                    Forgot Password?
+                    Quên mật khẩu?
                 </a>
             </div>
 
             <button type="submit"
                     class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
-                Login
+                Đăng nhập
             </button>
         </form>
 
         <div class="mt-6 text-center">
             <p class="text-sm text-gray-600">
-                Don't have an account?
-                <a href="/signup" class="text-blue-600 hover:text-blue-500 font-medium">Sign up here</a>
+                Chưa có tài khoản?
+                <a href="/signup" class="text-blue-600 hover:text-blue-500 font-medium">Đăng ký tại đây</a>
             </p>
         </div>
     </div>
 </div>
 
+<!-- Flowbite JS -->
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 <script>
 // Function to fill login form with test account credentials
 function fillLogin(email, password) {

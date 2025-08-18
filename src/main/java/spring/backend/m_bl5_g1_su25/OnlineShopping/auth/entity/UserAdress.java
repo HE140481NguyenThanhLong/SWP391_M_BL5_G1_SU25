@@ -1,4 +1,4 @@
-package spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,21 +17,21 @@ public class UserAdress {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer user_address_id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Column( nullable = false)
+    @Column
     private String recipientName;
 
-    @Column( nullable = false)
+    @Column
     private String phoneNumber;
 
     // Đây chính là phần "tổ dân phố", số nhà, tên đường
-    @Column(name = "street_address", nullable = false)
+    @Column(name = "street_address")
     private String streetAddress;
 
     // Liên kết tới Phường/Xã cụ thể
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ward_code", nullable = false)
+    @JoinColumn(name = "ward_code")
     private Ward ward;
 }

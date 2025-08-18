@@ -50,5 +50,8 @@ public class RegisterRequest {
     @Past(message = "Date of birth must be in the past")
     LocalDate dateOfBirth;
 
+    @NotNull(message = "Gender is required")
+    User.Gender gender;
+
     User.Role role = User.Role.CUSTOMER;
 }

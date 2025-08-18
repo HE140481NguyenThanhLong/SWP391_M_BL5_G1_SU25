@@ -1,4 +1,4 @@
-package spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class Province {
     @Column( length = 20)
     private String province_code; // Ví dụ: "01" cho Hà Nội, dùng mã của GSO
 
-    @Column(nullable = false)
+    @Column
     private String name; // Ví dụ: "Thành phố Hà Nội"
 
     // Một tỉnh có nhiều huyện

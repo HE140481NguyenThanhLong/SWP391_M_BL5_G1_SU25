@@ -39,7 +39,7 @@ public class DataLoader implements CommandLineRunner {
             "admin", "admin@test.com", "123456", User.Role.ADMIN,
             "John", "Wilson", "0123456789",
             "123 Admin Street, Ho Chi Minh City, Vietnam",
-            LocalDate.of(1985, 5, 15)
+            LocalDate.of(1985, 5, 15), User.Gender.MALE
         );
 
         // Test Customer Account
@@ -47,7 +47,7 @@ public class DataLoader implements CommandLineRunner {
             "customer", "customer@test.com", "123456", User.Role.CUSTOMER,
             "Alice", "Johnson", "0987654321",
             "456 Customer Avenue, Hanoi, Vietnam",
-            LocalDate.of(1990, 8, 22)
+            LocalDate.of(1990, 8, 22), User.Gender.FEMALE
         );
 
         // Test Staff Account
@@ -55,12 +55,12 @@ public class DataLoader implements CommandLineRunner {
             "staff", "staff@test.com", "123456", User.Role.STAFF,
             "Bob", "Thompson", "0555666777",
             "789 Staff Boulevard, Da Nang, Vietnam",
-            LocalDate.of(1988, 12, 3)
+            LocalDate.of(1988, 12, 3), User.Gender.MALE
         );
     }
 
     protected void createTestUser(String username, String email, String password, User.Role role,
-                               String firstname, String lastname, String phone, String address, LocalDate dateOfBirth) {
+                               String firstname, String lastname, String phone, String address, LocalDate dateOfBirth, User.Gender gender) {
 
         if (userRepository.existsByEmail(email)) {
             log.info("User with email {} already exists, skipping...", email);
@@ -80,6 +80,7 @@ public class DataLoader implements CommandLineRunner {
                 .role(role)
                 .status(User.Status.ACTIVE)
                 .isDeleted(false)
+                .gender(gender) // Set gender
                 .build();
 
             User savedUser = userRepository.save(user);

@@ -24,8 +24,6 @@ public class Staff {
     String firstname;
     @Column(nullable = false,length = 50,columnDefinition = "NVARCHAR(255)")
     String lastname;
-    @Column(nullable = false,length = 50,columnDefinition = "NVARCHAR(255)")
-    String middlename;
-
-
+    @Column(nullable = false,length = 50)
+    String phoneNumber;
 }

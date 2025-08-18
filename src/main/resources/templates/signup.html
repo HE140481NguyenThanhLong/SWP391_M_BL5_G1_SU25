@@ -81,7 +81,7 @@
 <!-- Main Content -->
 <div class="md:ml-72 min-h-screen bg-gray-50 py-8">
     <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-8">
-        <h2 class="text-2xl font-bold text-center mb-6">Create Your Smart Shop Account</h2>
+        <h2 class="text-2xl font-bold text-center mb-6">Tạo tài khoản Smart Shop</h2>
 
         <!-- Error messages -->
         <div th:if="${error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -93,19 +93,19 @@
 
             <!-- First Name -->
             <div>
-                <label for="firstname" class="block text-sm font-medium text-gray-700">First Name</label>
+                <label for="firstname" class="block text-sm font-medium text-gray-700">Họ</label>
                 <input type="text" th:field="*{firstname}" id="firstname"
                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                       placeholder="Enter your first name" required>
+                       placeholder="Nhập họ của bạn" required>
                 <div th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}" class="text-red-600 text-sm"></div>
             </div>
 
             <!-- Last Name -->
             <div>
-                <label for="lastname" class="block text-sm font-medium text-gray-700">Last Name</label>
+                <label for="lastname" class="block text-sm font-medium text-gray-700">Tên</label>
                 <input type="text" th:field="*{lastname}" id="lastname"
                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                       placeholder="Enter your last name" required>
+                       placeholder="Nhập tên của bạn" required>
                 <div th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}" class="text-red-600 text-sm"></div>
             </div>
 
@@ -114,44 +114,61 @@
                 <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                 <input type="email" th:field="*{email}" id="email"
                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                       placeholder="Enter your email" required>
+                       placeholder="Nhập địa chỉ email" required>
                 <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-600 text-sm"></div>
             </div>
 
             <!-- Phone Number -->
             <div>
-                <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Số điện thoại</label>
                 <input type="text" th:field="*{phoneNumber}" id="phoneNumber"
                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                       placeholder="Enter your phone number" required>
+                       placeholder="Nhập số điện thoại" required>
                 <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="text-red-600 text-sm"></div>
             </div>
 
             <!-- Date of Birth -->
             <div>
-                <label for="dateOfBirth" class="block text-sm font-medium text-gray-700">Date of Birth</label>
+                <label for="dateOfBirth" class="block text-sm font-medium text-gray-700">Ngày sinh</label>
                 <input type="date" th:field="*{dateOfBirth}" id="dateOfBirth"
                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                        required>
                 <div th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}" class="text-red-600 text-sm"></div>
             </div>
 
+            <!-- Gender -->
+            <div>
+                <label for="gender" class="block text-sm font-medium text-gray-700">Giới tính</label>
+                <select th:field="*{gender}" id="gender"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                        required>
+                    <option value="">Chọn giới tính</option>
+                    <option th:value="${T(spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User$Gender).MALE}"
+                            th:text="Nam">Nam</option>
+                    <option th:value="${T(spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User$Gender).FEMALE}"
+                            th:text="Nữ">Nữ</option>
+                    <option th:value="${T(spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User$Gender).OTHER}"
+                            th:text="Khác">Khác</option>
+                </select>
+                <div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" class="text-red-600 text-sm"></div>
+            </div>
+
             <!-- Address -->
             <div>
-                <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                <label for="address" class="block text-sm font-medium text-gray-700">Địa chỉ</label>
                 <textarea th:field="*{address}" id="address" rows="3"
                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                          placeholder="Enter your address" required></textarea>
+                          placeholder="Nhập địa chỉ của bạn" required></textarea>
                 <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="text-red-600 text-sm"></div>
             </div>
 
             <!-- Password -->
             <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <label for="password" class="block text-sm font-medium text-gray-700">Mật khẩu</label>
                 <div class="relative">
                     <input type="password" th:field="*{password}" id="password"
                            class="mt-1 block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                           placeholder="Enter password (minimum 6 characters)" required>
+                           placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)" required>
                     <button type="button" id="togglePassword"
                             class="absolute inset-y-0 right-0 pr-3 flex items-center">
                         <svg id="eyeIcon" class="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,15 +183,15 @@
             <!-- Submit Button -->
             <button type="submit"
                     class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                Create Account
+                Tạo tài khoản
             </button>
         </form>
 
         <!-- Login Link -->
         <div class="text-center mt-4">
             <p class="text-sm text-gray-600">
-                Already have an account?
-                <a href="/login" class="text-blue-600 hover:text-blue-800">Login here</a>
+                Đã có tài khoản?
+                <a href="/login" class="text-blue-600 hover:text-blue-800">Đăng nhập tại đây</a>
             </p>
         </div>
     </div>
