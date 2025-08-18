@@ -2,7 +2,7 @@ package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Cart_Items;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity.User;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 
 import java.util.List;

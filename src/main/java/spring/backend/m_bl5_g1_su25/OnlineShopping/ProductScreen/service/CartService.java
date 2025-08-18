@@ -7,7 +7,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Cart_Ite
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.CartItemsRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.ProductRepository;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity.User;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
 
 import java.util.List;
 

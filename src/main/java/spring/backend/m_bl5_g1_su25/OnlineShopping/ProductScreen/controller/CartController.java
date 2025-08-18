@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.CartService;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity.User;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.UserRepository;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.repository.UserRepository;
 
 import java.security.Principal;
 import java.util.HashMap;
