@@ -38,6 +38,7 @@ public class AuthService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .address(request.getAddress()) // Add address field
+                .dateOfBirth(request.getDateOfBirth()) // Add date of birth field
                 .role(request.getRole())
                 .status(User.Status.ACTIVE)
                 .isDeleted(false)

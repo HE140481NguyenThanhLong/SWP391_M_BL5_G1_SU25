@@ -2,12 +2,16 @@ package spring.backend.m_bl5_g1_su25.OnlineShopping.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.common.validation.ValidName;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.common.validation.ValidPhone;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -41,6 +45,10 @@ public class RegisterRequest {
 
     @NotBlank(message = "Address is required")
     String address;
+
+    @NotNull(message = "Date of birth is required")
+    @Past(message = "Date of birth must be in the past")
+    LocalDate dateOfBirth;
 
     User.Role role = User.Role.CUSTOMER;
 }

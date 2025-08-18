@@ -40,6 +40,7 @@ public class ProfileController {
         profileUpdateRequest.setUsername(user.getUsername());
         profileUpdateRequest.setEmail(user.getEmail());
         profileUpdateRequest.setAddress(user.getAddress());
+        profileUpdateRequest.setDateOfBirth(user.getDateOfBirth());
 
         // Load Customer/Staff profile based on role
         if (user.getRole() == User.Role.CUSTOMER) {
@@ -159,6 +160,7 @@ public class ProfileController {
 
             currentUser.setEmail(profileUpdateRequest.getEmail().trim());
             currentUser.setAddress(profileUpdateRequest.getAddress().trim());
+            currentUser.setDateOfBirth(profileUpdateRequest.getDateOfBirth());
             userRepository.save(currentUser);
 
             // Update Customer/Staff profile

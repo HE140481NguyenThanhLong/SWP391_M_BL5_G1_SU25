@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -30,6 +31,9 @@ public class User {
     String password;
     @Column(nullable = false, length = 500)
     String address;
+
+    @Column(nullable = false)
+    LocalDate dateOfBirth;
 
     @Column(nullable = false,length = 10)
     @Enumerated(EnumType.STRING)

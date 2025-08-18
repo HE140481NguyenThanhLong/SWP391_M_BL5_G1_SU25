@@ -13,6 +13,8 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.user.entity.Staff;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.user.repository.CustomerRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.user.repository.StaffRepository;
 
+import java.time.LocalDate;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -36,26 +38,29 @@ public class DataLoader implements CommandLineRunner {
         createTestUser(
             "admin", "admin@test.com", "123456", User.Role.ADMIN,
             "John", "Wilson", "0123456789",
-            "123 Admin Street, Ho Chi Minh City, Vietnam"
+            "123 Admin Street, Ho Chi Minh City, Vietnam",
+            LocalDate.of(1985, 5, 15)
         );
 
         // Test Customer Account
         createTestUser(
             "customer", "customer@test.com", "123456", User.Role.CUSTOMER,
             "Alice", "Johnson", "0987654321",
-            "456 Customer Avenue, Hanoi, Vietnam"
+            "456 Customer Avenue, Hanoi, Vietnam",
+            LocalDate.of(1990, 8, 22)
         );
 
         // Test Staff Account
         createTestUser(
             "staff", "staff@test.com", "123456", User.Role.STAFF,
             "Bob", "Thompson", "0555666777",
-            "789 Staff Boulevard, Da Nang, Vietnam"
+            "789 Staff Boulevard, Da Nang, Vietnam",
+            LocalDate.of(1988, 12, 3)
         );
     }
 
     protected void createTestUser(String username, String email, String password, User.Role role,
-                               String firstname, String lastname, String phone, String address) {
+                               String firstname, String lastname, String phone, String address, LocalDate dateOfBirth) {
 
         if (userRepository.existsByEmail(email)) {
             log.info("User with email {} already exists, skipping...", email);
@@ -71,6 +76,7 @@ public class DataLoader implements CommandLineRunner {
                 .email(email)
                 .password(passwordEncoder.encode(password))
                 .address(address)
+                .dateOfBirth(dateOfBirth)
                 .role(role)
                 .status(User.Status.ACTIVE)
                 .isDeleted(false)
