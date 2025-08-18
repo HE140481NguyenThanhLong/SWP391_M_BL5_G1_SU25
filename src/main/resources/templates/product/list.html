@@ -213,6 +213,17 @@
                                       th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '₫'">
 
                 </span>
+                                <div class="flex items-center gap-6 mb-6">
+                                    <div class="flex items-center gap-2">
+                                        <div class="flex text-yellow-400" th:with="rating=${product.rating}">
+                                            <svg th:each="i : ${#numbers.sequence(1, 5)}" th:class="${i <= rating} ? 'w-6 h-6 fill-current' : 'w-6 h-6 text-neutral-300 fill-current'" viewBox="0 0 20 20">
+                                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                            </svg>
+                                        </div>
+                                        <span class="text-lg font-medium" th:text="'(' + ${product.rating} + '/5)'"></span>
+                                    </div>
+                                </div>
+
                                 <button class="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primary-dark transition-colors">
                                     Thêm vào giỏ
                                 </button>
