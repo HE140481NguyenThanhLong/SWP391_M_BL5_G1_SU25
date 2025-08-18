@@ -19,7 +19,7 @@ public class ProductResponse {
     String description;
     String imageUrl;
 
-    BigDecimal price;
+    Double price;
     Integer quantity;
     Integer sales_count = 0;
     @Enumerated(EnumType.STRING)
