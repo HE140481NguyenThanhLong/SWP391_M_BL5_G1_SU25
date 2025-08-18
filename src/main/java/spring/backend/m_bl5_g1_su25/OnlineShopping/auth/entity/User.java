@@ -1,13 +1,16 @@
-package spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.Enum.Gender;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.Enum.Role;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.Enum.Status;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
@@ -29,11 +32,6 @@ public class User {
     String email;
     @Column(nullable = false, length = 255)
     String password;
-    @Column(nullable = false, length = 500)
-    String address;
-
-    @Column(nullable = false)
-    LocalDate dateOfBirth;
 
     @Column(nullable = false,length = 10)
     @Enumerated(EnumType.STRING)
@@ -42,6 +40,10 @@ public class User {
     @Column(nullable = false,length = 10)
     @Enumerated(EnumType.STRING)
     Status status = Status.ACTIVE;
+
+    @Column(nullable = false,length = 10)
+    @Enumerated(EnumType.STRING)
+    Gender gender =Gender.MALE;
 
     @CreationTimestamp
     @Column(nullable = false,updatable = false)
@@ -52,12 +54,7 @@ public class User {
     @Column(nullable = false)
     Boolean isDeleted = false;
 
-    public enum Role {
-        ADMIN,CUSTOMER,STAFF
-    }
-
-    public enum Status {
-        ACTIVE,INACTIVE
-    }
+    @Column(nullable = false,length = 50)
+    String phoneNumber;
 
 }

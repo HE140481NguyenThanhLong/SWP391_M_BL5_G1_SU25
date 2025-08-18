@@ -20,11 +20,12 @@ public class Staff {
     @MapsId
     @JoinColumn(name="staff_id")
     User user;
-    @Column(nullable = false,length = 50)
+    @Column(nullable = false,length = 50,columnDefinition = "NVARCHAR(255)")
     String firstname;
-    @Column(nullable = false,length = 50)
+    @Column(nullable = false,length = 50,columnDefinition = "NVARCHAR(255)")
     String lastname;
-    @Column(nullable = false,length = 50)
-    String phoneNumber;
+    @Column(nullable = false,length = 50,columnDefinition = "NVARCHAR(255)")
+    String middlename;
+
 
 }

@@ -5,11 +5,12 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.OrderScreen.enums.OrderStatus;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.entity.Payment;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,8 +30,8 @@ public class Order {
     @ManyToOne(optional = false)
     @JoinColumn(name="user_id",nullable = false)
     User user;
-    //    @Column(columnDefinition = "DOUBLE",nullable = false)
-//    Double total;
+    @Column(nullable = false)
+    Double total;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false,length = 10)
     OrderStatus status = OrderStatus.PENDING;
@@ -47,5 +48,8 @@ public class Order {
     String shippingAddress;
     @OneToMany(mappedBy = "order")
     private Set<OrderDetail> orderDetails = new HashSet<>();
+
+    @Embedded
+    ShippingInformation shippingInformation;
 
 }

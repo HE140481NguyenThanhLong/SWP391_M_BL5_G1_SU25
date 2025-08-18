@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen overflow-x-hidden bg-gray-50 dark:bg-gray-900">
+
+<div th:replace="Header/header::header"/>
+<main
+        class="ml-14 p-6 transition-[margin] duration-300
+         peer-hover:ml-72 peer-focus-within:ml-72 bg-transparent"
+>
+<section
+        class="relative rounded-2xl border border-gray-200 bg-gradient-to-br from-indigo-50 via-white to-white p-6 md:p-8 dark:border-gray-700 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800"
+>
+    <!-- optional soft accent blobs (remove if you want plain bg) -->
+    <div aria-hidden="true"
+         class="pointer-events-none absolute inset-0 opacity-70 [background:radial-gradient(40rem_40rem_at_-10%_-10%,rgba(99,102,241,0.12),transparent_60%),radial-gradient(32rem_32rem_at_110%_110%,rgba(16,185,129,0.10),transparent_60%)]">
+    </div>
+
+    <!-- Your content (unchanged, but with tag fixes) -->
+    <div class="relative grid grid-cols-1 gap-6 lg:grid-cols-12">
+        <!-- Sidebar Filter (form submits to backend) -->
+        <aside class="lg:col-span-3">
+            <form th:action="@{/guest/filter}" method="get"
+
+                  class="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-800">
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Filters</h2>
+                    <button type="button" id="clearButton" class="text-sm text-indigo-600 hover:underline dark:text-indigo-400" onclick="clearSelection()">Làm mới lựa chọn </button>
+                </div>
+                <div class="mb-4">
+                    <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tìm kiếm sản phẩm</label>
+                    <div class="relative mt-1">
+                        <input
+                                type="text"
+                                id="search"
+                                name="keyword"
+                                th:value="${keyword}"   placeholder="Nhập từ khóa tìm kiếm..."
+                                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 pl-10 text-sm text-gray-700 shadow-sm
+                   focus:border-indigo-500 focus:ring-indigo-500
+                   dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+                        />
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Collapsible Filters (Flowbite Accordion) -->
+                <div id="filter-accordion" data-accordion="collapse"
+                     class="divide-y divide-gray-200 dark:divide-gray-700">
+                    <button class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">
+                        <a th:href="@{/guest/getRecent}">Mới Nhất</a></button>
+                    <button class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">
+                        <a th:href="@{/guest/getLastest}">Cũ nhất </a></button>
+                    <button class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">
+                        <a th:href="@{/guest/byPriceDesc}">Giá giảm dần</a></button>
+                    <button class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">
+                        <a th:href="@{/guest/byPriceAsc}">Giá tăng dần</a></button>
+
+                    <!-- Category (single checkbox) -->
+<!--                    <div class="mt-4">-->
+<!--                        <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">-->
+<!--                            Loại sản phẩm-->
+<!--                        </label>-->
+<!--                        <select id="category" name="brand"-->
+<!--                                class="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm-->
+<!--                 focus:border-indigo-500 focus:ring-indigo-500-->
+<!--                 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200">-->
+<!--                            <option value="">Tất cả</option>-->
+<!--                            <option th:value="Electronics">Đồ điện tử</option>-->
+<!--                            <option th:value="Books">Sách</option>-->
+<!--                            <option th:value="Clothing">Quần Áo</option>-->
+<!--                            <option th:value="Kitchen">Đời sống</option>-->
+<!--                            <option th:value="Outdoors">Thể thao và Dã ngoại</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+                </div>
+
+                <!-- Submit filters -->
+                <div class="mt-4">
+                    <button type="submit"
+                            class="inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        Tìm sản phẩm
+                    </button>
+                </div>
+            </form>
+        </aside>
+
+        <!-- Products (single card; duplicate with Thymeleaf later) -->
+        <section class="lg:col-span-9">
+            <div class="mb-4 flex items-center justify-between">
+
+            </div>
+
+            <div id="product-grid" class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                <!-- Single Product Card -->
+                <article th:each="product : ${products}"
+                        class="group relative overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800"
+                        data-category="Headphones" data-price="89" data-added="2025-08-10"
+                >
+                    <div class="overflow-hidden">
+                        <img th:src="${product.imageUrl}"
+                                src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop"
+                                alt="Wireless Headphones"
+                                class="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                loading="lazy" />
+                    </div>
+                    <div class="p-4">
+                        <div class="mb-1 flex items-start justify-between gap-3">
+                            <h3 th:text="${product.name}" class="text-base font-semibold text-gray-900 dark:text-gray-100">Wireless Headphones</h3>
+                            <span th:text="${product.price}" class="shrink-0 rounded-md bg-indigo-50 px-2.5 py-1 text-sm font-medium text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200">$89.00</span>
+                        </div>
+                        <p th:text="${product.description}" class="text-sm text-gray-600 dark:text-gray-300">Noise-cancelling, 30h battery, ultra-soft cushions.</p>
+
+                        <!-- Add to cart (POST to backend) -->
+                        <form action="/cart/add" method="post" class="mt-4">
+                            <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
+                            <input type="hidden" name="productId" value="123" />
+                            <input type="hidden" name="quantity" value="1" />
+                            <button type="submit"
+                                    class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l3-8H6.4M7 13l-1.6-8M7 13l-2 9m12-9l-2 9M9 22a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                                </svg>
+                                Thêm vào giỏ hàng
+                            </button>
+                        </form>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </div>
+<!--   Pagination section -->
+    <div class="flex justify-center items-center mt-4">
+        <div th:if="${totalPages > 0}" class="flex flex-col items-center mt-4">
+            <!-- Help text -->
+            <span class="text-sm text-gray-700 dark:text-gray-400">
+      Hiển thị <span class="font-semibold text-gray-900 dark:text-white" th:text="${content.size()}">trên</span>
+      <span class="font-semibold text-gray-900 dark:text-white" th:text="${totalItems}"></span> Sản phẩm
+    </span>
+
+            <!-- Pagination buttons -->
+            <div class="inline-flex mt-2 xs:mt-0">
+                <!-- Previous Button -->
+                <a th:if="${currentPage > 0}"
+                   th:href="@{/guest    (page=${currentPage - 1}, size=${pageSize})}"
+                   class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-700 rounded-l hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700">
+                    <svg class="w-3.5 h-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                         fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                              stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
+                    </svg>
+                    Về
+                </a>
+                <span th:unless="${currentPage > 0}"
+                      class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-400 rounded-l dark:bg-blue-500 cursor-not-allowed">
+        <svg class="w-3.5 h-3.5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+             viewBox="0 0 14 10">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13 5H1m0 0 4 4M1 5l4-4"/>
+        </svg>
+        Về đầu
+      </span>
+
+                <!-- Page number indicators -->
+                <div class="flex">
+                    <div th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                         th:if="${i >= currentPage - 2 && i <= currentPage + 2}"
+                         class="hidden md:flex">
+                        <a th:if="${i != currentPage}"
+                           th:href="@{/guest(page=${i}, size=${pageSize})}"
+                           class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                           th:text="${i + 1}">
+                        </a>
+                        <span th:if="${i == currentPage}"
+                              class="flex items-center justify-center px-4 h-10 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+                              th:text="${i + 1}">
+          </span>
+                    </div>
+                </div>
+
+                <!-- Next Button -->
+                <a th:if="${currentPage < totalPages - 1}"
+                   th:href="@{/guest(page=${currentPage + 1}, size=${pageSize})}"
+                   class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-700 border-0 border-l border-gray-700 rounded-r hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700">
+                    Tiếp
+                    <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                         fill="none" viewBox="0 0 14 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                              stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                    </svg>
+                </a>
+                <span th:unless="${currentPage < totalPages - 1}"
+                      class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-400 border-0 border-l border-gray-700 rounded-r dark:bg-blue-500 cursor-not-allowed">
+        Tới cuối
+        <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+             viewBox="0 0 14 10">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M1 5h12m0 0L9 1m4 4L9 9"/>
+        </svg>
+      </span>
+            </div>
+        </div>
+    </div>
+</section>
+</main>
+
+<!-- Root popup container -->
+<div id="new-product-popup"
+     class="fixed inset-0 z-50 flex items-center justify-center p-4"
+     role="dialog" aria-modal="true" aria-labelledby="new-product-heading"
+      >
+    <!-- Modal -->
+    <div class="relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-800">
+        <!-- Click image to open product detail -->
+        <section th:if="${latestProduct!=null}">
+            <a href="#" class="block">
+
+                <img th:src="${latestProduct.imageUrl}"
+                     class="h-auto w-full object-cover" loading="lazy" />
+            </a>
+        </section>
+<!--        <section th:if="${latestProduct==null}">-->
+<!--            <a href="#" class="block">-->
+
+<!--                <img src="https://mac24h.vn/images/detailed/95/Lenovo_loq_2025.jpg"-->
+<!--                     class="h-auto w-full object-cover" loading="lazy" />-->
+<!--            </a>-->
+<!--        </section>-->
+
+        <!-- Close (ensure it's above everything) -->
+        <a
+           class="absolute right-3 top-3 z-20 inline-flex rounded-full bg-white/90 p-2 text-gray-700 shadow hover:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-900/70 dark:text-gray-200">
+            <span class="sr-only">Close</span>
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </a>
+    </div>
+</div>
+
+
+<script>
+    (function () {
+        const popup = document.getElementById('new-product-popup');
+        if (!popup) return;
+
+        // The inner panel (so backdrop clicks can be detected reliably)
+        const panel = popup.querySelector('.relative.z-10');
+
+        // Find the close button via the sr-only "Close" label
+        const closeBtn = popup.querySelector('a .sr-only')?.closest('a');
+
+        function closeModal() {
+            popup.classList.add('hidden');           // hide the modal
+            popup.setAttribute('aria-hidden', 'true');
+            // (optional) restore scrolling if you lock body scroll elsewhere:
+            // document.documentElement.classList.remove('overflow-hidden');
+        }
+
+        // Close via the X button
+        closeBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            closeModal();
+        });
+
+        // Close when clicking the backdrop (but not inside the panel)
+        popup.addEventListener('click', (e) => {
+            if (e.target === popup) closeModal();
+        });
+
+        // Safety: if events bubble from children, stop them at the panel
+        panel?.addEventListener('click', (e) => e.stopPropagation());
+
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !popup.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+    })();
+</script>
+<script>
+    function clearSelections() {
+        document.getElementById('category').value = "";
+    }
+    document.getElementById('clearButton').addEventListener('click', clearSelections);
+</script>
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+</body>
+</html>
