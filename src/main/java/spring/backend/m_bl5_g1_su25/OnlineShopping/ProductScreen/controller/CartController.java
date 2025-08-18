@@ -2,7 +2,6 @@ package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.CartService;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity.User;
