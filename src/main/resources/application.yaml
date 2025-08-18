@@ -1,86 +1,61 @@
-server:
-  port: 8080
-  shutdown: graceful
-  servlet:
-    session:
-      timeout: 30m
-      cookie:
-        max-age: 1800
-        same-site: lax
-        secure: false
-        http-only: true
+#spring.application.name=M_BL5_G1_SU25
 
+# Database Configuration for MySQL
+#spring.datasource.url=jdbc:mysql://localhost:3306/smartshop?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+#spring.datasource.username=root
+#spring.datasource.password=123456
+#spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# Hibernate Configuration
+#spring.jpa.hibernate.ddl-auto=update
+#spring.jpa.show-sql=true
+#spring.jpa.properties.hibernate.format_sql=true
+#spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+
+# Thymeleaf Configuration
+#spring.thymeleaf.cache=false
+#spring.thymeleaf.prefix=classpath:/templates/
+#spring.thymeleaf.suffix=.html
+
+# Web Configuration
+#server.port=8080
+
+# Security Configuration (temporary disable for development)
+#spring.security.user.name=admin
+#spring.security.user.password=admin
+#spring.security.user.roles=ADMIN
 spring:
   application:
-    name: SWP391-Online-Shopping
+    name: M_BL5_G1_SU25
 
-  lifecycle:
-    timeout-per-shutdown-phase: 10s
-
-  session:
-    store-type: none
-
-  # Local SQL Server Configuration
   datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=G1_SWP391;trustServerCertificate=true;encrypt=false
-    username: sa
-    password: 123456
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    hikari:
-      connection-timeout: 30000
-      idle-timeout: 600000
-      max-lifetime: 1800000
-      maximum-pool-size: 10
-      minimum-idle: 5
+    url: jdbc:mysql://localhost:6379/smartshop?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: admin
+    password: Dungnche140981
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
-  # Hibernate Configuration
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.SQLServerDialect
-        jdbc:
-          lob:
-            non_contextual_creation: true
         format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
-  # SMTP Configuration for Gmail
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: smartshopforeveryone@gmail.com
-    password: ynzx kxzg upzh jhvk
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
-          ssl:
-            trust: smtp.gmail.com
-          connectiontimeout: 5000
-          timeout: 5000
-          writetimeout: 5000
-
-  # Thymeleaf Configuration
   thymeleaf:
     cache: false
     prefix: classpath:/templates/
     suffix: .html
-    mode: HTML
 
-# Application specific properties
-app:
-  base-url: http://localhost:8080
+  security:
+    user:
+      name: admin
+      password: admin
+      roles: ADMIN
 
-# Logging configuration
-logging:
-  level:
-    spring.backend.m_bl5_g1_su25: DEBUG
-    org.springframework.mail: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+server:
+  port: 8080
+
+
 
