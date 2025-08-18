@@ -1,9 +1,9 @@
-package spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity.User;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
 
 @Entity
 @Getter
@@ -12,20 +12,18 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity.User;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name="Customer")
-public class Customer {
+@Table(name="Staff")
+public class Staff {
     @Id
-    Integer customer_id;
+    Integer staff_id;
     @OneToOne(optional = false)
     @MapsId
-    @JoinColumn(name="customer_id")
+    @JoinColumn(name="staff_id")
     User user;
-    @Column(columnDefinition = "NVARCHAR(255)",nullable = false,length = 50)
+    @Column(nullable = false,length = 50,columnDefinition = "NVARCHAR(255)")
     String firstname;
     @Column(nullable = false,length = 50,columnDefinition = "NVARCHAR(255)")
-    String middlename;
-    @Column(nullable = false,length = 50,columnDefinition = "NVARCHAR(255)")
     String lastname;
-
-
+    @Column(nullable = false,length = 50)
+    String phoneNumber;
 }
