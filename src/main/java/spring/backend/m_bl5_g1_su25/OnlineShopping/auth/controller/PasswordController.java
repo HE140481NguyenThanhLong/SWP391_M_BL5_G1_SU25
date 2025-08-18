@@ -12,7 +12,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.dto.ForgotPasswordReques
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.dto.ResetPasswordRequest;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.service.AuthService;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.service.PasswordResetService;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.common.service.MockEmailService;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.common.service.EmailService;
 
 @Controller
 @RequestMapping("/shared/change-password")
@@ -22,7 +22,7 @@ public class PasswordController {
 
     private final AuthService authService;
     private final PasswordResetService passwordResetService;
-    private final MockEmailService emailService;
+    private final EmailService emailService;
 
     // Show change password page
     @GetMapping

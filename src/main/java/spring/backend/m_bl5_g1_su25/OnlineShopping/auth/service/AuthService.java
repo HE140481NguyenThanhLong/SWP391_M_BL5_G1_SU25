@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.dto.RegisterRequest;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.repository.UserRepository;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.common.service.EmailService;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.user.entity.Customer;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.user.entity.Staff;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.user.repository.CustomerRepository;
@@ -22,6 +23,7 @@ public class AuthService {
     private final CustomerRepository customerRepository;
     private final StaffRepository staffRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService; // Thêm EmailService
 
     public User register(RegisterRequest request) {
         // Check if user already exists
@@ -48,6 +50,13 @@ public class AuthService {
 
         // Tạo Customer hoặc Staff entity tương ứng dựa trên role
         createUserProfile(savedUser, request);
+
+        // Gửi email chào mừng
+        try {
+            emailService.sendWelcomeEmail(savedUser.getEmail(), savedUser.getUsername());
+        } catch (Exception e) {
+            log.warn("Failed to send welcome email to: {}", savedUser.getEmail());
+        }
 
         log.info("User registered successfully: {} ({})", savedUser.getUsername(), savedUser.getEmail());
         return savedUser;

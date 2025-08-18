@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.PasswordResetToken;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.repository.PasswordResetTokenRepository;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.common.service.MockEmailService;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.common.service.EmailService;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -17,7 +17,7 @@ import java.util.Optional;
 public class PasswordResetService {
 
     private final PasswordResetTokenRepository tokenRepository;
-    private final MockEmailService emailService;
+    private final EmailService emailService;
 
     // Token validity duration in hours (24 hours as requested)
     private static final int TOKEN_VALIDITY_HOURS = 24;
