@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 
 
-public class ProductServiceImpl implements ProductService {
+public class ProductCartServiceImpl implements ProductCartService {
     ProductRepo productRepo;
     ProductMapper productMapper;
     @Override

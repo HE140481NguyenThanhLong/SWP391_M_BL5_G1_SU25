@@ -6,6 +6,6 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.dto.reponse.Pro
 import java.util.List;
 
 @Service
-public interface ProductService {
+public interface ProductCartService {
     List<ProductResponse> toProductResponse();
 }

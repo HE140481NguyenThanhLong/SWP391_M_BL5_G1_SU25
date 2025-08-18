@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.dto.reponse.ProductResponse;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.service.ProductServiceImpl;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.service.ProductCartServiceImpl;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ import java.util.List;
 @FieldDefaults(level =AccessLevel.PRIVATE,makeFinal = true)
 public class ProductList {
 
-    private ProductServiceImpl productService;
-    public ProductList(ProductServiceImpl productService) {
+    private ProductCartServiceImpl productService;
+    public ProductList(ProductCartServiceImpl productService) {
         this.productService = productService;
     }
 
