@@ -20,15 +20,15 @@ public class StaffController {
     private final AuthService authService;
 
     @GetMapping("/dashboard")
-    public String staffDashboard(Authentication authentication, Model model) {
+    public String showStaffDashboard(Authentication authentication, Model model) {
         // Spring Security already handles authentication check via SecurityConfig
         User user = authService.findByEmail(authentication.getName());
 
         model.addAttribute("user", user);
-        model.addAttribute("username", user.getUsername()); // Sửa từ getName() thành getUsername()
+        model.addAttribute("username", user.getUsername());
         model.addAttribute("role", user.getRole());
 
-        return "staff/staff-main-screen";
+        return "staff/staff-dashboard";
     }
 
     @GetMapping("/create-account")

@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -19,47 +20,63 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.Product
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/guest")
-@FieldDefaults(level =AccessLevel.PRIVATE,makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ProductList {
-        ProductServiceForHomeScreen productServiceForHomeScreen;
-        @GetMapping
-    public String getAll(Model model,
-                         @RequestParam(defaultValue = "0")int page,
-                         @RequestParam(defaultValue = "10")int size) {
-            Pageable pageable = PageRequest.of(page, size);
-            Page<ProductResponse> products = productServiceForHomeScreen.findAllProduct(pageable);
-            model.addAttribute("products", products);
-            model.addAttribute("currentPage", page);
-            model.addAttribute("totalPages", products.getTotalPages());
-            model.addAttribute("totalItems", products.getTotalElements());
-            model.addAttribute("pageSize", size);
-            model.addAttribute("content", products.getContent());
+    ProductServiceForHomeScreen productServiceForHomeScreen;
 
-        return"HomeScreen/Home";
-        }
+    @GetMapping
+    public String getAll(Model model,
+                         @RequestParam(defaultValue = "0") int page,
+                         @RequestParam(defaultValue = "10") int size,
+                         Authentication authentication) {
+
+        // Add user info to model for header display
+        addUserInfoToModel(model, authentication);
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProductResponse> products = productServiceForHomeScreen.findAllProduct(pageable);
+        model.addAttribute("products", products);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("totalItems", products.getTotalElements());
+        model.addAttribute("pageSize", size);
+        model.addAttribute("content", products.getContent());
+
+        return "HomeScreen/Home";
+    }
+
     @GetMapping("/getRecent")
     public String getRecent(Model model,
-                            @RequestParam(defaultValue = "0")int page,
-                            @RequestParam(defaultValue = "10")int size) {
+                            @RequestParam(defaultValue = "0") int page,
+                            @RequestParam(defaultValue = "10") int size,
+                            Authentication authentication) {
+
+        addUserInfoToModel(model, authentication);
+
         Pageable pageable = PageRequest.of(page, size);
         Page<ProductResponse> recentProducts = productServiceForHomeScreen.getRecentProducts(pageable);
         model.addAttribute("products", recentProducts);
         return "HomeScreen/Home";
-
     }
+
     @GetMapping("/getLastest")
-    public  String getLastest(Model model,
-                              @RequestParam(defaultValue = "0")int page,
-                              @RequestParam(defaultValue = "10")int size) {
-            Pageable pageable = PageRequest.of(page, size);
-            Page<ProductResponse> lastestProducts = productServiceForHomeScreen.getLatestProducts(pageable);
-            model.addAttribute("products", lastestProducts);
+    public String getLastest(Model model,
+                             @RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "10") int size,
+                             Authentication authentication) {
+
+        addUserInfoToModel(model, authentication);
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProductResponse> lastestProducts = productServiceForHomeScreen.getLatestProducts(pageable);
+        model.addAttribute("products", lastestProducts);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", lastestProducts.getTotalPages());
         model.addAttribute("totalItems", lastestProducts.getTotalElements());
         model.addAttribute("pageSize", size);
         model.addAttribute("content", lastestProducts.getContent());
-            return "HomeScreen/Home";
+
+        return "HomeScreen/Home";
     }
 //    @GetMapping("/getLastestwithCategories/{categories}")
 //    public String getLastestwithCategories(Model model, @PathVariable String categories,
@@ -165,5 +182,26 @@ public class ProductList {
         model.addAttribute("content", products.getContent());
         model.addAttribute("keyword", keyword);
     return "HomeScreen/Home";
+    }
+
+    // Helper method to add user info to model
+    private void addUserInfoToModel(Model model, Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated() &&
+            !authentication.getName().equals("anonymousUser")) {
+            // User is logged in
+            model.addAttribute("isGuest", false);
+            model.addAttribute("username", authentication.getName());
+
+            String role = authentication.getAuthorities().stream()
+                    .map(grantedAuthority -> grantedAuthority.getAuthority())
+                    .findFirst()
+                    .orElse("USER");
+            model.addAttribute("role", role);
+        } else {
+            // Guest user
+            model.addAttribute("isGuest", true);
+            model.addAttribute("username", "Guest");
+            model.addAttribute("role", "GUEST");
+        }
     }
 }

@@ -30,7 +30,7 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
         String redirectUrl = switch (role) {
             case "CUSTOMER" -> "/customer/dashboard";
             case "STAFF" -> "/staff/dashboard";
-            default -> "/dashboard";
+            default -> "/guest"; // Redirect to guest home instead of /dashboard
         };
 
         response.sendRedirect(redirectUrl);

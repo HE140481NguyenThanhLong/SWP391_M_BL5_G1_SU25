@@ -17,7 +17,7 @@ public class CustomerController {
     private final AuthService authService;
 
     @GetMapping("/dashboard")
-    public String customerDashboard(Authentication authentication, Model model) {
+    public String showCustomerDashboard(Authentication authentication, Model model) {
         // Spring Security already handles authentication check via SecurityConfig
         User user = authService.findByEmail(authentication.getName());
 

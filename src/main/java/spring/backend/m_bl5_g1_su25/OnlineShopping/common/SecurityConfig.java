@@ -29,7 +29,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/", "/login", "/signup", "/dashboard", "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/", "/login", "/signup", "/dashboard", "/guest/**", "/css/**", "/js/**", "/images/**").permitAll()
                 .requestMatchers("/shared/change-password/**").permitAll()
                 .requestMatchers("/shared/forgot-password/**", "/shared/reset-password/**").permitAll()
                 .requestMatchers("/customer/**").hasAuthority("CUSTOMER")
