@@ -1,6 +1,5 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.HomeScreen.controller;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,25 +14,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.dto.response.ProductResponse;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.enums.Status;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.ProductService;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.Collectors;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.ProductServiceForHomeScreen;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/guest")
 @FieldDefaults(level =AccessLevel.PRIVATE,makeFinal = true)
 public class ProductList {
-        ProductService productService;
+        ProductServiceForHomeScreen productServiceForHomeScreen;
         @GetMapping
     public String getAll(Model model,
                          @RequestParam(defaultValue = "0")int page,
                          @RequestParam(defaultValue = "10")int size) {
             Pageable pageable = PageRequest.of(page, size);
-            Page<ProductResponse> products =productService.findAllProduct(pageable);
+            Page<ProductResponse> products = productServiceForHomeScreen.findAllProduct(pageable);
             model.addAttribute("products", products);
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", products.getTotalPages());
@@ -48,7 +42,7 @@ public class ProductList {
                             @RequestParam(defaultValue = "0")int page,
                             @RequestParam(defaultValue = "10")int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<ProductResponse> recentProducts = productService.getRecentProducts(pageable);
+        Page<ProductResponse> recentProducts = productServiceForHomeScreen.getRecentProducts(pageable);
         model.addAttribute("products", recentProducts);
         return "HomeScreen/Home";
 
@@ -58,7 +52,7 @@ public class ProductList {
                               @RequestParam(defaultValue = "0")int page,
                               @RequestParam(defaultValue = "10")int size) {
             Pageable pageable = PageRequest.of(page, size);
-            Page<ProductResponse> lastestProducts =productService.getLatestProducts(pageable);
+            Page<ProductResponse> lastestProducts = productServiceForHomeScreen.getLatestProducts(pageable);
             model.addAttribute("products", lastestProducts);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", lastestProducts.getTotalPages());
@@ -109,7 +103,7 @@ public class ProductList {
                                      @RequestParam(defaultValue = "0")int page,
                                      @RequestParam(defaultValue = "10")int size){
             Pageable pageable = PageRequest.of(page, size);
-            Page<ProductResponse> byCategory =productService.getProductsByCategory(pageable,categories);
+            Page<ProductResponse> byCategory = productServiceForHomeScreen.getProductsByCategory(pageable,categories);
             model.addAttribute("products", byCategory);
 
             return "HomeScreen/Home";
@@ -119,7 +113,7 @@ public class ProductList {
                                          @RequestParam(defaultValue = "0")int page,
                                          @RequestParam(defaultValue = "10")int size){
             Pageable pageable = PageRequest.of(page, size);
-            Page<ProductResponse> productsByPriceDesc = productService.getProductsByPriceDesc(pageable);
+            Page<ProductResponse> productsByPriceDesc = productServiceForHomeScreen.getProductsByPriceDesc(pageable);
             model.addAttribute("products", productsByPriceDesc);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", productsByPriceDesc.getTotalPages());
@@ -130,7 +124,7 @@ public class ProductList {
     }
     @GetMapping("/lastestProduct")
     public String getLastestProduct(Model model){
-        ProductResponse latest = productService
+        ProductResponse latest = productServiceForHomeScreen
                 .findFirstByOrderByCreatedDateDesc()
                 .orElse(null);
         model.addAttribute("latestProduct", latest);
@@ -141,7 +135,7 @@ public class ProductList {
                                          @RequestParam(defaultValue = "0")int page,
                                          @RequestParam(defaultValue = "10")int size){
         Pageable pageable = PageRequest.of(page, size);
-        Page<ProductResponse> productsByPriceDesc = productService.getProductsByPriceAsc(pageable);
+        Page<ProductResponse> productsByPriceDesc = productServiceForHomeScreen.getProductsByPriceAsc(pageable);
         model.addAttribute("products", productsByPriceDesc);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", productsByPriceDesc.getTotalPages());
@@ -158,10 +152,10 @@ public class ProductList {
     Pageable pageable = PageRequest.of(page, size);
     Page<ProductResponse> products=Page.empty();
     if (StringUtils.hasText(keyword) ) {
-        products=productService.getProductsByName(pageable,keyword);
+        products= productServiceForHomeScreen.getProductsByName(pageable,keyword);
 
     }else{
-        products=productService.findAllProduct(pageable);
+        products= productServiceForHomeScreen.findAllProduct(pageable);
     }
         model.addAttribute("products", products);
         model.addAttribute("currentPage", page);
