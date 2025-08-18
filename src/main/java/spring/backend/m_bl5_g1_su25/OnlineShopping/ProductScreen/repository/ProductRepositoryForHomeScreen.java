@@ -6,11 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ProductRepo extends JpaRepository<Product, Long> {
+public interface ProductRepositoryForHomeScreen extends JpaRepository<Product, Long> {
 
     Page<Product> findAll(Pageable page);
     Page<Product> findAllByOrderByCreatedAtDesc(Pageable pageable);
