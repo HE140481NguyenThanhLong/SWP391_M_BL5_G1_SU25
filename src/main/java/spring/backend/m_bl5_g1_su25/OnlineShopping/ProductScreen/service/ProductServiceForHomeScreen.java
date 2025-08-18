@@ -4,13 +4,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.dto.response.ProductResponse;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
-public interface ProductService {
+public interface ProductServiceForHomeScreen {
     Optional<ProductResponse> findFirstByOrderByCreatedDateDesc();
     Page<ProductResponse> findAllProduct(Pageable page);
     Page<ProductResponse> getRecentProducts(Pageable page);
