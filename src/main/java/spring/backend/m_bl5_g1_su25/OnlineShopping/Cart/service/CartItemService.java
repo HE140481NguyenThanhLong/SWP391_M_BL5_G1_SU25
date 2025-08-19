@@ -17,7 +17,7 @@ public interface CartItemService {
     public BigDecimal getCartTotalPrice(Integer userId);
 
     @Transactional
-    public Cart_Items addToCart(Integer userId, Integer productId, Integer quantity);
+    public Cart_Items addToCart(Integer userId, Long productId, Integer quantity);
 
     @Transactional
     public Cart_Items updateCartItem(Integer cartItemId, Integer quantity);

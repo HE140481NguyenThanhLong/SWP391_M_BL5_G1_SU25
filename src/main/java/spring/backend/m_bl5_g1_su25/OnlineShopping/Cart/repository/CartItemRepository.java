@@ -29,5 +29,5 @@ public interface CartItemRepository extends JpaRepository<Cart_Items, Integer> {
         Select c from Cart_Items c
         Where c.user.user_id = :user_id AND c.product.product_id = :product_id
     """)
-    Cart_Items findByUser_UserIdAndProduct_ProductId(Integer userId, Integer productId);
+    Cart_Items findByUser_UserIdAndProduct_ProductId(Integer userId, Long productId);
 }

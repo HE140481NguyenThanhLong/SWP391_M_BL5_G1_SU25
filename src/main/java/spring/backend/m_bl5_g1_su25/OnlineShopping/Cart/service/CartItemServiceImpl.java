@@ -69,7 +69,7 @@ public class CartItemServiceImpl implements CartItemService{
 //    }
     @Override
     @Transactional
-    public Cart_Items addToCart(Integer userId, Integer productId, Integer quantity) {
+    public Cart_Items addToCart(Integer userId, Long productId, Integer quantity) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Product product = productCartRepository.findById(productId)
