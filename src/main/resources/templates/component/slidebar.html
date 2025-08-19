@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en" class="h-full" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vertical Header (Flowbite + Tailwind)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body th:fragment="header" class="h-full ">
+
+<!-- Top bar (mobile) -->
+<div class="sticky top-0 z-50 flex items-center gap-2 bg-white px-4 py-3 shadow-sm md:hidden dark:bg-gray-800">
+    <button
+            type="button"
+            class="inline-flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-gray-300 dark:hover:bg-gray-700"
+            aria-controls="app-sidebar"
+            data-drawer-target="app-sidebar"
+            data-drawer-toggle="app-sidebar"
+            aria-label="Open sidebar"
+    >
+        <!-- Hamburger -->
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+             aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+    <span class="font-semibold text-gray-800 dark:text-gray-100">Menu</span>
+</div>
+
+<!-- Vertical Header / Sidebar -->
+<!-- Hover-to-expand Sidebar -->
+<section >
+    <!-- Sidebar -->
+    <aside
+            class="peer group fixed left-0 top-0 z-40 h-screen w-14 overflow-hidden
+           border-r border-gray-200 bg-white transition-[width] duration-300
+           hover:w-72 focus-within:w-72 dark:border-gray-700 dark:bg-gray-800"
+            aria-label="Sidebar"
+    >
+        <!-- Handle (">") -->
+        <button type="button"
+                class="absolute -right-3 top-4 hidden h-6 w-6 items-center justify-center rounded-full
+             bg-indigo-600 text-white shadow transition-transform md:flex
+             group-hover:rotate-180 group-focus-within:rotate-180"
+                aria-label="Expand sidebar">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/>
+            </svg>
+        </button>
+
+        <!-- Brand -->
+        <div class="flex items-center gap-3 p-4">
+            <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 font-bold text-white">F</span>
+            <span class="text-lg font-semibold text-gray-900 opacity-0 transition-opacity duration-200
+                   group-hover:opacity-100 group-focus-within:opacity-100 dark:text-gray-100">
+        Flow Shop
+      </span>
+        </div>
+
+        <!-- Search (input appears only when expanded) -->
+        <div class="px-3 pb-3">
+            <div class="relative flex items-center rounded-lg border border-gray-300 bg-gray-50 px-3 py-2
+                  dark:border-gray-600 dark:bg-gray-700">
+                <svg class="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z"/>
+                </svg>
+                <input type="search" placeholder="Search products"
+                       class="ml-2 hidden w-full bg-transparent text-sm text-gray-900 outline-none
+                      group-hover:block group-focus-within:block dark:text-gray-100"/>
+            </div>
+        </div>
+
+        <!-- Nav -->
+        <nav class="space-y-1 px-2">
+            <!-- Home -->
+            <a th:href="@{/guest}"
+               class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
+                dark:text-gray-200 dark:hover:bg-gray-700">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2V12H8v8a2 2 0 0 1-2 2H3z"/>
+                </svg>
+                <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Home</span>
+            </a>
+
+            <!-- Products -->
+            <a href="#products"
+               class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
+                dark:text-gray-200 dark:hover:bg-gray-700">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20 7h-8m8 5h-8m8 5h-8M9 7H4m5 5H4m5 5H4"/>
+                </svg>
+                <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Products</span>
+            </a>
+
+            <!-- Links -->
+            <a href="#links"
+               class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
+                dark:text-gray-200 dark:hover:bg-gray-700">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 0 1 0 5.656l-2 2a4 4 0 1 1-5.656-5.656l1-1M10.172 13.828a4 4 0 0 1 0-5.656l2-2a4 4 0 1 1 5.656 5.656l-1 1"/>
+                </svg>
+                <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Links</span>
+            </a>
+
+            <!-- Cart -->
+            <a href="#cart"
+               class="relative flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
+                dark:text-gray-200 dark:hover:bg-gray-700">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l3-8H6.4M7 13l-1.6-8M7 13l-2 9m12-9l-2 9M9 22a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                </svg>
+                <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Cart</span>
+                <span id="cart-count"
+                      class="absolute right-2 top-1 inline-flex items-center justify-center rounded-full
+                     bg-indigo-600 px-1.5 text-[10px] font-medium text-white">3</span>
+            </a>
+
+            <!-- Payment -->
+            <a href="#payment"
+               class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
+                dark:text-gray-200 dark:hover:bg-gray-700">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 8h18M3 10h18v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7zm4 5h4"/>
+                </svg>
+                <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Payment</span>
+            </a>
+            <a th:href="@{/templates/login}" class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
+                dark:text-gray-200 dark:hover:bg-gray-700">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM3 20a6 6 0 0 1 12 0v1H3v-1z"/>
+                </svg>
+                <span class="opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">Đăng nhập </span>
+            </a>
+            <a th:href="@{/signup}"  class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
+                dark:text-gray-200 dark:hover:bg-gray-700">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM3 20a6 6 0 0 1 12 0v1H3v-1z"/>
+                </svg>
+                <span class="opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">Đăng ký</span>
+            </a>
+        </nav>
+
+
+        <!-- User -->
+        <div class="mt-auto p-2">
+            <a href="#account"
+               class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
+                dark:text-gray-200 dark:hover:bg-gray-700">
+        <span class="inline-flex h-8 w-8 items-center justify-center rounded-full
+                     bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 14a4 4 0 1 0-8 0v2a4 4 0 0 0 4 4m0 0a4 4 0 0 0 4-4v-2M12 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"/>
+          </svg>
+        </span>
+                <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Account</span>
+            </a>
+        </div>
+    </aside>
+</section>
+
+
+
+<!-- Flowbite JS (for drawer & dropdown) -->
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+</body>
+</html>
