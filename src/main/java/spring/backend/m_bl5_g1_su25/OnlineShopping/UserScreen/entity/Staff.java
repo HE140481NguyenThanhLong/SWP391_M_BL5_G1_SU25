@@ -1,9 +1,9 @@
-package spring.backend.m_bl5_g1_su25.OnlineShopping.user.entity;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
+
 
 @Entity
 @Getter
@@ -24,6 +24,5 @@ public class Staff {
     String firstname;
     @Column(nullable = false,length = 50,columnDefinition = "NVARCHAR(255)")
     String lastname;
-    @Column(nullable = false,length = 50)
-    String phoneNumber;
+
 }

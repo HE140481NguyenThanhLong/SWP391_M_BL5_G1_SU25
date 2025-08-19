@@ -31,8 +31,18 @@ public class Product {
     String name;
     @Column(nullable = false,length = 255,columnDefinition = "NVARCHAR(255)")
     String description;
-    @Column(nullable = false)
-    Double price;
+    @Column(length = 300)
+    String instruc;
+    @Column(length = 300)
+    String feature ;
+    @Column(length = 300)
+    String expiry ;
+    @Column(length = 300)
+    String origin;
+    @Column(nullable = false, precision = 18, scale = 2)
+    BigDecimal price;
+    @Column()
+    String supplier;
     @Column()
     Integer quantity;
     @Column(nullable = false)
@@ -43,16 +53,31 @@ public class Product {
     @Column(columnDefinition = "NVARCHAR(255)")
     String imageUrl;
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(nullable = false, updatable = false)
     LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column()
+    @Column(nullable = false)
     LocalDateTime updatedAt;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id") // Tên cột khóa ngoại trong bảng product
-    private Category categories;
+    @ManyToMany
+    @JoinTable(
+            name = "product_category",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<Category> categories = new HashSet<>();
+    @Column(nullable = false, precision = 18, scale = 2)
+    BigDecimal importPrice;
 
+    @Column(nullable = false, precision = 18, scale = 2)
+    BigDecimal salePrice;
+    private String brand;
+    private double rating;
+    private int discount;
+    private int stock;
+    private String sku;
+    private int reviewCount;  // thêm
+    private int soldCount;
 
 
 }
