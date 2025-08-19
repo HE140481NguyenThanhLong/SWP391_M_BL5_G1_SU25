@@ -6,12 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import spring.backend.m_bl5_g1_su25.OnlineShopping.AdminScreen.IssueReportManagement.entity.User;
+
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Cart.repository.CartItemRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Cart.repository.ProductCartRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Cart.repository.UserRepositoryCart;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Cart_Items;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 
 
 import java.math.BigDecimal;
