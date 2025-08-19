@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.dto.response.ProductResponse;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,6 +18,7 @@ public interface ProductServiceForHomeScreen {
     Page<ProductResponse> getProductsByPriceAsc(Pageable page);
     Page<ProductResponse> getLatestProducts(Pageable page);
     Page<ProductResponse> getProductsByName(Pageable page,String name);
+    List<ProductResponse> getFiveProductsHottest();
 //    Page<ProductResponse> getAllByCategoryNameOrderByPriceDesc(Pageable pageable, String categories, Double price);
 //    Page<ProductResponse> getAllByCategoryNameOrderByPriceAsc(Pageable pageable, String categories, Double price);
 //    Page<ProductResponse> getAllByOrderByCreatedAtDescAndCategories(Pageable pageable, String categories);

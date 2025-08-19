@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,6 +23,8 @@ public interface ProductRepositoryForHomeScreen extends JpaRepository<Product, L
 //    Page<Product> findAllByOrderByCreatedAtDescAndCategories(Pageable pageable, String categories);
 //    Page<Product> findAllByOrderByCreatedAtAscAndCategories(Pageable pageable, String categories);
     Page<Product> findByNameContainingIgnoreCase(Pageable pageable,String keyword);
+    List<Product> getTopBy5ProductsOrderBySales_countDesc();
+
 
     Optional<Product> findFirstByOrderByCreatedAtDesc();
 }

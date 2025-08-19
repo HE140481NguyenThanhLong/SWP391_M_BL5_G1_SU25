@@ -10,7 +10,9 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.dto.response.Pr
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.mapper.ProductMapper;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.ProductRepositoryForHomeScreen;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -25,6 +27,15 @@ public class ProductServiceForHomeScreenImpl implements ProductServiceForHomeScr
     @Override
     public Page<ProductResponse> getProductsByName(Pageable page, String name) {
         return productRepositoryForHomeScreen.findByNameContainingIgnoreCase(page, name).map(productMapper::toProductResponse);
+    }
+
+    @Override
+    public List<ProductResponse> getFiveProductsHottest() {
+            List<ProductResponse> product =productRepositoryForHomeScreen.getTopBy5ProductsOrderBySales_countDesc()
+                    .stream()
+                    .map(productMapper::toProductResponse)
+                    .collect(Collectors.toList());
+        return product;
     }
 
     @Override

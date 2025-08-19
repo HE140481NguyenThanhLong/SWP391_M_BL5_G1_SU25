@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.dto.response.ProductResponse;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.ProductServiceForHomeScreen;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/guest")
@@ -31,7 +33,7 @@ public class ProductList {
                          Authentication authentication) {
 
         // Add user info to model for header display
-        addUserInfoToModel(model, authentication);
+
 
         Pageable pageable = PageRequest.of(page, size);
         Page<ProductResponse> products = productServiceForHomeScreen.findAllProduct(pageable);
@@ -51,7 +53,7 @@ public class ProductList {
                             @RequestParam(defaultValue = "10") int size,
                             Authentication authentication) {
 
-        addUserInfoToModel(model, authentication);
+
 
         Pageable pageable = PageRequest.of(page, size);
         Page<ProductResponse> recentProducts = productServiceForHomeScreen.getRecentProducts(pageable);
@@ -65,7 +67,7 @@ public class ProductList {
                              @RequestParam(defaultValue = "10") int size,
                              Authentication authentication) {
 
-        addUserInfoToModel(model, authentication);
+
 
         Pageable pageable = PageRequest.of(page, size);
         Page<ProductResponse> lastestProducts = productServiceForHomeScreen.getLatestProducts(pageable);
@@ -184,24 +186,31 @@ public class ProductList {
     return "HomeScreen/Home";
     }
 
-    // Helper method to add user info to model
-    private void addUserInfoToModel(Model model, Authentication authentication) {
-        if (authentication != null && authentication.isAuthenticated() &&
-            !authentication.getName().equals("anonymousUser")) {
-            // User is logged in
-            model.addAttribute("isGuest", false);
-            model.addAttribute("username", authentication.getName());
+//    // Helper method to add user info to model
+//    private void addUserInfoToModel(Model model, Authentication authentication) {
+//        if (authentication != null && authentication.isAuthenticated() &&
+//            !authentication.getName().equals("anonymousUser")) {
+//            // User is logged in
+//            model.addAttribute("isGuest", false);
+//            model.addAttribute("username", authentication.getName());
+//
+//            String role = authentication.getAuthorities().stream()
+//                    .map(grantedAuthority -> grantedAuthority.getAuthority())
+//                    .findFirst()
+//                    .orElse("USER");
+//            model.addAttribute("role", role);
+//        } else {
+//            // Guest user
+//            model.addAttribute("isGuest", true);
+//            model.addAttribute("username", "Guest");
+//            model.addAttribute("role", "GUEST");
+//        }
+//    }
+    @GetMapping("/top5")
+    public String getTop5(Model model){
+        List<ProductResponse> product5 = productServiceForHomeScreen.getFiveProductsHottest();
+        model.addAttribute("product5", product5);
+        return "HomeScreen/Top-Seller";
 
-            String role = authentication.getAuthorities().stream()
-                    .map(grantedAuthority -> grantedAuthority.getAuthority())
-                    .findFirst()
-                    .orElse("USER");
-            model.addAttribute("role", role);
-        } else {
-            // Guest user
-            model.addAttribute("isGuest", true);
-            model.addAttribute("username", "Guest");
-            model.addAttribute("role", "GUEST");
-        }
     }
 }
