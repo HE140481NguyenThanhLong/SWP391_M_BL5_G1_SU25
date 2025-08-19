@@ -298,39 +298,7 @@
 </script>
 
 <!-- Script to add login/signup buttons to header sidebar -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Find the nav element in the header sidebar
-        const sidebarNav = document.querySelector('aside nav');
-        if (sidebarNav) {
-            // Create login button
-            const loginButton = document.createElement('a');
-            loginButton.href = '/login';
-            loginButton.className = 'flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700';
-            loginButton.innerHTML = `
-                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7"/>
-                </svg>
-                <span class="opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">Đăng nhập</span>
-            `;
 
-            // Create signup button
-            const signupButton = document.createElement('a');
-            signupButton.href = '/signup';
-            signupButton.className = 'flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700';
-            signupButton.innerHTML = `
-                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM3 20a6 6 0 0 1 12 0v1H3v-1z"/>
-                </svg>
-                <span class="opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">Đăng ký</span>
-            `;
-
-            // Add buttons to the sidebar nav
-            sidebarNav.appendChild(loginButton);
-            sidebarNav.appendChild(signupButton);
-        }
-    });
-</script>
 
 <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 </body>

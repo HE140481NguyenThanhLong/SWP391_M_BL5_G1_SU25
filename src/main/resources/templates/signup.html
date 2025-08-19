@@ -53,7 +53,7 @@
     <!-- Primary Nav -->
     <nav class="space-y-1.5">
         <!-- Home -->
-        <a href="/dashboard" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+        <a th:href="@{/guest}" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
             <svg class="h-5 w-5 text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2V12H8v8a2 2 0 0 1-2 2H3z"/>
             </svg>
@@ -61,7 +61,7 @@
         </a>
 
         <!-- Login -->
-        <a href="/login" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+        <a th:href="@{/login}" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
             <svg class="h-5 w-5 text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7"/>
             </svg>
@@ -69,7 +69,7 @@
         </a>
 
         <!-- Sign Up (current page) -->
-        <a href="/signup" class="group flex items-center gap-3 rounded-lg px-3 py-2 bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200">
+        <a th:href="@{/signup}" class="group flex items-center gap-3 rounded-lg px-3 py-2 bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200">
             <svg class="h-5 w-5 text-indigo-500 dark:text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM3 20a6 6 0 0 1 12 0v1H3v-1z"/>
             </svg>
@@ -143,11 +143,11 @@
                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         required>
                     <option value="">Chọn giới tính</option>
-                    <option th:value="${T(spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User$Gender).MALE}"
+                    <option value="MALE"
                             th:text="Nam">Nam</option>
-                    <option th:value="${T(spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User$Gender).FEMALE}"
+                    <option value="FEMALE"
                             th:text="Nữ">Nữ</option>
-                    <option th:value="${T(spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User$Gender).OTHER}"
+                    <option value="OTHER"
                             th:text="Khác">Khác</option>
                 </select>
                 <div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" class="text-red-600 text-sm"></div>
