@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông Tin Sản Phẩm - FlowShop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10B981',
+                        'primary-dark': '#059669',
+                        'primary-light': '#34D399',
+                        accent: '#F59E0B',
+                        'accent-light': '#FCD34D',
+                        neutral: {
+                            50: '#F9FAFB',
+                            100: '#F3F4F6',
+                            200: '#E5E7EB',
+                            300: '#D1D5DB',
+                            400: '#9CA3AF',
+                            500: '#6B7280',
+                            600: '#4B5563',
+                            700: '#374151',
+                            800: '#1F2937',
+                            900: '#111827'
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'display': ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-sans bg-neutral-50 text-neutral-800">
+<!-- Header -->
+<header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Main Header -->
+        <div class="flex items-center justify-between py-4">
+            <div class="flex items-center gap-8">
+                <a href="index.html" class="font-display text-3xl font-bold text-primary">Flow Mart</a>
+            </div>
+
+            <div class="flex-1 max-w-2xl mx-8">
+                <div class="relative">
+                    <input type="text" placeholder="Tìm kiếm sản phẩm..." class="w-full px-4 py-3 pr-12 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-primary">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button class="flex items-center gap-2 px-4 py-2 text-neutral-600 hover:text-primary transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+
+                    </svg>
+                    Giao hàng
+                </button>
+                <button onclick="addToCart(1)"
+                        class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+                    </svg>
+                    Giỏ hàng (<span id="cartCount">0</span>)
+                </button>
+
+                <button class="flex items-center gap-2 px-4 py-2 text-neutral-600 hover:text-primary transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    Hội viên
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Breadcrumb -->
+<div class="bg-white border-b border-neutral-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <nav class="flex items-center gap-2 text-sm text-neutral-600">
+            <a href="index.html" class="hover:text-primary transition-colors">Trang chủ</a>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+            <span class="text-neutral-800 font-medium" th:text="${product.name}"></span>
+        </nav>
+    </div>
+</div>
+
+<!-- Product Detail Section -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+        <!-- Product Images -->
+        <div>
+            <div class="relative mb-6 group">
+                <img th:src="${product.imageUrl}" th:alt="${product.name}" id="mainImage"
+                     class="w-full h-96 lg:h-[500px] object-cover rounded-2xl cursor-zoom-in transition-transform duration-300 group-hover:scale-105">
+                <div th:if="${product.discount > 0}"
+                     class="absolute top-6 left-6 bg-red-500 text-white px-4 py-2 rounded-full text-lg font-bold"
+                     th:text="'-' + ${product.discount} + '%'"></div>
+                <!-- Zoom overlay -->
+                <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-10 transition-all duration-300 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100">
+                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Information -->
+        <div>
+            <h1 class="font-display text-4xl font-bold text-neutral-800 mb-6" th:text="${product.name}"></h1>
+
+            <!-- Rating and Reviews -->
+            <div class="flex items-center gap-6 mb-6">
+                <div class="flex items-center gap-2">
+                    <div class="flex text-yellow-400" th:with="rating=${product.rating}">
+                        <svg th:each="i : ${#numbers.sequence(1, 5)}" th:class="${i <= rating} ? 'w-6 h-6 fill-current' : 'w-6 h-6 text-neutral-300 fill-current'" viewBox="0 0 20 20">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                        </svg>
+                    </div>
+                    <span class="text-lg font-medium" th:text="'(' + ${product.rating} + '/5)'"></span>
+                </div>
+                <span class="text-neutral-300">|</span>
+                <span class="text-neutral-600" th:text="${product.reviewCount} + ' đánh giá'"></span>
+                <span class="text-neutral-300">|</span>
+                <span class="text-neutral-600" th:text="'Đã bán ' + ${product.soldCount}"></span>
+            </div>
+
+            <!-- Price -->
+            <div class="flex items-center gap-6 mb-8">
+                <span class="text-5xl font-bold text-primary" th:text="${#numbers.formatInteger(product.salePrice, 0, 'COMMA')} + '₫'"></span>
+                <span class="text-2xl text-neutral-400 line-through" th:text="${#numbers.formatInteger(product.price, 0, 'COMMA')} + '₫'"></span>
+                <span class="bg-red-100 text-red-600 px-4 py-2 rounded-lg text-lg font-semibold"
+                      th:text="'Tiết kiệm ' + ${#numbers.formatInteger(product.price - product.salePrice, 0, 'COMMA')} + '₫'"></span>
+            </div>
+
+
+
+
+            <!-- Product Details -->
+            <div class="space-y-4 mb-8">
+                <div class="flex items-center justify-between py-4 border-b border-neutral-100">
+                    <span class="text-neutral-600 text-lg">SKU:</span>
+                    <span class="font-semibold text-lg" th:text="${product.sku}"></span>
+                </div>
+                <div class="flex items-center justify-between py-4 border-b border-neutral-100">
+                    <span class="text-neutral-600 text-lg">Tình trạng:</span>
+                    <span class="text-primary font-semibold flex items-center gap-3 text-lg">
+                            <div class="w-3 h-3 bg-primary rounded-full"></div>
+                            <span th:text="${product.status}"></span>
+                        </span>
+                </div>
+                <div class="flex items-center justify-between py-4 border-b border-neutral-100">
+                    <span class="text-neutral-600 text-lg">Thương hiệu:</span>
+                    <span class="font-semibold text-lg" th:text="${product.brand}"></span>
+                </div>
+
+                <div class="flex items-center justify-between py-4 border-b border-neutral-100">
+                    <span class="text-neutral-600 text-lg">Vận chuyển:</span>
+                    <span class="text-lg">Miễn phí giao hàng cho đơn từ 300.000đ</span>
+                </div>
+            </div>
+
+            <!-- Quantity Selector -->
+            <div class="flex items-center gap-6 mb-8">
+                <span class="text-neutral-600 text-lg">Số lượng:</span>
+                <div class="flex items-center border border-neutral-200 rounded-xl">
+                    <button class="px-6 py-3 hover:bg-neutral-50 text-xl font-semibold" onclick="decreaseQuantity()">-</button>
+                    <input type="number" id="quantity" value="1" min="1" th:max="${product.quantity}"
+                           class="w-24 text-center border-0 focus:outline-none text-xl font-semibold"
+                           aria-label="Số lượng sản phẩm">
+                    <button class="px-6 py-3 hover:bg-neutral-50 text-xl font-semibold" onclick="increaseQuantity()">+</button>
+                </div>
+                <span class="text-neutral-500" th:text="'Còn ' + ${product.quantity} + ' sản phẩm'"></span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="space-y-4">
+                <button th:onclick="'addToCart(\'' + ${product.product_id} + '\')'"
+                        class="w-full bg-primary text-white py-5 rounded-xl font-bold hover:bg-primary-dark transition-colors text-xl">
+                    THÊM VÀO GIỎ HÀNG
+                </button>
+
+                <button class="w-full bg-accent text-white py-5 rounded-xl font-bold hover:bg-accent/90 transition-colors text-xl">
+                    MUA NGAY
+                </button>
+                <div class="grid grid-cols-2 gap-4">
+                    <button class="border-2 border-primary text-primary py-4 rounded-xl font-semibold hover:bg-primary hover:text-white transition-colors flex items-center justify-center gap-3 text-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                        Yêu thích
+                    </button>
+                    <button class="border border-neutral-200 text-neutral-600 py-4 rounded-xl font-semibold hover:bg-neutral-50 transition-colors flex items-center justify-center gap-3 text-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+                        </svg>
+                        Chia sẻ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Details Tabs -->
+    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+        <!-- Tab Navigation -->
+        <div class="flex border-b border-neutral-200" role="tablist">
+            <button role="tab" aria-selected="true" aria-controls="description"
+                    class="px-8 py-6 font-semibold text-primary border-b-2 border-primary text-lg"
+                    onclick="switchTab('description', this)">Mô tả sản phẩm</button>
+            <button role="tab" aria-selected="false" aria-controls="specifications"
+                    class="px-8 py-6 font-semibold text-neutral-600 hover:text-primary text-lg"
+                    onclick="switchTab('specifications', this)">Thông số kỹ thuật</button>
+            <button role="tab" aria-selected="false" aria-controls="reviews"
+                    class="px-8 py-6 font-semibold text-neutral-600 hover:text-primary text-lg"
+                    th:text="'Đánh giá (' + ${product.reviewCount} + ')'"></button>
+            <button role="tab" aria-selected="false" aria-controls="related"
+                    class="px-8 py-6 font-semibold text-neutral-600 hover:text-primary text-lg"
+                    onclick="switchTab('related', this)">Sản phẩm liên quan</button>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="p-8">
+            <div id="description" class="tab-content" role="tabpanel" aria-labelledby="description">
+                <div class="prose max-w-none text-neutral-600">
+                    <h3 class="font-display text-2xl font-semibold mb-6 text-neutral-800">Về sản phẩm</h3>
+                    <p class="text-lg mb-6 leading-relaxed" th:text="${product.description}"></p>
+                    <h4 class="font-semibold text-xl text-neutral-800 mb-4">Đặc điểm nổi bật:</h4>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start gap-4">
+                            <svg class="w-6 h-6 text-primary mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-lg"  th:text="${product.expiry}">Bổ sung canxi tự nhiên giúp xương chắc khỏe</span>
+                        </li>
+                        <!-- Thêm các đặc điểm khác nếu cần, có thể động hóa từ cơ sở dữ liệu -->
+                    </ul>
+                    <div class="bg-neutral-50 rounded-2xl p-8">
+                        <h4 class="font-semibold text-xl text-neutral-800 mb-4" >Hướng dẫn sử dụng:</h4>
+                        <p class="text-lg" th:text="${product.expiry}"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="specifications" class="tab-content hidden" role="tabpanel" aria-labelledby="specifications">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div class="space-y-6">
+                        <h3 class="font-display text-2xl font-semibold text-neutral-800">Thông tin sản phẩm</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between py-4 border-b border-neutral-100">
+                                <span class="text-neutral-600 text-lg">Thương hiệu:</span>
+                                <span class="font-semibold text-lg" th:text="${product.brand}"></span>
+                            </div>
+                            <div class="flex justify-between py-4 border-b border-neutral-100">
+                                <span class="text-neutral-600 text-lg">Dung tích:</span>
+                                <span class="font-semibold text-lg" th:text="${product.feature}"></span>
+                            </div>
+                            <div class="flex justify-between py-4 border-b border-neutral-100">
+                                <span class="text-neutral-600 text-lg">Xuất xứ:</span>
+                                <span class="font-semibold text-lg" th:text="${product.origin}">Việt Nam</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <h3 class="font-display text-2xl font-semibold text-neutral-800">Thành phần dinh dưỡng</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between py-4 border-b border-neutral-100">
+                                <span class="text-neutral-600 text-lg">Protein:</span>
+                                <span class="font-semibold text-lg">3.2g/100ml</span>
+                            </div>
+                            <div class="flex justify-between py-4 border-b border-neutral-100">
+                                <span class="text-neutral-600 text-lg">Canxi:</span>
+                                <span class="font-semibold text-lg">120mg/100ml</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="reviews" class="tab-content hidden" role="tabpanel" aria-labelledby="reviews">
+                <div class="space-y-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="bg-neutral-50 rounded-2xl p-8 text-center">
+                            <div class="text-5xl font-bold text-primary mb-4" th:text="${product.rating}"></div>
+                            <div class="flex justify-center mb-4">
+                                <div class="flex text-yellow-400" th:with="rating=${product.rating}">
+                                    <svg th:each="i : ${#numbers.sequence(1, 5)}" th:class="${i <= rating} ? 'w-6 h-6 fill-current' : 'w-6 h-6 text-neutral-300 fill-current'" viewBox="0 0 20 20">
+                                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="text-lg text-neutral-600" th:text="${product.reviewCount} + ' đánh giá'"></div>
+                        </div>
+
+                    </div>
+                    <!-- Thêm danh sách đánh giá nếu có (có thể động hóa từ cơ sở dữ liệu) -->
+                    </div>
+            </div>
+            <div id="related" class="tab-content hidden">
+                <h3 class="font-display text-2xl font-semibold text-neutral-800 mb-8">
+                    Sản phẩm liên quan
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <a th:each="rel : ${relatedProducts}"
+                       th:href="@{/product/detailproduct/{id}(id=${rel.product_id})}"
+                       class="block bg-white border border-neutral-200 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+
+                        <img th:src="${rel.imageUrl}"
+                             th:alt="${rel.name}"
+                             class="w-full h-48 object-cover">
+
+                        <div class="p-6">
+                            <h4 class="font-semibold text-lg mb-3" th:text="${rel.name}"></h4>
+                            <div class="text-primary font-bold text-xl"
+                                 th:text="${#numbers.formatDecimal(rel.salePrice, 0, 'COMMA', 0, 'POINT')} + ' ₫'">
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex justify-center mt-6 space-x-2">
+                    <a th:each="pageNum : ${pageNumbers}"
+                       th:href="@{/product/detailproduct/{id}(id=${product.product_id}, page=${pageNum}, size=4)}"
+                       th:text="${pageNum + 1}"
+                       th:classappend="${pageNum == currentPage} ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'"
+                       class="px-3 py-1 rounded-md">
+                    </a>
+                </div>
+            </div>
+
+
+
+        </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-neutral-800 text-white py-16 mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            <div>
+                <h3 class="font-display text-2xl font-bold text-primary mb-6">WinMart</h3>
+                <p class="text-neutral-300 mb-6 leading-relaxed">
+                    Công Ty Cổ Phần Dịch Vụ Thương Mại Tổng Hợp WinCommerce
+                </p>
+                <p class="text-sm text-neutral-400 leading-relaxed">
+                    Mã số doanh nghiệp: 0104918404 Đăng ký lần đầu ngày 20 tháng 09 năm 2010, đăng ký thay đổi lần thứ 48, ngày 30 tháng 06 năm 2023
+                </p>
+            </div>
+
+            <div>
+                <h4 class="font-semibold text-lg mb-6">Về chúng tôi</h4>
+                <ul class="space-y-3 text-neutral-300">
+                    <li><a href="#" class="hover:text-primary transition-colors">Giới thiệu về WinMart</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">Danh sách cửa hàng</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">Quản lý chất lượng</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">Chính sách bảo mật</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">Điều khoản và điều kiện giao dịch</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-semibold text-lg mb-6">Hỗ trợ khách hàng</h4>
+                <ul class="space-y-3 text-neutral-300">
+                    <li><a href="#" class="hover:text-primary transition-colors">Trung tâm hỗ trợ khách hàng</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">Chính sách giao hàng</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">Chính sách thanh toán</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">Chính sách đổi trả</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">Đánh giá góp ý</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-semibold text-lg mb-6">Chăm sóc khách hàng</h4>
+                <div class="space-y-4 text-neutral-300">
+                    <p>Mua Online: 0247 1066866</p>
+                    <p>Email: cskh@winmart.masangroup.com</p>
+                    <div class="pt-4">
+                        <p class="mb-4">Kết nối với chúng tôi</p>
+                        <div class="flex gap-4">
+                            <a href="#" class="bg-blue-600 p-3 rounded-lg hover:bg-blue-700 transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="bg-red-600 p-3 rounded-lg hover:bg-red-700 transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="bg-blue-500 p-3 rounded-lg hover:bg-blue-600 transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.347-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001 12.017.001z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</footer>
+
+<script>
+    function changeMainImage(src) {
+        document.getElementById('mainImage').src = src;
+        document.querySelectorAll('.grid-cols-4 img').forEach(img => {
+            img.classList.remove('border-primary', 'opacity-100');
+            img.classList.add('border-neutral-200', 'opacity-70');
+        });
+        event.target.classList.add('border-primary', 'opacity-100');
+        event.target.classList.remove('border-neutral-200', 'opacity-70');
+    }
+
+    function increaseQuantity() {
+        const input = document.getElementById('quantity');
+        const max = parseInt(input.max);
+        const current = parseInt(input.value);
+        if (current < max) input.value = current + 1;
+    }
+
+    function decreaseQuantity() {
+        const input = document.getElementById('quantity');
+        const current = parseInt(input.value);
+        if (current > 1) input.value = current - 1;
+    }
+
+    function switchTab(tabId, element) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+        document.getElementById(tabId).classList.remove('hidden');
+        document.querySelectorAll('.flex.border-b button').forEach(btn => {
+            btn.classList.remove('text-primary', 'border-primary');
+            btn.classList.add('text-neutral-600', 'border-transparent');
+        });
+        element.classList.add('text-primary', 'border-primary');
+        element.classList.remove('text-neutral-600', 'border-transparent');
+    }
+    async function addToCart(productId) {
+        try {
+            const response = await fetch(`/api/cart/add/${productId}`, {
+                method: "POST"
+            });
+            const data = await response.json();
+
+            if (data.status === "success") {
+                // update số trên icon giỏ hàng
+                document.getElementById("cartCount").innerText = data.totalItems;
+            } else {
+                alert("Có lỗi xảy ra khi thêm sản phẩm");
+            }
+        } catch (e) {
+            console.error("Lỗi:", e);
+            alert("Không thể kết nối server!");
+        }
+    }
+
+
+</script>
+</body>
+</html>

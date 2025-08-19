@@ -7,10 +7,9 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AdminScreen.IssueReportManagement.enums.IssueType;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AdminScreen.IssueReportManagement.enums.ReportStatus;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity.User;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -23,7 +22,7 @@ import java.util.Date;
 public class ReportForm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     Integer report_id;
+    Integer report_id;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
@@ -34,7 +33,7 @@ public class ReportForm {
     IssueType issueType = IssueType.PRODUCT_ISSUE;
 
     @Column( nullable = false, length = 1000)
-     String description;
+    String description;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10, nullable = false)

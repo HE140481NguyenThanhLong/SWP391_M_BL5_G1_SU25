@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Shop - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+<div class="sticky top-0 z-50 flex items-center gap-2 bg-white px-4 py-3 shadow-sm md:hidden dark:bg-gray-800">
+    <button
+            type="button"
+            class="inline-flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-gray-300 dark:hover:bg-gray-700"
+            aria-controls="app-sidebar"
+            data-drawer-target="app-sidebar"
+            data-drawer-toggle="app-sidebar"
+            aria-label="Open sidebar"
+    >
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+             aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+    <span class="font-semibold text-gray-800 dark:text-gray-100">Menu</span>
+</div>
+
+<!-- Vertical Header / Sidebar -->
+<aside
+        id="app-sidebar"
+        class="fixed top-0 left-0 z-40 h-screen w-72 -translate-x-full overflow-y-auto border-r border-gray-200 bg-white p-4 transition-transform md:translate-x-0 dark:border-gray-700 dark:bg-gray-800"
+        tabindex="-1"
+        aria-label="Sidebar"
+>
+    <div class="mb-4 flex items-center justify-between">
+        <a href="#" class="flex items-center gap-2">
+            <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white font-bold">F</span>
+            <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">Flow Shop</span>
+        </a>
+        <button
+                type="button"
+                class="md:hidden inline-flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-gray-300 dark:hover:bg-gray-700"
+                data-drawer-hide="app-sidebar"
+                aria-label="Close menu"
+        >
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+    </div>
+
+    <form class="mb-4">
+        <label for="sidebar-search" class="sr-only">Search</label>
+        <div class="relative">
+            <div class="pointer-events-none absolute inset-y-0 left-3 flex items-center">
+                <svg class="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z"/>
+                </svg>
+            </div>
+            <input
+                    id="sidebar-search"
+                    type="search"
+                    placeholder="Search products"
+                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 py-2.5 pl-10 pr-3 text-sm text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
+            />
+        </div>
+    </form>
+
+    <nav class="space-y-1.5">
+        <a href="#home" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+            <svg class="h-5 w-5 text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2V12H8v8a2 2 0 0 1-2 2H3z"/>
+            </svg>
+            <span>Home</span>
+        </a>
+        <a href="#products" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+            <svg class="h-5 w-5 text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20 7h-8m8 5h-8m8 5h-8M9 7H4m5 5H4m5 5H4"/>
+            </svg>
+            <span>Products</span>
+        </a>
+        <a href="#links" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+            <svg class="h-5 w-5 text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 0 1 0 5.656l-2 2a4 4 0 1 1-5.656-5.656l1-1M10.172 13.828a4 4 0 0 1 0-5.656l2-2a4 4 0 1 1 5.656 5.656l-1 1"/>
+            </svg>
+            <span>Links</span>
+        </a>
+        <a href="#cart" class="group relative flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+            <svg class="h-5 w-5 text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l3-8H6.4M7 13l-1.6-8M7 13l-2 9m12-9l-2 9M9 22a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+            </svg>
+            <span>Cart</span>
+            <span class="absolute right-2 top-1 inline-flex items-center justify-center rounded-full bg-indigo-600 px-1.5 text-[10px] font-medium text-white">
+                3
+            </span>
+        </a>
+        <a href="#payment" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+            <svg class="h-5 w-5 text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8h18M3 10h18v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7zm4 5h4"/>
+            </svg>
+            <span>Payment</span>
+        </a>
+    </nav>
+
+    <div class="my-4 border-t border-gray-200 dark:border-gray-700"></div>
+
+    <div class="mt-auto">
+        <button
+                id="user-menu-button"
+                type="button"
+                class="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                data-dropdown-toggle="user-dropdown"
+                aria-expanded="false"
+        >
+            <span class="flex items-center gap-3">
+                <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 14a4 4 0 1 0-8 0m8 0a4 4 0 1 1-8 0m8 0v2a4 4 0 0 1-4 4m0 0a4 4 0 0 1-4-4v-2m4-8a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/>
+                    </svg>
+                </span>
+                <span class="font-medium">Account</span>
+            </span>
+            <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+            </svg>
+        </button>
+
+        <div
+                id="user-dropdown"
+                class="z-50 hidden w-56 divide-y divide-gray-100 rounded-lg border border-gray-200 bg-white shadow-lg dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800"
+        >
+            <div class="px-4 py-3">
+                <p class="text-sm font-medium text-gray-900 dark:text-gray-100">John Doe</p>
+                <p class="truncate text-sm text-gray-500 dark:text-gray-400">john@example.com</p>
+            </div>
+            <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="user-menu-button">
+                <li><a href="#profile" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Profile</a></li>
+                <li><a href="#orders" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Orders</a></li>
+                <li><a href="#settings" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Settings</a></li>
+            </ul>
+            <div class="py-1">
+                <a href="#signout" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-700">Sign out</a>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- Main Content Wrapper -->
+<main class="px-4 py-8 flex-grow w-full md:pl-72">
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-600 mb-4" aria-label="Breadcrumb">
+        <ol class="inline-flex space-x-1">
+            <li><a href="#" class="text-blue-600 hover:underline">Home</a></li>
+            <li><span>/</span></li>
+            <li><a href="#" class="text-blue-600 hover:underline">Product</a></li>
+            <li><span>/</span></li>
+            <li class="text-gray-500">Product List</li>
+        </ol>
+    </nav>
+
+    <!-- Page Title + Actions -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+        <h1 class="text-2xl font-bold text-gray-800">Quản lý sản phẩm</h1>
+        <div class="flex gap-2">
+            <a href="/product/import" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 inline-block">
+                + Nhập hàng
+            </a>
+        </div>
+    </div>
+
+    <!-- Overview Stats -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white p-4 rounded shadow text-center">
+            <p class="text-sm text-gray-500">Tổng sản phẩm</p>
+            <p class="text-xl font-bold text-gray-800" th:text="${stats.totalProducts}"></p>
+        </div>
+        <div class="bg-white p-4 rounded shadow text-center">
+            <p class="text-sm text-gray-500">Còn trong kho</p>
+            <p class="text-xl font-bold text-gray-800" th:text="${stats.inStock}"></p>
+        </div>
+        <div class="bg-white p-4 rounded shadow text-center">
+            <p class="text-sm text-gray-500">Sản phẩm sắp hết</p>
+            <p class="text-xl font-bold text-yellow-500" th:text="${stats.lowStock}"></p>
+        </div>
+        <div class="bg-white p-4 rounded shadow text-center">
+            <p class="text-sm text-gray-500">Ngừng bán</p>
+            <p class="text-xl font-bold text-red-500" th:text="${stats.outOfStock}"></p>
+        </div>
+    </div>
+
+    <!-- Search & Filter -->
+    <form class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4" th:action="@{/product}" method="get">
+        <input type="text" name="search" th:value="${search}" placeholder="Tìm sản phẩm..."
+               class="w-full md:w-1/2 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+        <select name="category" class="w-full md:w-1/4 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Tất cả danh mục</option>
+            <option value="LOW_STOCK" th:selected="${selectedCategory == 'LOW_STOCK'}">Hàng sắp hết (1–5)</option>
+            <option value="OUT_OF_STOCK" th:selected="${selectedCategory == 'OUT_OF_STOCK'}">Hết hàng</option>
+            <option th:each="category : ${categories}"
+                    th:value="${category.name}"
+                    th:text="${category.name}"
+                    th:selected="${category.name == selectedCategory}">
+            </option>
+        </select>
+
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Lọc</button>
+    </form>
+    <!-- Product Table -->
+    <div th:unless="${products.isEmpty()}" class="overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-100">
+        <table class="min-w-full bg-white">
+            <thead class="bg-gradient-to-r from-blue-50 to-indigo-50 text-gray-700">
+            <tr>
+                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Tên sản phẩm</th>
+                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Mã Sản xuất</th>
+                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Thương Hiệu </th>
+                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Nhà Cung Cấp</th>
+                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Loại Sản Phẩm</th>
+                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Ngày nhập</th>
+                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Giá nhập</th>
+                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">
+                    <a th:href="@{/product(page=${currentPage}, search=${search}, category=${selectedCategory}, sortField='salePrice', sortDir=${sortDir == 'asc' ? 'desc' : 'asc'})}">
+                        Giá bán <span th:text="${sortField == 'salePrice' ? (sortDir == 'asc' ? '▲' : '▼') : ''}"></span>
+                    </a>
+                </th>
+                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">
+                    <a th:href="@{/product(page=${currentPage}, search=${search}, category=${selectedCategory}, sortField='quantity', sortDir=${sortDir == 'asc' ? 'desc' : 'asc'})}">
+                        Tồn Kho <span th:text="${sortField == 'quantity' ? (sortDir == 'asc' ? '▲' : '▼') : ''}"></span>
+                    </a>
+                </th>
+                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Số lượng đã bán</th>
+                <th class="py-3 px-6 text-left text-sm font-semibold uppercase tracking-wide">Trạng thái</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+            <tr th:each="product : ${products}"
+                class="hover:bg-blue-50 transition-colors duration-200 cursor-pointer"
+                th:onclick="|window.location.href='/product/detail/${product.product_id}'|">
+                <td class="py-4 px-6 text-gray-800 font-medium" th:text="${product.name}"></td>
+                <td class="py-4 px-6 text-gray-800 font-medium" th:text="${product.sku}"></td>
+                <td class="py-4 px-6 text-gray-800 font-medium" th:text="${product.brand}"></td>
+                <td class="py-4 px-6 text-gray-800 font-medium" th:text="${product.supplier}"></td>
+                <td class="py-4 px-6">
+                <span th:unless="${product.categories == null or product.categories.isEmpty()}"
+                      th:each="cat, iterStat : ${product.categories}"
+                      th:text="${cat.name} + (${iterStat.last ? '' : ', '})"
+                      class="text-gray-800 font-medium text-sm mr-1"></span>
+                </td>
+                <td class="py-4 px-6 text-gray-600 text-sm"
+                    th:text="${#temporals.format(product.createdAt, 'dd/MM/yyyy')}"></td>
+                <td class="py-4 px-6 text-gray-600 text-sm"
+                    th:text="${#numbers.formatDecimal(product.salePrice, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+                <td class="py-4 px-6 text-gray-600 text-sm"
+                    th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+                <td class="py-4 px-6 text-gray-600 text-sm" th:text="${product.quantity}"></td>
+                <td class="py-4 px-6 text-gray-600 text-sm" th:text="${product.soldCount}"></td>
+                <td class="py-4 px-6">
+                <span th:classappend="${product.quantity > 0} ? 'text-green-600' : 'text-red-600'"
+                      th:text="${product.quantity > 0 ? 'Đang bán' : 'Hết hàng'}"
+                      class="inline-flex items-center gap-1 font-medium text-sm">
+                    <svg th:if="${product.quantity > 0}" class="h-4 w-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <svg th:if="${product.quantity == 0}" class="h-4 w-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex justify-center mt-6 space-x-2">
+        <a th:if="${currentPage > 1}"
+           th:href="@{/product(page=${currentPage - 1}, search=${search}, category=${selectedCategory})}"
+           class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+           aria-label="Trang trước" title="Trang trước">
+            &laquo;
+        </a>
+        <span th:if="${currentPage == 1}" class="px-3 py-1 bg-gray-100 rounded text-gray-400 cursor-not-allowed">
+            &laquo;
+        </span>
+
+        <a th:each="i : ${#numbers.sequence(1, totalPages)}"
+           th:href="@{/product(page=${i}, search=${search}, category=${selectedCategory})}"
+           th:text="${i}"
+           class="px-3 py-1 rounded"
+           th:classappend="${i == currentPage} ? ' bg-blue-600 text-white' : ' bg-gray-200 hover:bg-gray-300'">
+        </a>
+
+        <a th:if="${currentPage < totalPages}"
+           th:href="@{/product(page=${currentPage + 1}, search=${search}, category=${selectedCategory})}"
+           class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+           aria-label="Trang sau" title="Trang sau">
+            &raquo;
+        </a>
+        <span th:if="${currentPage == totalPages}" class="px-3 py-1 bg-gray-100 rounded text-gray-400 cursor-not-allowed">
+            &raquo;
+        </span>
+    </div>
+</main>
+
+
+
+</body>
+</html>

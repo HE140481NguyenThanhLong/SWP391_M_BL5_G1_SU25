@@ -1,264 +1,275 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" class="h-full" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile - Smart Shop</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50">
-    <!-- Navigation - Dynamic styling based on role -->
-    <nav th:class="${user.role.name() == 'CUSTOMER'} ? 'bg-indigo-600 text-white shadow-lg' : 'bg-orange-600 text-white shadow-lg'">
-        <div class="container mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center space-x-4">
-                    <h1 class="text-2xl font-bold">Smart Shop</h1>
-                </div>
-                <div class="flex items-center space-x-6">
-                    <!-- Notification Bell -->
-                    <div class="relative">
-                        <button id="notificationBtn" th:class="${user.role.name() == 'CUSTOMER'} ? 'relative hover:text-indigo-200 focus:outline-none' : 'relative hover:text-orange-200 focus:outline-none'">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-3.5-3.5a7 7 0 1 0-9.9 0L10 17h5a2 2 0 0 1 0 4H9a2 2 0 0 1 0-4z"/>
-                            </svg>
-                            <!-- Notification badge -->
-                            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">1</span>
-                        </button>
-                        <!-- Notification dropdown -->
-                        <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg z-50">
-                            <div class="py-2">
-                                <div class="px-4 py-2 text-sm text-gray-700 border-b">
-                                    <strong>Notifications</strong>
-                                </div>
-                                <!-- Empty notifications -->
-                                <div class="px-4 py-6 text-center text-gray-500 text-sm">
-                                    No notifications
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- User section - only show if authenticated -->
-                    <div sec:authorize="isAuthenticated()">
-                        <span th:class="${user.role.name() == 'CUSTOMER'} ? 'text-indigo-200' : 'text-orange-200'">
-                            Welcome, <span th:text="${user.name}" class="font-semibold">User</span>
-                        </span>
-                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/dashboard' : '/deliverer/dashboard'"
-                           th:class="${user.role.name() == 'CUSTOMER'} ? 'hover:text-indigo-200' : 'hover:text-orange-200'">Home</a>
-                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/orders' : '/deliverer/orders'"
-                           th:class="${user.role.name() == 'CUSTOMER'} ? 'hover:text-indigo-200' : 'hover:text-orange-200'">My Orders</a>
-                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/profile' : '/deliverer/profile'"
-                           th:class="${user.role.name() == 'CUSTOMER'} ? 'hover:text-indigo-200' : 'hover:text-orange-200'">Profile</a>
-                        <a href="/logout"
-                           th:class="${user.role.name() == 'CUSTOMER'} ? 'bg-indigo-700 px-3 py-1 rounded hover:bg-indigo-800 transition-colors' : 'bg-orange-700 px-3 py-1 rounded hover:bg-orange-800 transition-colors'">Logout</a>
-                    </div>
-                </div>
+<body class="h-full bg-gray-50">
+
+<!-- Mobile Top Bar -->
+<div class="sticky top-0 z-50 flex items-center gap-2 bg-white px-4 py-3 shadow-sm md:hidden dark:bg-gray-800">
+    <button type="button"
+            class="inline-flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-gray-300 dark:hover:bg-gray-700"
+            aria-controls="app-sidebar"
+            data-drawer-target="app-sidebar"
+            data-drawer-toggle="app-sidebar"
+            aria-label="Open sidebar">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+    </button>
+    <span class="font-semibold text-gray-800 dark:text-gray-100">Smart Shop</span>
+</div>
+
+<!-- Sidebar -->
+<aside id="app-sidebar"
+       class="fixed top-0 left-0 z-40 h-screen w-72 -translate-x-full overflow-y-auto border-r border-gray-200 bg-white p-4 transition-transform md:translate-x-0 dark:border-gray-700 dark:bg-gray-800"
+       tabindex="-1" aria-label="Sidebar">
+
+    <!-- Brand Header -->
+    <div class="mb-4 flex items-center justify-between">
+        <a href="/dashboard" class="flex items-center gap-2">
+            <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white font-bold">S</span>
+            <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">Smart Shop</span>
+        </a>
+        <button type="button"
+                class="md:hidden inline-flex items-center justify-center rounded-lg p-2 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-gray-300 dark:hover:bg-gray-700"
+                data-drawer-hide="app-sidebar"
+                aria-label="Close menu">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Search Bar -->
+    <form class="mb-4">
+        <label for="sidebar-search" class="sr-only">Search</label>
+        <div class="relative">
+            <div class="pointer-events-none absolute inset-y-0 left-3 flex items-center">
+                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z"/>
+                </svg>
             </div>
+            <input id="sidebar-search" type="search" placeholder="Search products"
+                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 py-2.5 pl-10 pr-3 text-sm text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"/>
+        </div>
+    </form>
+
+    <!-- Navigation Menu -->
+    <nav class="space-y-1.5">
+        <!-- Home/Dashboard -->
+        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/dashboard' : '/dashboard'"
+           class="nav-link group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+            <svg class="nav-icon h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2V12H8v8a2 2 0 0 1-2 2H3z"/>
+            </svg>
+            <span th:text="${user.role.name() == 'STAFF'} ? 'Dashboard' : 'Home'">Home</span>
+        </a>
+
+        <!-- Products -->
+        <a href="/products" class="nav-link group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+            <svg class="nav-icon h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M20 7h-8m8 5h-8m8 5h-8M9 7H4m5 5H4m5 5H4"/>
+            </svg>
+            <span>Products</span>
+        </a>
+
+        <!-- Links -->
+        <a href="/links" class="nav-link group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+            <svg class="nav-icon h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 0 1 0 5.656l-2 2a4 4 0 1 1-5.656-5.656l1-1M10.172 13.828a4 4 0 0 1 0-5.656l2-2a4 4 0 1 1 5.656 5.656l-1 1"/>
+            </svg>
+            <span>Links</span>
+        </a>
+
+        <!-- Cart -->
+        <a href="/cart" class="nav-link group relative flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+            <svg class="nav-icon h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l3-8H6.4M7 13l-1.6-8M7 13l-2 9m12-9l-2 9M9 22a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+            </svg>
+            <span>Cart</span>
+            <span class="absolute right-2 top-1 inline-flex items-center justify-center rounded-full bg-indigo-600 px-1.5 text-[10px] font-medium text-white">3</span>
+        </a>
+
+        <!-- Payment -->
+        <a href="/payment" class="nav-link group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+            <svg class="nav-icon h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8h18M3 10h18v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7zm4 5h4"/>
+            </svg>
+            <span>Payment</span>
+        </a>
+
+        <!-- Role-Specific Navigation -->
+        <!-- Customer Only -->
+        <div th:if="${user.role.name() == 'CUSTOMER'}">
+            <a href="/customer/orders" class="nav-link group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+                <svg class="nav-icon h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 0 0-8 0v4M8 11v6h8v-6M8 11H5.5A1.5 1.5 0 0 0 4 12.5v4A1.5 1.5 0 0 0 5.5 18H8"/>
+                </svg>
+                <span>Orders</span>
+            </a>
+        </div>
+
+        <!-- Staff Only -->
+        <div th:if="${user.role.name() == 'STAFF'}">
+            <a href="/staff/dashboard" class="nav-link group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+                <svg class="nav-icon h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7m0 10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m0 10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2M9 7a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2"/>
+                </svg>
+                <span>Staff Panel</span>
+            </a>
+            <a href="/staff/create-account" class="nav-link group flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+                <svg class="nav-icon h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+                </svg>
+                <span>Create Account</span>
+            </a>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <div class="container mx-auto px-4 py-8">
-        <!-- Page Header -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-            <h2 class="text-3xl font-bold text-gray-800 mb-2">My Profile</h2>
-            <p class="text-gray-600">Manage your personal information</p>
-        </div>
+    <div class="my-4 border-t border-gray-200 dark:border-gray-700"></div>
 
-        <!-- Success/Error Messages -->
-        <div th:if="${success}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-            <span th:text="${success}"></span>
-        </div>
-        <div th:if="${error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            <span th:text="${error}"></span>
-        </div>
+    <!-- User Account Section -->
+    <div class="mt-auto">
+        <button id="user-menu-button" type="button"
+                class="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
+                data-dropdown-toggle="user-dropdown"
+                aria-expanded="false">
+            <span class="flex items-center gap-3">
+                <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-200">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 14a4 4 0 1 0-8 0m8 0a4 4 0 1 1-8 0m8 0v2a4 4 0 0 1-4 4m0 0a4 4 0 0 1-4-4v-2m4-8a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/>
+                    </svg>
+                </span>
+                <span class="font-medium" th:text="${user.username}">Account</span>
+            </span>
+            <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+            </svg>
+        </button>
 
-        <!-- Profile Content -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-            <!-- Profile Info -->
-            <div class="lg:col-span-2">
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-xl font-semibold text-gray-900">Personal Information</h3>
-                        <button id="editProfileBtn" onclick="toggleEditMode()"
-                                th:class="${user.role.name() == 'CUSTOMER'} ? 'bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors' : 'bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition-colors'">
-                            Edit Profile
-                        </button>
-                    </div>
-
-                    <!-- View Mode -->
-                    <div id="viewMode">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                                <p class="text-gray-900 bg-gray-50 p-3 rounded-md" th:text="${user.name}">Name</p>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                                <p class="text-gray-900 bg-gray-50 p-3 rounded-md" th:text="${user.email}">Email</p>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                                <p class="text-gray-900 bg-gray-50 p-3 rounded-md" th:text="${user.phoneNumber}">Phone</p>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
-                                <p class="text-gray-900 bg-gray-50 p-3 rounded-md" th:text="${user.role}">Role</p>
-                            </div>
-                            <div class="md:col-span-2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
-                                <p class="text-gray-900 bg-gray-50 p-3 rounded-md" th:text="${user.address}">Address</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Edit Mode -->
-                    <div id="editMode" class="hidden">
-                        <form th:action="${user.role.name() == 'CUSTOMER'} ? '/customer/profile/update' : '/deliverer/profile/update'"
-                              th:object="${user}" method="post" class="space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                                    <input type="text" th:field="*{name}" id="name"
-                                           th:class="${user.role.name() == 'CUSTOMER'} ? 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' : 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500'"
-                                           required>
-                                </div>
-                                <div>
-                                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                                    <input type="email" th:field="*{email}" id="email"
-                                           th:class="${user.role.name() == 'CUSTOMER'} ? 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' : 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500'"
-                                           required>
-                                </div>
-                                <div>
-                                    <label for="phoneNumber" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                                    <input type="text" th:field="*{phoneNumber}" id="phoneNumber"
-                                           th:class="${user.role.name() == 'CUSTOMER'} ? 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' : 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500'"
-                                           required>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
-                                    <input type="text" th:value="${user.role}" readonly
-                                           class="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md text-gray-500 cursor-not-allowed">
-                                </div>
-                                <div class="md:col-span-2">
-                                    <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Address</label>
-                                    <textarea th:field="*{address}" id="address" rows="3"
-                                              th:class="${user.role.name() == 'CUSTOMER'} ? 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500' : 'w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500'"
-                                              required></textarea>
-                                </div>
-                            </div>
-
-                            <div class="flex space-x-4">
-                                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors">
-                                    Save Changes
-                                </button>
-                                <button type="button" onclick="toggleEditMode()" class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors">
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+        <!-- User Dropdown Menu -->
+        <div id="user-dropdown" class="z-50 hidden w-56 divide-y divide-gray-100 rounded-lg border border-gray-200 bg-white shadow-lg dark:divide-gray-700 dark:border-gray-700 dark:bg-gray-800">
+            <div class="px-4 py-3">
+                <p class="text-sm font-medium text-gray-900 dark:text-gray-100" th:text="${user.username}">User</p>
+                <p class="truncate text-sm text-gray-500 dark:text-gray-400" th:text="${user.email}">email@example.com</p>
             </div>
-
-            <!-- Sidebar -->
-            <div class="space-y-6">
-                <!-- Profile Actions -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Account Actions</h3>
-                    <div class="space-y-3">
-                        <button onclick="changePassword()" class="w-full bg-yellow-600 text-white px-4 py-2 rounded-md hover:bg-yellow-700 transition-colors">
-                            Change Password
-                        </button>
-                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/orders' : '/deliverer/orders'"
-                           class="block w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors text-center">
-                            View My Orders
-                        </a>
-                        <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/dashboard' : '/deliverer/dashboard'"
-                           th:class="${user.role.name() == 'CUSTOMER'} ? 'block w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors text-center' : 'block w-full bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition-colors text-center'">
-                            Back to Dashboard
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Account Info - Dynamic content based on role -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4"
-                        th:text="${user.role.name() == 'CUSTOMER'} ? 'Account Information' : 'Delivery Information'">Account Information</h3>
-                    <div class="space-y-3 text-sm">
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Account Status:</span>
-                            <span class="text-green-600 font-medium">Active</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span class="text-gray-600">Member Since:</span>
-                            <span class="text-gray-900">Aug 2025</span>
-                        </div>
-                        <div class="flex justify-between" th:if="${user.role.name() == 'CUSTOMER'}">
-                            <span class="text-gray-600">Total Orders:</span>
-                            <span class="text-gray-900">12</span>
-                        </div>
-                        <div class="flex justify-between" th:if="${user.role.name() == 'DELIVERER'}">
-                            <span class="text-gray-600">Deliveries This Month:</span>
-                            <span class="text-gray-900">156</span>
-                        </div>
-                        <div class="flex justify-between" th:if="${user.role.name() == 'DELIVERER'}">
-                            <span class="text-gray-600">Success Rate:</span>
-                            <span class="text-green-600 font-medium">98.5%</span>
-                        </div>
-                    </div>
-                </div>
+            <ul class="py-1 text-sm text-gray-700 dark:text-gray-200">
+                <li>
+                    <a th:href="${user.role.name() == 'CUSTOMER'} ? '/customer/profile' : '/staff/profile'"
+                       class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 bg-indigo-50 text-indigo-700">
+                        Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="/shared/change-password" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Change Password</a>
+                </li>
+            </ul>
+            <div class="py-1">
+                <a href="/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-700">Sign out</a>
             </div>
         </div>
     </div>
+</aside>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white text-center p-4 mt-16">
-        <p>&copy; 2025 Smart Shop Portal. All rights reserved.</p>
-    </footer>
+<!-- Main Content Area -->
+<div class="md:ml-72 min-h-screen bg-gray-50">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Page Header -->
+        <header class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Hồ sơ của tôi</h2>
+            <p class="text-gray-600">Xem thông tin cá nhân của bạn</p>
+        </header>
 
-    <!-- JavaScript -->
-    <script>
-        function toggleEditMode() {
-            const viewMode = document.getElementById('viewMode');
-            const editMode = document.getElementById('editMode');
-            const editBtn = document.getElementById('editProfileBtn');
+        <!-- Profile Information -->
+        <section class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-6">Thông tin cá nhân</h3>
 
-            if (viewMode.classList.contains('hidden')) {
-                // Switch to view mode
-                viewMode.classList.remove('hidden');
-                editMode.classList.add('hidden');
-                editBtn.textContent = 'Edit Profile';
-            } else {
-                // Switch to edit mode
-                viewMode.classList.add('hidden');
-                editMode.classList.remove('hidden');
-                editBtn.textContent = 'Cancel Edit';
-            }
-        }
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="form-group">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Họ</label>
+                    <p class="text-gray-900 bg-gray-50 px-3 py-2 rounded-md" th:text="${profile.firstname}">John</p>
+                </div>
 
-        function changePassword() {
-            alert('Change Password functionality will be implemented later.');
-            // TODO: Navigate to change password page
-        }
+                <div class="form-group">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tên</label>
+                    <p class="text-gray-900 bg-gray-50 px-3 py-2 rounded-md" th:text="${profile.lastname}">Doe</p>
+                </div>
 
-        // Notification functionality
-        document.getElementById('notificationBtn').addEventListener('click', function() {
-            const dropdown = document.getElementById('notificationDropdown');
-            dropdown.classList.toggle('hidden');
-        });
+                <div class="form-group">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tên người dùng</label>
+                    <p class="text-gray-900 bg-gray-50 px-3 py-2 rounded-md" th:text="${profile.user.username}">johndoe</p>
+                </div>
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('notificationDropdown');
-            const button = document.getElementById('notificationBtn');
+                <div class="form-group">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Số điện thoại</label>
+                    <p class="text-gray-900 bg-gray-50 px-3 py-2 rounded-md" th:text="${profile.phoneNumber}">123-456-7890</p>
+                </div>
 
-            if (!button.contains(event.target) && !dropdown.contains(event.target)) {
-                dropdown.classList.add('hidden');
-            }
-        });
-    </script>
+                <div class="form-group">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ngày sinh</label>
+                    <p class="text-gray-900 bg-gray-50 px-3 py-2 rounded-md" th:text="${#temporals.format(profile.user.dateOfBirth, 'dd/MM/yyyy')}">January 15, 1990</p>
+                </div>
+
+                <div class="form-group md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Địa chỉ Email</label>
+                    <p class="text-gray-900 bg-gray-50 px-3 py-2 rounded-md" th:text="${profile.user.email}">john@example.com</p>
+                </div>
+
+                <div class="form-group md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Địa chỉ</label>
+                    <p class="text-gray-900 bg-gray-50 px-3 py-2 rounded-md" th:text="${profile.user.address}">123 Main St, City, State</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Loại tài khoản</label>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"
+                          th:text="${profile.user.role.name()}">CUSTOMER</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Trạng thái</label>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800"
+                          th:text="${profile.user.status.name()}">ACTIVE</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-8 flex justify-end">
+                <a th:href="@{/customer/profile/edit}"
+                   th:if="${profile.user.role.name() == 'CUSTOMER'}"
+                   class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
+                    Chỉnh sửa hồ sơ
+                </a>
+                <a th:href="@{/staff/profile/edit}"
+                   th:if="${profile.user.role.name() == 'STAFF'}"
+                   class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
+                    Chỉnh sửa hồ sơ
+                </a>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+
+<style>
+    /* Custom styles for better organization */
+    .nav-link .nav-icon {
+        @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-200;
+    }
+
+    .form-group {
+        @apply mb-4;
+    }
+</style>
 
 </body>
+
 </html>

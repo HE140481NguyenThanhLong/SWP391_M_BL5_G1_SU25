@@ -19,8 +19,8 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer category_id;
-    @Column(length = 100,nullable = false)
+    @Column(length = 100,nullable = false,columnDefinition = "NVARCHAR(255)")
     String name;
-    @ManyToMany(mappedBy = "categories")
+    @OneToMany(mappedBy = "categories", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Product> products = new HashSet<>();
 }
