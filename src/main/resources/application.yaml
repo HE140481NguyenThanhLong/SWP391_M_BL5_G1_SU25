@@ -25,9 +25,9 @@
 #spring.security.user.password=admin
 #spring.security.user.roles=ADMIN
 server:
-port: 8080
-servlet:
-  context-path: /rms
+  port: 8080
+  servlet:
+    context-path: /rms
 
 spring:
   datasource:
@@ -40,5 +40,26 @@ spring:
       ddl-auto: update
     show-sql: true
 
+
+
+
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+  username: smartshopforeveryone@gmail.com
+  password: ynzx kxzg upzh jhvk
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+          required: true
+        ssl:
+          trust: smtp.gmail.com
+        connectiontimeout: 5000
+        timeout: 5000
+        writetimeout: 5000
 
 

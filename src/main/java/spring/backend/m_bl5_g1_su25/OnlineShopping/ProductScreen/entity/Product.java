@@ -27,22 +27,12 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer product_id;
 
-    @Column(nullable = false,length = 255)
+    @Column(nullable = false,length = 255,columnDefinition = "NVARCHAR(255)")
     String name;
-    @Column(nullable = false,length = 255)
+    @Column(nullable = false,length = 255,columnDefinition = "NVARCHAR(255)")
     String description;
-    @Column(length = 300)
-    String instruc;
-    @Column(length = 300)
-    String feature ;
-    @Column(length = 300)
-    String expiry ;
-    @Column(length = 300)
-    String origin;
     @Column(nullable = false)
-    BigDecimal price;
-    @Column()
-    String supplier;
+    Double price;
     @Column()
     Integer quantity;
     @Column(nullable = false)
@@ -53,31 +43,16 @@ public class Product {
     @Column(columnDefinition = "NVARCHAR(255)")
     String imageUrl;
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(nullable = false)
+    @Column()
     LocalDateTime updatedAt;
-    @ManyToMany
-    @JoinTable(
-            name = "product_category",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private Set<Category> categories = new HashSet<>();
-    @Column(nullable = false, precision = 18, scale = 2)
-    BigDecimal importPrice;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id") // Tên cột khóa ngoại trong bảng product
+    private Category categories;
 
-    @Column(nullable = false, precision = 18, scale = 2)
-    BigDecimal salePrice;
-    private String brand;
-    private double rating;
-    private int discount;
-    private int stock;
-    private String sku;
-    private int reviewCount;  // thêm
-    private int soldCount;
 
 
 }

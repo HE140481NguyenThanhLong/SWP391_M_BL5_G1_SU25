@@ -79,7 +79,7 @@ public class ProductController {
                 // Cập nhật các trường từ form
                 existingProduct.setName(product.getName());
                 existingProduct.setDescription(product.getDescription());
-                existingProduct.setSalePrice(product.getSalePrice());
+                //existingProduct.setSalePrice(product.getSalePrice());
                 existingProduct.setPrice(product.getPrice());
 
                 // PHẦN XỬ LÝ UPLOAD ẢNH (CỐT LÕI)
@@ -119,13 +119,13 @@ public class ProductController {
         }
 
     }
-    @GetMapping("/import")
-    public String importProduct(Model model) {
-        // Lấy danh sách nhà cung cấp và sản phẩm từ DB
-        List<String> suppliers = productService.getAllSuppliers();
-        model.addAttribute("suppliers", suppliers);
-        return "product/import_product";
-    }
+//    @GetMapping("/import")
+//    public String importProduct(Model model) {
+//        // Lấy danh sách nhà cung cấp và sản phẩm từ DB
+//        List<String> suppliers = productService.getAllSuppliers();
+//        model.addAttribute("suppliers", suppliers);
+//        return "product/import_product";
+//    }
     @GetMapping("/list")
     public String productList(
             @RequestParam(required = false) BigDecimal minPrice,
@@ -167,7 +167,7 @@ public class ProductController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageNumbers", pageNumbers);
-        model.addAttribute("suppliers", productService.getSuppliers());
+//        model.addAttribute("suppliers", productService.getSuppliers());
         model.addAttribute("categories", productService.getAllCategories());
         model.addAttribute("selectedCategory", selectedCategory);
 
