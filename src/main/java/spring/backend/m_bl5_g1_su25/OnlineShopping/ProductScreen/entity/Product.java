@@ -39,7 +39,7 @@ public class Product {
     String expiry ;
     @Column(length = 300)
     String origin;
-    @Column(nullable = false, precision = 18, scale = 2)
+    @Column(nullable = false)
     BigDecimal price;
     @Column()
     String supplier;
