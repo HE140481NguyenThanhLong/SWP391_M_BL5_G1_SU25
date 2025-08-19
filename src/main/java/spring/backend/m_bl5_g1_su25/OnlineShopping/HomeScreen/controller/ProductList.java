@@ -186,31 +186,12 @@ public class ProductList {
     return "homeScreen/Home";
     }
 
-//    // Helper method to add user info to model
-//    private void addUserInfoToModel(Model model, Authentication authentication) {
-//        if (authentication != null && authentication.isAuthenticated() &&
-//            !authentication.getName().equals("anonymousUser")) {
-//            // User is logged in
-//            model.addAttribute("isGuest", false);
-//            model.addAttribute("username", authentication.getName());
-//
-//            String role = authentication.getAuthorities().stream()
-//                    .map(grantedAuthority -> grantedAuthority.getAuthority())
-//                    .findFirst()
-//                    .orElse("USER");
-//            model.addAttribute("role", role);
-//        } else {
-//            // Guest user
-//            model.addAttribute("isGuest", true);
-//            model.addAttribute("username", "Guest");
-//            model.addAttribute("role", "GUEST");
-//        }
-//    }
-//    @GetMapping("/top5")
-//    public String getTop5(Model model){
-//        List<ProductResponse> product5 = productServiceForHomeScreen.getFiveProductsHottest();
-//        model.addAttribute("product5", product5);
-//        return "HomeScreen/Top-Seller";
-//
-//    }
+
+    @GetMapping("/top5")
+    public String getTop5(Model model){
+        List<ProductResponse> product5 = productServiceForHomeScreen.getFiveProductsHottest();
+        model.addAttribute("product5", product5);
+        return "HomeScreen/Top-Seller";
+
+    }
 }
