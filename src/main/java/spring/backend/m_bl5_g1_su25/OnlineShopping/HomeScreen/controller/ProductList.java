@@ -6,7 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -29,8 +29,8 @@ public class ProductList {
     @GetMapping
     public String getAll(Model model,
                          @RequestParam(defaultValue = "0") int page,
-                         @RequestParam(defaultValue = "10") int size,
-                         Authentication authentication) {
+                         @RequestParam(defaultValue = "10") int size
+                       ) {
 
         // Add user info to model for header display
 
@@ -44,28 +44,28 @@ public class ProductList {
         model.addAttribute("pageSize", size);
         model.addAttribute("content", products.getContent());
 
-        return "HomeScreen/Home";
+        return "homeScreen/Home";
     }
 
     @GetMapping("/getRecent")
     public String getRecent(Model model,
                             @RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "10") int size,
-                            Authentication authentication) {
+                            @RequestParam(defaultValue = "10") int size
+                           ) {
 
 
 
         Pageable pageable = PageRequest.of(page, size);
         Page<ProductResponse> recentProducts = productServiceForHomeScreen.getRecentProducts(pageable);
         model.addAttribute("products", recentProducts);
-        return "HomeScreen/Home";
+        return "homeScreen/Home";
     }
 
     @GetMapping("/getLastest")
     public String getLastest(Model model,
                              @RequestParam(defaultValue = "0") int page,
-                             @RequestParam(defaultValue = "10") int size,
-                             Authentication authentication) {
+                             @RequestParam(defaultValue = "10") int size
+                            ) {
 
 
 
@@ -78,7 +78,7 @@ public class ProductList {
         model.addAttribute("pageSize", size);
         model.addAttribute("content", lastestProducts.getContent());
 
-        return "HomeScreen/Home";
+        return "homeScreen/Home";
     }
 //    @GetMapping("/getLastestwithCategories/{categories}")
 //    public String getLastestwithCategories(Model model, @PathVariable String categories,
@@ -125,7 +125,7 @@ public class ProductList {
             Page<ProductResponse> byCategory = productServiceForHomeScreen.getProductsByCategory(pageable,categories);
             model.addAttribute("products", byCategory);
 
-            return "HomeScreen/Home";
+            return "homeScreen/Home";
     }
     @GetMapping ("/byPriceDesc")
     public String getProductsByPriceDesc(Model model,
@@ -139,7 +139,7 @@ public class ProductList {
         model.addAttribute("totalItems", productsByPriceDesc.getTotalElements());
         model.addAttribute("pageSize", size);
         model.addAttribute("content", productsByPriceDesc.getContent());
-            return "HomeScreen/Home";
+            return "homeScreen/Home";
     }
     @GetMapping("/lastestProduct")
     public String getLastestProduct(Model model){
@@ -147,7 +147,7 @@ public class ProductList {
                 .findFirstByOrderByCreatedDateDesc()
                 .orElse(null);
         model.addAttribute("latestProduct", latest);
-        return "HomeScreen/Home";
+        return "homeScreen/Home";
     }
     @GetMapping ("/byPriceAsc")
     public String getProductsByPriceAsc(Model model,
@@ -161,7 +161,7 @@ public class ProductList {
         model.addAttribute("totalItems", productsByPriceDesc.getTotalElements());
         model.addAttribute("pageSize", size);
         model.addAttribute("content", productsByPriceDesc.getContent());
-        return "HomeScreen/Home";
+        return "homeScreen/Home";
     }
     @GetMapping("/filter")
     public String filterProduct(@RequestParam(name="keyword",required = false) String keyword,
@@ -183,7 +183,7 @@ public class ProductList {
         model.addAttribute("pageSize", size);
         model.addAttribute("content", products.getContent());
         model.addAttribute("keyword", keyword);
-    return "HomeScreen/Home";
+    return "homeScreen/Home";
     }
 
 //    // Helper method to add user info to model
@@ -206,11 +206,11 @@ public class ProductList {
 //            model.addAttribute("role", "GUEST");
 //        }
 //    }
-    @GetMapping("/top5")
-    public String getTop5(Model model){
-        List<ProductResponse> product5 = productServiceForHomeScreen.getFiveProductsHottest();
-        model.addAttribute("product5", product5);
-        return "HomeScreen/Top-Seller";
-
-    }
+//    @GetMapping("/top5")
+//    public String getTop5(Model model){
+//        List<ProductResponse> product5 = productServiceForHomeScreen.getFiveProductsHottest();
+//        model.addAttribute("product5", product5);
+//        return "HomeScreen/Top-Seller";
+//
+//    }
 }

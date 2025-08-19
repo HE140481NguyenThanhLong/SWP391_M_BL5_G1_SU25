@@ -29,14 +29,14 @@ public class ProductServiceForHomeScreenImpl implements ProductServiceForHomeScr
         return productRepositoryForHomeScreen.findByNameContainingIgnoreCase(page, name).map(productMapper::toProductResponse);
     }
 
-    @Override
-    public List<ProductResponse> getFiveProductsHottest() {
-            List<ProductResponse> product =productRepositoryForHomeScreen.getTopBy5ProductsOrderBySales_countDesc()
-                    .stream()
-                    .map(productMapper::toProductResponse)
-                    .collect(Collectors.toList());
-        return product;
-    }
+//    @Override
+//    public List<ProductResponse> getFiveProductsHottest() {
+//            List<ProductResponse> product =productRepositoryForHomeScreen.getTop5ByProductOrderBySales_countDesc()
+//                    .stream()
+//                    .map(productMapper::toProductResponse)
+//                    .collect(Collectors.toList());
+//        return product;
+//    }
 
     @Override
     public Optional<ProductResponse> findFirstByOrderByCreatedDateDesc() {

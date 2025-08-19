@@ -23,7 +23,7 @@ public interface ProductRepositoryForHomeScreen extends JpaRepository<Product, L
 //    Page<Product> findAllByOrderByCreatedAtDescAndCategories(Pageable pageable, String categories);
 //    Page<Product> findAllByOrderByCreatedAtAscAndCategories(Pageable pageable, String categories);
     Page<Product> findByNameContainingIgnoreCase(Pageable pageable,String keyword);
-    List<Product> getTopBy5ProductsOrderBySales_countDesc();
+//    List<Product> getTop5ByProductOrderBySales_countDesc();
 
 
     Optional<Product> findFirstByOrderByCreatedAtDesc();
