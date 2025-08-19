@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Cart.repository.ProductCartRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Cart.repository.ProductRepo;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.Cart.service.CartItemService;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Category;
 
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Cart_Items;
@@ -46,7 +47,7 @@ public class CartController {
 
         model.addAttribute("productDetail", pro);
 
-        return ("cart/product-detail");
+        return ("cart/cart-detail");
     }
 
     @GetMapping("")
