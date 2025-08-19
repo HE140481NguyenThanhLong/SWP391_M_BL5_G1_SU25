@@ -5,8 +5,6 @@ import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -33,10 +31,6 @@ public class Voucher {
     LocalDateTime expirationDate;
     @Column(nullable = false)
     Boolean isUsed = false;
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id")
-    User user;
-
     @CreationTimestamp
     @Column(nullable = false,updatable = false)
     LocalDateTime createdAt;

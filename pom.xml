@@ -15,8 +15,7 @@
 	<description>M_BL5_G1_SU25</description>
 	<properties>
 		<java.version>17</java.version>
-		<mapstruct.version>1.6.3</mapstruct.version>
-		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+
 	</properties>
 	<dependencies>
 		<dependency>
@@ -86,20 +85,11 @@
 
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.mapstruct/mapstruct -->
-		<dependency>
-			<groupId>org.mapstruct</groupId>
-			<artifactId>mapstruct</artifactId>
-			<version>${mapstruct.version}</version>
-		</dependency>
+
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
 			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.modelmapper</groupId>
-			<artifactId>modelmapper</artifactId>
-			<version>3.2.2</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -116,16 +106,6 @@
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
-						</path>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok-mapstruct-binding</artifactId>
-							<version>${lombok-mapstruct-binding.version}</version>
-						</path>
-						<path>
-							<groupId>org.mapstruct</groupId>
-							<artifactId>mapstruct-processor</artifactId>
-							<version>${mapstruct.version}</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
