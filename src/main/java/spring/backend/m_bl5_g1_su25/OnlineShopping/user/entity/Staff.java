@@ -3,7 +3,7 @@ package spring.backend.m_bl5_g1_su25.OnlineShopping.user.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
+import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
 
 @Entity
 @Getter
@@ -16,6 +16,10 @@ import lombok.experimental.FieldDefaults;
 public class Staff {
     @Id
     Integer staff_id;
+    @OneToOne(optional = false)
+    @MapsId
+    @JoinColumn(name="staff_id")
+    User user;
     @Column(nullable = false,length = 50,columnDefinition = "NVARCHAR(255)")
     String firstname;
     @Column(nullable = false,length = 50,columnDefinition = "NVARCHAR(255)")

@@ -5,7 +5,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
-
+import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +22,9 @@ public class Favorite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    User user;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_id", nullable = false)

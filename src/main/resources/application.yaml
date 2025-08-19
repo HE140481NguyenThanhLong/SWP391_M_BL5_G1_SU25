@@ -24,38 +24,42 @@
 #spring.security.user.name=admin
 #spring.security.user.password=admin
 #spring.security.user.roles=ADMIN
+server:
+  port: 8080
+  servlet:
+    context-path: /rms
+
 spring:
-  application:
-    name: M_BL5_G1_SU25
-
   datasource:
-    url: jdbc:mysql://localhost:6379/smartshop?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    username: admin
-    password: Dungnche140981
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
+    url: "jdbc:sqlserver://localhost:1433;database=SWP391_BL5_SU25;trustServerCertificate=true"
+    #    url: "jdbc:sqlserver://localhost:1433;database=testDB;trustServerCertificate=true"
+    username: sa
+    password: sa
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
 
-  thymeleaf:
-    cache: false
-    prefix: classpath:/templates/
-    suffix: .html
 
-  security:
-    user:
-      name: admin
-      password: admin
-      roles: ADMIN
 
-server:
-  port: 8080
 
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+  username: smartshopforeveryone@gmail.com
+  password: ynzx kxzg upzh jhvk
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+          required: true
+        ssl:
+          trust: smtp.gmail.com
+        connectiontimeout: 5000
+        timeout: 5000
+        writetimeout: 5000
 
 

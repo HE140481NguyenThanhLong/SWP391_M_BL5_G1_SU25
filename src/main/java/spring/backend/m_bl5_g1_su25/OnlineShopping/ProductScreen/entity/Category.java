@@ -21,6 +21,6 @@ public class Category {
     Integer category_id;
     @Column(length = 100,nullable = false,columnDefinition = "NVARCHAR(255)")
     String name;
-    @ManyToMany(mappedBy = "categories", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "categories", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Product> products = new HashSet<>();
 }

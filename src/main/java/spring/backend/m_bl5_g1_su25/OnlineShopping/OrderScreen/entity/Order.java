@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.auth.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.OrderScreen.enums.OrderStatus;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.entity.Payment;
 
@@ -25,6 +26,10 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer order_id;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name="user_id",nullable = false)
+    User user;
     @Column(nullable = false)
     Double total;
     @Enumerated(EnumType.STRING)
