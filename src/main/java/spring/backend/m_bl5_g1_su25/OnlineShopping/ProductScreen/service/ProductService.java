@@ -107,8 +107,10 @@ public class ProductService {
         }
 
         if (supplier != null && !supplier.isEmpty()) {
-            spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("supplier"), supplier));
+            spec = spec.and((root, query, cb) -> {
+                Join<Object, Object> supplierJoin = root.join("supplier", JoinType.INNER);
+                return cb.equal(supplierJoin.get("name"), supplier);
+            });
         }
         if (categoryId != null) {
             spec = spec.and((root, query, cb) -> {
@@ -144,6 +146,20 @@ public class ProductService {
     public Page<Product> findRelatedProducts(Integer productId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return productRepository.findRelatedProducts(productId, pageable);
+    }
+    public void importProducts(List<Product> importedProducts) {
+        for (Product p : importedProducts) {
+            Product existing = productRepository.findById(p.getProduct_id())
+                    .orElseThrow(() -> new RuntimeException("Product not found: " + p.getProduct_id()));
+            existing.setQuantity(existing.getQuantity() + p.getQuantity()); // cộng thêm số lượng nhập
+            productRepository.save(existing);
+        }
+    }
+
+
+    public List<Product> getAllProducts() {
+
+            return productRepository.findAll();
     }
 
 }

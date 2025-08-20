@@ -2,6 +2,7 @@ package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity;
 
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -41,8 +42,9 @@ public class Product {
     String origin;
     @Column(nullable = false, precision = 18, scale = 2)
     BigDecimal price;
-    @Column()
-    String supplier;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "supplier_id")
+    Supplier supplier;
     @Column()
     Integer quantity;
     @Column(nullable = false)

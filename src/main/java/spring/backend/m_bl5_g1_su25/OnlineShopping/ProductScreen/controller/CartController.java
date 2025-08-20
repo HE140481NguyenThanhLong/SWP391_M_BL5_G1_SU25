@@ -18,10 +18,6 @@ public class CartController {
 
     private final CartService cartService;
     private final UserRepository userRepository;
-
-
-
-
     @PostMapping("/add/{productId}")
     public ResponseEntity<Map<String, Object>> addToCart(@PathVariable Integer productId,
                                                          @RequestParam(defaultValue = "1") int quantity,
