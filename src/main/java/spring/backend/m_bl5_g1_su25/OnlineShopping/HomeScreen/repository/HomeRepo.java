@@ -1,4 +1,4 @@
-package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.HomeScreen.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ProductRepositoryForHomeScreen extends JpaRepository<Product, Long> {
+public interface HomeRepo extends JpaRepository<Product, Long> {
 
     Page<Product> findAll(Pageable page);
     Page<Product> findAllByOrderByCreatedAtDesc(Pageable pageable);

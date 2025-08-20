@@ -1,4 +1,4 @@
-package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.HomeScreen.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public interface ProductServiceForHomeScreen {
+public interface HomeService {
     Optional<ProductResponse> findFirstByOrderByCreatedDateDesc();
     Page<ProductResponse> findAllProduct(Pageable page);
     Page<ProductResponse> getRecentProducts(Pageable page);

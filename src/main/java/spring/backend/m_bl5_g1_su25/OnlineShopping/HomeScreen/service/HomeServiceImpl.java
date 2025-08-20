@@ -1,4 +1,4 @@
-package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.HomeScreen.service;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -7,8 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.dto.response.ProductResponse;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.mapper.ProductMapper;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.ProductRepositoryForHomeScreen;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.HomeScreen.mapper.HomeMapper;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.HomeScreen.repository.HomeRepo;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,58 +20,58 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 
 
-public class ProductServiceForHomeScreenImpl implements ProductServiceForHomeScreen {
-    final ProductRepositoryForHomeScreen productRepositoryForHomeScreen;
-    final ProductMapper productMapper;
+public class HomeServiceImpl implements HomeService {
+    final HomeRepo homeRepo;
+    final HomeMapper homeMapper;
 
     @Override
     public Page<ProductResponse> getProductsByName(Pageable page, String name) {
-        return productRepositoryForHomeScreen.findByNameContainingIgnoreCase(page, name).map(productMapper::toProductResponse);
+        return homeRepo.findByNameContainingIgnoreCase(page, name).map(homeMapper::toProductResponse);
     }
 
     @Override
     public List<ProductResponse> getFiveProductsHottest() {
-            List<ProductResponse> product =productRepositoryForHomeScreen.findTop5ByOrderBySoldCountDesc()
+            List<ProductResponse> product = homeRepo.findTop5ByOrderBySoldCountDesc()
                     .stream()
-                    .map(productMapper::toProductResponse)
+                    .map(homeMapper::toProductResponse)
                     .collect(Collectors.toList());
         return product;
     }
 
     @Override
     public Optional<ProductResponse> findFirstByOrderByCreatedDateDesc() {
-        return productRepositoryForHomeScreen.findFirstByOrderByCreatedAtDesc().map(productMapper::toProductResponse);
+        return homeRepo.findFirstByOrderByCreatedAtDesc().map(homeMapper::toProductResponse);
     }
 
     @Override
     public Page<ProductResponse> findAllProduct(Pageable page) {
-        return productRepositoryForHomeScreen.findAll(page).map(productMapper::toProductResponse);
+        return homeRepo.findAll(page).map(homeMapper::toProductResponse);
     }
     @Override
     public Page<ProductResponse> getRecentProducts(Pageable page) {
-        return productRepositoryForHomeScreen.findAllByOrderByCreatedAtDesc(page)
-                .map(productMapper::toProductResponse);
+        return homeRepo.findAllByOrderByCreatedAtDesc(page)
+                .map(homeMapper::toProductResponse);
     }
 
     @Override
     public Page<ProductResponse> getProductsByCategory(Pageable page, String categories) {
-        return productRepositoryForHomeScreen.findAllByCategories(page, categories).map(productMapper::toProductResponse);
+        return homeRepo.findAllByCategories(page, categories).map(homeMapper::toProductResponse);
     }
 
     @Override
     public Page<ProductResponse> getProductsByPriceDesc(Pageable page) {
-        return productRepositoryForHomeScreen.findAllByOrderByPriceDesc(page).map(productMapper::toProductResponse);
+        return homeRepo.findAllByOrderByPriceDesc(page).map(homeMapper::toProductResponse);
     }
 
     @Override
     public Page<ProductResponse> getProductsByPriceAsc(Pageable page) {
-        return productRepositoryForHomeScreen.findAllByOrderByPriceAsc(page).map(productMapper::toProductResponse);
+        return homeRepo.findAllByOrderByPriceAsc(page).map(homeMapper::toProductResponse);
     }
 
     @Override
     public Page<ProductResponse> getLatestProducts(Pageable page) {
-        return productRepositoryForHomeScreen.findAllByOrderByCreatedAtAsc(page)
-                .map(productMapper::toProductResponse);
+        return homeRepo.findAllByOrderByCreatedAtAsc(page)
+                .map(homeMapper::toProductResponse);
     }
 
 //    @Override
