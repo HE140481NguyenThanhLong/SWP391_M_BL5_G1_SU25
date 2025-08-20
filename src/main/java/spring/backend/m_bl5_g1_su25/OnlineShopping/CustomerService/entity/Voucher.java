@@ -5,6 +5,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Customer;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 
 import java.math.BigDecimal;
@@ -34,8 +35,8 @@ public class Voucher {
     @Column(nullable = false)
     Boolean isUsed = false;
     @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id")
-    User user;
+    @JoinColumn(name = "customer_id")
+    Customer customer;
 
     @CreationTimestamp
     @Column(nullable = false,updatable = false)

@@ -6,6 +6,8 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.Role;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.UserStatus;
 
 
 import java.time.LocalDateTime;
@@ -38,6 +40,14 @@ public class User {
     LocalDateTime updatedAt;
     @Column(nullable = false)
     Boolean isDeleted = false;
+
+    @Column(nullable = false,length = 10)
+    @Enumerated(EnumType.STRING)
+    Role role = Role.CUSTOMER;
+
+    @Column(nullable = false,length = 10)
+    @Enumerated(EnumType.STRING)
+    UserStatus status = UserStatus.ACTIVE;
 
     @Column(nullable = false,length = 50)
     String phoneNumber;
