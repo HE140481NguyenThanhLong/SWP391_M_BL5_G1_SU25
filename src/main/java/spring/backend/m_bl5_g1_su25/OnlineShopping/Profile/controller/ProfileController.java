@@ -114,7 +114,11 @@ public class ProfileController {
     // Helper methods
     private User getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return (User) auth.getPrincipal();
+        String username = auth.getName(); // Lấy username từ Authentication
+
+        // Tìm user trong database dựa trên username
+        return authorizedRepo.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
     }
 
     private boolean hasRole(User user, Role role) {
