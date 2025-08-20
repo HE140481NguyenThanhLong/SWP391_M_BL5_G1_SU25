@@ -27,9 +27,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer product_id;
 
-    @Column(nullable = false,length = 255)
+    @Column(nullable = false,length = 255,columnDefinition = "NVARCHAR(255)")
     String name;
-    @Column(nullable = false,length = 255)
+    @Column(nullable = false,length = 255,columnDefinition = "NVARCHAR(255)")
     String description;
     @Column(length = 300)
     String instruc;
@@ -46,7 +46,7 @@ public class Product {
     @Column()
     Integer quantity;
     @Column(nullable = false)
-    Integer sales_count=0;
+    Integer salesCount=0;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false,length = 10)
     Status status = Status.IN_STOCK;
