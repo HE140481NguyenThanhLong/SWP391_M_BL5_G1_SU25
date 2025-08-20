@@ -45,7 +45,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     Role role = Role.CUSTOMER;
 
-    @Column(nullable = false,length = 10)
+    @Column(nullable = false, length = 10, columnDefinition = "varchar(10) not null default 'ACTIVE'")
     @Enumerated(EnumType.STRING)
     UserStatus status = UserStatus.ACTIVE;
 
