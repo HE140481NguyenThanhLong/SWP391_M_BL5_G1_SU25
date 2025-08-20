@@ -1,7 +1,6 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.service;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.dto.request.SignUpRequest;
@@ -12,32 +11,27 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.UserStatus;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Profile.repository.CustomerRepository;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class AuthorizedServiceImpl implements AuthorizedService {
     private final CustomerRepository customerRepository;
     private final AuthorizedRepo authorizedRepo;
     private final PasswordEncoder passwordEncoder;
-    private final ModelMapper modelMapper;
 
     @Override
     public Customer signUp(SignUpRequest request) {
-        // Create User entity manually to ensure proper role assignment
+
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .phoneNumber(request.getPhoneNumber())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.CUSTOMER) // Explicitly set default role to CUSTOMER
-                .status(UserStatus.ACTIVE) // Explicitly set default status
+                .role(Role.CUSTOMER)
+                .status(UserStatus.ACTIVE)
                 .build();
 
         User savedUser = authorizedRepo.save(user);
 
-        // Create Customer entity with firstname/lastname
         Customer customer = Customer.builder()
                 .user(savedUser)
                 .firstname(request.getFirstname())
