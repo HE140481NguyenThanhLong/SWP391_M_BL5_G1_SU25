@@ -25,4 +25,5 @@ public class Customer {
     @Column(nullable = false,length = 50,columnDefinition = "NVARCHAR(255)")
     String lastname;
 
+
 }
