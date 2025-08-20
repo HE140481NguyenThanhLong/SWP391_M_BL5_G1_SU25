@@ -1,15 +1,17 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.enums.SupplierStatus;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "Supplier")
 @Getter
@@ -17,7 +19,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +35,24 @@ public class Supplier {
 
     @Column(length = 500, columnDefinition = "NVARCHAR(500)")
     String address;
+
+    @Column(length = 100)
+    String productType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    SupplierStatus status = SupplierStatus.ACTIVE;
+
+    @Column(columnDefinition = "NVARCHAR(1000)")
+    String notes;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(nullable = false)
+    LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Product> products = new HashSet<>();

@@ -230,7 +230,7 @@
 </div>
 
 <script>
-    let selectedProducts = [];
+
 
     // Modal functions
     function openSupplierModal() {
@@ -249,37 +249,52 @@
     async function loadSuppliers() {
         try {
             const response = await fetch('/api/suppliers');
+            if (!response.ok) {
+                throw new Error(`API error: ${response.status} ${response.statusText}`);
+            }
             const data = await response.json();
             const supplierSelect = document.getElementById('supplierSelect');
             supplierSelect.innerHTML = '<option value="">-- Chọn nhà cung cấp --</option>';
 
-            data.forEach(supplier => {
-                const option = document.createElement('option');
-                option.value = supplier.supplier_id;
-                option.textContent = supplier.name;
-                supplierSelect.appendChild(option);
-            });
+            if (Array.isArray(data)) {
+                data.forEach(supplier => {
+                    const option = document.createElement('option');
+                    option.value = supplier.supplier_id;
+                    option.textContent = supplier.name;
+                    supplierSelect.appendChild(option);
+                });
+            } else {
+                throw new Error('Dữ liệu nhà cung cấp không hợp lệ');
+            }
         } catch (error) {
             console.error('Error loading suppliers:', error);
+            document.getElementById('supplierSelect').innerHTML = '<option value="">-- Lỗi tải dữ liệu --</option>';
         }
     }
 
-    // Load Categories vào select
     async function loadCategories() {
         try {
             const response = await fetch('/api/categories');
+            if (!response.ok) {
+                throw new Error(`API error: ${response.status} ${response.statusText}`);
+            }
             const data = await response.json();
             const categorySelect = document.getElementById('categorySelect');
-            categorySelect.innerHTML = '<option value="">-- Chọn loại sản phẩm --</option>';
+            categorySelect.innerHTML = '<option value="">-- Chọn danh mục --</option>';
 
-            data.categories.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category.category_id;
-                option.textContent = category.name;
-                categorySelect.appendChild(option);
-            });
+            if (data.categories && Array.isArray(data.categories)) {
+                data.categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.category_id;
+                    option.textContent = category.name;
+                    categorySelect.appendChild(option);
+                });
+            } else {
+                throw new Error('Dữ liệu danh mục không hợp lệ');
+            }
         } catch (error) {
             console.error('Error loading categories:', error);
+            document.getElementById('categorySelect').innerHTML = '<option value="">-- Lỗi tải dữ liệu --</option>';
         }
     }
 
@@ -290,68 +305,124 @@
         const productsTable = document.getElementById('productsTable');
         const productsList = document.getElementById('supplierProductsList');
 
+        productsTable.classList.add('hidden');
+        productsList.innerHTML = '<tr><td colspan="4" class="py-4 px-6 text-center text-neutral-600">Đang tải sản phẩm...</td></tr>';
+
         if (!supplier) {
-            productsTable.classList.add('hidden');
+            productsList.innerHTML = '<tr><td colspan="4" class="py-4 px-6 text-center text-neutral-600">Vui lòng chọn nhà cung cấp</td></tr>';
             return;
         }
 
         try {
-            const res = await fetch(`/api/suppliers/${supplier}/products`);
-            if (!res.ok) throw new Error("Lỗi API: " + res.status);
+            const params = category ? `?category_id=${category}` : '';
+            const res = await fetch(`/api/suppliers/${supplier}/products${params}`);
+            if (!res.ok) {
+                throw new Error(`API error: ${res.status} ${res.statusText}`);
+            }
 
-            let products = await res.json();
+            const products = await res.json();
 
-            if (category) {
-                products = products.filter(p => p.category_id === category);
+            if (!Array.isArray(products) || products.length === 0) {
+                productsList.innerHTML = '<tr><td colspan="4" class="py-4 px-6 text-center text-neutral-600">Không tìm thấy sản phẩm nào</td></tr>';
+                productsTable.classList.remove('hidden');
+                return;
             }
 
             productsList.innerHTML = '';
             products.forEach(product => {
+                const categoryNames = product.categories && Array.isArray(product.categories)
+                    ? product.categories.map(c => c.name).join(', ')
+                    : 'Không có danh mục';
                 const row = document.createElement('tr');
                 row.className = 'border-b border-neutral-100 hover:bg-neutral-50';
                 row.innerHTML = `
                 <td class="py-4 px-6">
-                    <input type="checkbox" value="${product.product_id}" class="w-4 h-4 text-primary">
+                    <input type="checkbox" value="${product.product_id}" class="w-4 h-4 text-primary bg-neutral-100 border-neutral-300 rounded focus:ring-primary">
                 </td>
-                <td class="py-4 px-6">${product.name}</td>
-                <td class="py-4 px-6">${product.category?.name || ''}</td>
-                <td class="py-4 px-6 text-primary font-semibold">${formatPrice(product.price)}</td>
+                <td class="py-4 px-6 font-medium text-neutral-800">${product.name || 'Không có tên'}</td>
+                <td class="py-4 px-6 text-neutral-600">${categoryNames}</td>
+                <td class="py-4 px-6 text-primary font-semibold">${formatPrice(product.importPrice || product.price || 0)}</td>
             `;
                 productsList.appendChild(row);
             });
 
             productsTable.classList.remove('hidden');
-
         } catch (error) {
-            console.error("API error:", error);
-            alert("Không thể tải sản phẩm từ server!");
+            console.error('Error loading products:', error);
+            productsList.innerHTML = `<tr><td colspan="4" class="py-4 px-6 text-center text-red-500">Lỗi tải sản phẩm: ${error.message}</td></tr>`;
+            productsTable.classList.remove('hidden');
         }
     }
 
+    // Array to store selected products
+    let selectedProducts = [];
 
-    // Add selected products to main list
-    function addSelectedProducts() {
+    async function addSelectedProducts() {
         const checkboxes = document.querySelectorAll('#supplierProductsList input[type="checkbox"]:checked');
         const supplierId = document.getElementById('supplierSelect').value;
 
-        checkboxes.forEach(async checkbox => {
+        if (!supplierId) {
+            alert('Vui lòng chọn nhà cung cấp trước khi thêm sản phẩm.');
+            return;
+        }
+
+        if (checkboxes.length === 0) {
+            alert('Vui lòng chọn ít nhất một sản phẩm.');
+            return;
+        }
+
+        let hasError = false;
+
+        for (const checkbox of checkboxes) {
             const productId = parseInt(checkbox.value);
+            if (isNaN(productId)) {
+                console.error(`Invalid productId for checkbox: ${checkbox.value}`);
+                hasError = true;
+                continue;
+            }
+
             try {
-                const response = await fetch(`import`);
-                const product = await response.json();
-                if (product && !selectedProducts.find(p => p.product_id === productId)) {
+                console.log(`Fetching product details for productId: ${productId}`);
+                const response = await fetch(`/product/api/products/${productId}`);
+                const responseText = await response.text(); // Lấy phản hồi thô
+                console.log(`Raw response for productId ${productId}:`, responseText);
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status} ${response.statusText}`);
+                }
+                const product = await response.json(); // Parse sau khi log
+
+                console.log('Product data received:', product);
+
+                if (!product || !product.product_id || !product.name) {
+                    throw new Error(`Invalid product data for productId ${productId}: ${JSON.stringify(product)}`);
+                }
+
+                if (!selectedProducts.find(p => p.product_id === productId)) {
                     selectedProducts.push({
                         product_id: product.product_id,
                         name: product.name,
-                        categoryName: product.categories.map(c => c.name).join(', '),
-                        importPrice: product.importPrice,
+                        categoryName: product.categories && Array.isArray(product.categories)
+                            ? product.categories.map(c => c.name).join(', ')
+                            : 'Không có danh mục',
+                        importPrice: product.importPrice || product.price || 0,
                         quantity: 1
                     });
+                    console.log(`Added product ${productId} to selectedProducts:`, selectedProducts);
+                } else {
+                    console.log(`Product ${productId} already in selectedProducts`);
                 }
             } catch (error) {
-                console.error('Error fetching product details:', error);
+                console.error(`Error fetching or processing product details for productId ${productId}:`, error);
+                hasError = true;
             }
-        });
+        }
+
+        if (hasError) {
+            alert('Có lỗi khi thêm một số sản phẩm. Vui lòng kiểm tra console để biết chi tiết.');
+        } else {
+            alert('Đã thêm sản phẩm thành công!');
+        }
 
         updateSelectedProductsList();
         closeSupplierModal();
@@ -362,39 +433,46 @@
         const emptyState = document.getElementById('emptyState');
         const confirmBtn = document.getElementById('confirmBtn');
 
+        if (!tbody) {
+            console.error('Element with ID "selectedProductsList" not found');
+            return;
+        }
+
+        console.log('Updating list with selectedProducts:', selectedProducts);
+
         if (selectedProducts.length === 0) {
             tbody.innerHTML = '';
-            emptyState.style.display = 'block';
-            confirmBtn.disabled = true;
+            if (emptyState) emptyState.style.display = 'block';
+            if (confirmBtn) confirmBtn.disabled = true;
             updateTotal();
             return;
         }
 
-        emptyState.style.display = 'none';
-        confirmBtn.disabled = false;
+        if (emptyState) emptyState.style.display = 'none';
+        if (confirmBtn) confirmBtn.disabled = false;
 
         tbody.innerHTML = selectedProducts.map(product => `
-            <tr class="border-b border-neutral-100 hover:bg-neutral-50">
-                <td class="py-4 px-6 font-medium text-neutral-800">${product.name}</td>
-                <td class="py-4 px-6 text-neutral-600">${product.categoryName}</td>
-                <td class="py-4 px-6 text-primary font-semibold">${formatPrice(product.importPrice)}</td>
-                <td class="py-4 px-6">
-                    <div class="flex items-center gap-2">
-                        <button onclick="updateQuantity(${product.product_id}, -1)" class="w-8 h-8 flex items-center justify-center border border-neutral-200 rounded hover:bg-neutral-50">-</button>
-                        <input type="number" value="${product.quantity}" min="1" class="w-16 text-center border border-neutral-200 rounded px-2 py-1" onchange="setQuantity(${product.product_id}, this.value)">
-                        <button onclick="updateQuantity(${product.product_id}, 1)" class="w-8 h-8 flex items-center justify-center border border-neutral-200 rounded hover:bg-neutral-50">+</button>
-                    </div>
-                </td>
-                <td class="py-4 px-6 font-semibold text-neutral-800">${formatPrice(product.importPrice * product.quantity)}</td>
-                <td class="py-4 px-6">
-                    <button onclick="removeProduct(${product.product_id})" class="text-red-500 hover:text-red-700 p-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
-                    </button>
-                </td>
-            </tr>
-        `).join('');
+        <tr class="border-b border-neutral-100 hover:bg-neutral-50">
+            <td class="py-4 px-6 font-medium text-neutral-800">${product.name || 'Không có tên'}</td>
+            <td class="py-4 px-6 text-neutral-600">${product.categoryName || 'Không có danh mục'}</td>
+            <td class="py-4 px-6 text-primary font-semibold">${formatPrice(product.importPrice) || '0 ₫'}</td>
+            <td class="py-4 px-6">
+                <div class="flex items-center gap-2">
+                    <button onclick="updateQuantity(${product.product_id}, -1)" class="w-8 h-8 flex items-center justify-center border border-neutral-200 rounded hover:bg-neutral-50">-</button>
+                    <input type="number" value="${product.quantity}" min="1" class="w-16 text-center border border-neutral-200 rounded px-2 py-1" onchange="setQuantity(${product.product_id}, this.value)">
+                    <button onclick="updateQuantity(${product.product_id}, 1)" class="w-8 h-8 flex items-center justify-center border border-neutral-200 rounded hover:bg-neutral-50">+</button>
+                </div>
+            </td>
+            <td class="py-4 px-6 font-semibold text-neutral-800">${formatPrice(product.importPrice * product.quantity) || '0 ₫'}</td>
+            <td class="py-4 px-6">
+                <button onclick="removeProduct(${product.product_id})" class="text-red-500 hover:text-red-700 p-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                </button>
+            </td>
+        </tr>
+    `).join('');
 
         updateTotal();
     }

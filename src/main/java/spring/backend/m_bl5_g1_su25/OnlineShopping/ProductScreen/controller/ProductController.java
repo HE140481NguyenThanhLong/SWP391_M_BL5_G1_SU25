@@ -212,14 +212,14 @@ public class ProductController {
     }
 
 
-    @PostMapping("/products/import")
+    /*@PostMapping("/import")
     public String importProducts(@RequestParam Map<String, String> params) {
         // Ví dụ duyệt toàn bộ params
         params.forEach((key, value) -> {
             System.out.println(key + " = " + value);
         });
-        return "redirect:/products";
-    }
+        return "redirect:product/import";
+    }*/
 
 
 

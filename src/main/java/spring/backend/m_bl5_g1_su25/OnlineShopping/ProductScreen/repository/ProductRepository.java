@@ -29,7 +29,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, JpaS
 
     long countByQuantityGreaterThan(int qty);
     long countByQuantityBetween(int min, int max);
-    long countByQuantity(int qty);
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.quantity = :quantity")
+    long countByQuantity(int quantity);
     // Thêm phương thức tùy chỉnh để lấy danh sách nhà cung cấp duy nhất
     @Query("SELECT DISTINCT p.supplier.name FROM Product p WHERE p.supplier IS NOT NULL")
     List<String> findAllSuppliers();
@@ -44,6 +45,15 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, JpaS
     Page<Product> findRelatedProducts(@Param("productId") Integer productId, Pageable pageable);
     @Query("SELECT DISTINCT p.supplier FROM Product p")
     List<String> findDistinctSuppliers();
+
+
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.quantity > p.minQuantity")
+    long countByQuantityGreaterThanMinQuantity();
+
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.quantity BETWEEN 1 AND p.minQuantity")
+    long countByQuantityBetween(int min, String maxField);
+
+
 }
 
 

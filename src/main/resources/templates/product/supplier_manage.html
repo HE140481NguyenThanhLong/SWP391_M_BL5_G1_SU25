@@ -1,5 +1,6 @@
+
 <!DOCTYPE html>
-<html lang="vi" class="scroll-smooth">
+<html lang="vi" class="scroll-smooth" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,14 +68,16 @@
             </div>
 
             <div class="flex-1 max-w-2xl mx-8">
-                <div class="relative">
-                    <input type="text" placeholder="Tìm kiếm sản phẩm..." class="w-full px-4 py-3 pr-12 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-primary">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </button>
-                </div>
+                <form th:action="@{/suppliers}" method="get">
+                    <div class="relative">
+                        <input type="text" name="search" th:value="${search}" placeholder="Tìm kiếm sản phẩm..." class="w-full px-4 py-3 pr-12 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <button type="submit" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-primary">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
             </div>
 
             <div class="flex items-center gap-4">
@@ -106,7 +109,7 @@
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Breadcrumb -->
     <nav class="flex items-center gap-2 text-sm text-neutral-600 mb-8">
-        <a href="index.html" class="hover:text-primary transition-colors">Trang chủ</a>
+        <a href="/index.html" class="hover:text-primary transition-colors">Trang chủ</a>
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
         </svg>
@@ -119,12 +122,12 @@
             <h2 class="font-display text-3xl font-bold text-neutral-800 mb-2">Quản lý nhà cung cấp</h2>
             <p class="text-neutral-600">Quản lý thông tin các nhà cung cấp sản phẩm</p>
         </div>
-        <button onclick="openSupplierModal()" class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition-colors">
+        <a th:href="@{/suppliers/add}" class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
             </svg>
             Thêm nhà cung cấp
-        </button>
+        </a>
     </div>
 
     <!-- Stats Overview -->
@@ -133,7 +136,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-neutral-600 mb-1">Tổng nhà cung cấp</p>
-                    <p class="text-3xl font-bold text-neutral-800">24</p>
+                    <p class="text-3xl font-bold text-neutral-800" th:text="${stats.totalSuppliers}"></p>
                 </div>
                 <div class="bg-primary/10 p-3 rounded-lg">
                     <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -151,7 +154,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-neutral-600 mb-1">Đang hoạt động</p>
-                    <p class="text-3xl font-bold text-primary">22</p>
+                    <p class="text-3xl font-bold text-primary" th:text="${stats.activeSuppliers}"></p>
                 </div>
                 <div class="bg-primary/10 p-3 rounded-lg">
                     <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -160,7 +163,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-2 mt-4">
-                <span class="text-sm text-primary font-medium">91.7%</span>
+                <span class="text-sm text-primary font-medium" th:text="${#numbers.formatDecimal((stats.activeSuppliers * 100.0 / stats.totalSuppliers), 0, 1, ',')} + '%'"></span>
                 <span class="text-sm text-neutral-500">tỷ lệ hoạt động</span>
             </div>
         </div>
@@ -169,7 +172,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-neutral-600 mb-1">Tạm ngưng</p>
-                    <p class="text-3xl font-bold text-accent">2</p>
+                    <p class="text-3xl font-bold text-accent" th:text="${stats.inactiveSuppliers}"></p>
                 </div>
                 <div class="bg-accent/10 p-3 rounded-lg">
                     <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,7 +181,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-2 mt-4">
-                <span class="text-sm text-accent font-medium">8.3%</span>
+                <span class="text-sm text-accent font-medium" th:text="${#numbers.formatDecimal((stats.inactiveSuppliers * 100.0 / stats.totalSuppliers), 0, 1, ',')} + '%'"></span>
                 <span class="text-sm text-neutral-500">cần xem xét</span>
             </div>
         </div>
@@ -187,7 +190,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-neutral-600 mb-1">Đơn hàng tháng này</p>
-                    <p class="text-3xl font-bold text-neutral-800">156</p>
+                    <p class="text-3xl font-bold text-neutral-800" th:text="${stats.monthlyOrders}"></p>
                 </div>
                 <div class="bg-primary/10 p-3 rounded-lg">
                     <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -204,46 +207,53 @@
 
     <!-- Search and Filter -->
     <div class="bg-white rounded-xl p-6 shadow-sm border border-neutral-200 mb-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-                <label class="block text-sm font-medium text-neutral-700 mb-2">Tìm kiếm nhà cung cấp</label>
-                <div class="relative">
-                    <input type="text" placeholder="Tên nhà cung cấp..." class="w-full px-4 py-2 pl-10 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                    <svg class="w-5 h-5 text-neutral-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
+        <form th:action="@{/suppliers}" method="get">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">Tìm kiếm nhà cung cấp</label>
+                    <div class="relative">
+                        <input type="text" name="search" th:value="${search}" placeholder="Tên nhà cung cấp..." class="w-full px-4 py-2 pl-10 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <svg class="w-5 h-5 text-neutral-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">Loại sản phẩm</label>
+                    <select name="productType" class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="">Tất cả loại sản phẩm</option>
+                        <option value="Sữa các loại" th:selected="${productType == 'Sữa các loại'}">Sữa các loại</option>
+                        <option value="Rau - Củ - Trái cây" th:selected="${productType == 'Rau - Củ - Trái cây'}">Rau - Củ - Trái cây</option>
+                        <option value="Thịt - Hải sản" th:selected="${productType == 'Thịt - Hải sản'}">Thịt - Hải sản</option>
+                        <option value="Bánh kẹo" th:selected="${productType == 'Bánh kẹo'}">Bánh kẹo</option>
+                        <option value="Chăm sóc cá nhân" th:selected="${productType == 'Chăm sóc cá nhân'}">Chăm sóc cá nhân</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">Trạng thái</label>
+                    <select name="status" class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="" th:selected="${status == null}">Tất cả trạng thái</option>
+                        <option value="ACTIVE" th:selected="${status == 'ACTIVE'}">Đang hoạt động</option>
+                        <option value="INACTIVE" th:selected="${status == 'INACTIVE'}">Tạm ngưng</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">Khu vực</label>
+                    <select name="region" class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="" th:selected="${region == null}">Tất cả khu vực</option>
+                        <option value="Hà Nội" th:selected="${region == 'Hà Nội'}">Hà Nội</option>
+                        <option value="TP. Hồ Chí Minh" th:selected="${region == 'TP. Hồ Chí Minh'}">TP. Hồ Chí Minh</option>
+                        <option value="Đà Nẵng" th:selected="${region == 'Đà Nẵng'}">Đà Nẵng</option>
+                        <option value="Khác" th:selected="${region == 'Khác'}">Khác</option>
+                    </select>
                 </div>
             </div>
-            <div>
-                <label class="block text-sm font-medium text-neutral-700 mb-2">Loại sản phẩm</label>
-                <select class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                    <option value="">Tất cả loại sản phẩm</option>
-                    <option value="sua">Sữa các loại</option>
-                    <option value="rau-cu">Rau - Củ - Trái cây</option>
-                    <option value="thit">Thịt - Hải sản</option>
-                    <option value="banh-keo">Bánh kẹo</option>
-                    <option value="cham-soc">Chăm sóc cá nhân</option>
-                </select>
+            <div class="mt-4">
+                <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
+                    Lọc kết quả
+                </button>
             </div>
-            <div>
-                <label class="block text-sm font-medium text-neutral-700 mb-2">Trạng thái</label>
-                <select class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                    <option value="">Tất cả trạng thái</option>
-                    <option value="active">Đang hoạt động</option>
-                    <option value="inactive">Tạm ngưng</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-neutral-700 mb-2">Khu vực</label>
-                <select class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                    <option value="">Tất cả khu vực</option>
-                    <option value="hanoi">Hà Nội</option>
-                    <option value="hcm">TP. Hồ Chí Minh</option>
-                    <option value="danang">Đà Nẵng</option>
-                    <option value="other">Khác</option>
-                </select>
-            </div>
-        </div>
+        </form>
     </div>
 
     <!-- Suppliers Table -->
@@ -252,11 +262,18 @@
             <div class="flex items-center justify-between">
                 <h3 class="font-semibold text-lg text-neutral-800">Danh sách nhà cung cấp</h3>
                 <div class="flex items-center gap-4">
-                    <select class="px-3 py-2 border border-neutral-200 rounded-lg text-sm">
-                        <option>Sắp xếp theo tên</option>
-                        <option>Sắp xếp theo ngày tạo</option>
-                        <option>Sắp xếp theo số đơn hàng</option>
-                    </select>
+                    <form th:action="@{/suppliers}" method="get">
+                        <input type="hidden" name="search" th:value="${search}">
+                        <input type="hidden" name="productType" th:value="${productType}">
+                        <input type="hidden" name="status" th:value="${status}">
+                        <input type="hidden" name="region" th:value="${region}">
+                        <select name="sortField" class="px-3 py-2 border border-neutral-200 rounded-lg text-sm" onchange="this.form.submit()">
+                            <option value="name" th:selected="${sortField == 'name'}">Sắp xếp theo tên</option>
+                            <option value="createdAt" th:selected="${sortField == 'createdAt'}">Sắp xếp theo ngày tạo</option>
+                            <option value="id" th:selected="${sortField == 'id'}">Sắp xếp theo số đơn hàng</option>
+                        </select>
+                        <input type="hidden" name="sortDir" th:value="${sortDir == 'asc' ? 'desc' : 'asc'}">
+                    </form>
                 </div>
             </div>
         </div>
@@ -273,177 +290,27 @@
                     <th class="px-6 py-4 text-left text-sm font-medium text-neutral-600">Thao tác</th>
                 </tr>
                 </thead>
-                <tbody class="divide-y divide-neutral-200">
-                <tr class="hover:bg-neutral-50">
+                <tbody class="divide-y divide-neutral-200" th:each="supplier : ${suppliers}">
+                <tr class="hover:bg-neutral-50" th:classappend="${supplier.status == 'INACTIVE'} ? 'bg-red-50'">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                                <span class="font-semibold text-primary">V</span>
+                            <div class="w-10 h-10 rounded-lg flex items-center justify-center" th:class="${supplier.status == 'INACTIVE'} ? 'bg-red-100' : 'bg-primary/10'">
+                                <span class="font-semibold" th:class="${supplier.status == 'INACTIVE'} ? 'text-red-600' : 'text-primary'" th:text="${#strings.substring(supplier.name, 0, 1)}"></span>
                             </div>
                             <div>
-                                <div class="font-semibold text-neutral-800">Vinamilk</div>
-                                <div class="text-sm text-neutral-600">Công ty Cổ phần Sữa Việt Nam</div>
+                                <div class="font-semibold text-neutral-800" th:text="${supplier.name}"></div>
+                                <div class="text-sm text-neutral-600" th:text="'Mã: ' + ${supplier.supplier_id}"></div>
                             </div>
                         </div>
                     </td>
                     <td class="px-6 py-4">
                         <div class="text-sm">
-                            <div class="text-neutral-800">📞 024 3974 8888</div>
-                            <div class="text-neutral-600">📧 info@vinamilk.com.vn</div>
+                            <div class="text-neutral-800" th:text="'📞 ' + ${supplier.phone}"></div>
+                            <div class="text-neutral-600" th:text="'📧 ' + ${supplier.email}"></div>
                         </div>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-primary/10 text-primary">Sữa các loại</span>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm">
-                            <div class="font-semibold text-neutral-800">45 đơn</div>
-                            <div class="text-neutral-600">Tháng này</div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-primary/10 text-primary">
-                                    <div class="w-2 h-2 bg-primary rounded-full mr-2"></div>
-                                    Đang hoạt động
-                                </span>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-2">
-                            <button onclick="editSupplier('vinamilk')" class="p-2 text-neutral-600 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                </svg>
-                            </button>
-                            <button onclick="viewSupplierDetails('vinamilk')" class="p-2 text-neutral-600 hover:text-accent hover:bg-accent/10 rounded-lg transition-colors">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr class="hover:bg-neutral-50">
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center">
-                                <span class="font-semibold text-accent">N</span>
-                            </div>
-                            <div>
-                                <div class="font-semibold text-neutral-800">Nestlé Việt Nam</div>
-                                <div class="text-sm text-neutral-600">Công ty TNHH Nestlé Việt Nam</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm">
-                            <div class="text-neutral-800">📞 028 3820 6111</div>
-                            <div class="text-neutral-600">📧 contact@nestle.com.vn</div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-accent/10 text-accent">Bánh kẹo</span>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm">
-                            <div class="font-semibold text-neutral-800">32 đơn</div>
-                            <div class="text-neutral-600">Tháng này</div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-primary/10 text-primary">
-                                    <div class="w-2 h-2 bg-primary rounded-full mr-2"></div>
-                                    Đang hoạt động
-                                </span>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-2">
-                            <button onclick="editSupplier('nestle')" class="p-2 text-neutral-600 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                </svg>
-                            </button>
-                            <button onclick="viewSupplierDetails('nestle')" class="p-2 text-neutral-600 hover:text-accent hover:bg-accent/10 rounded-lg transition-colors">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr class="hover:bg-neutral-50">
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                                <span class="font-semibold text-primary">U</span>
-                            </div>
-                            <div>
-                                <div class="font-semibold text-neutral-800">Unilever Việt Nam</div>
-                                <div class="text-sm text-neutral-600">Công ty TNHH Unilever Việt Nam</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm">
-                            <div class="text-neutral-800">📞 028 3821 2345</div>
-                            <div class="text-neutral-600">📧 info@unilever.com.vn</div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-600">Chăm sóc cá nhân</span>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm">
-                            <div class="font-semibold text-neutral-800">28 đơn</div>
-                            <div class="text-neutral-600">Tháng này</div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-primary/10 text-primary">
-                                    <div class="w-2 h-2 bg-primary rounded-full mr-2"></div>
-                                    Đang hoạt động
-                                </span>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-2">
-                            <button onclick="editSupplier('unilever')" class="p-2 text-neutral-600 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                </svg>
-                            </button>
-                            <button onclick="viewSupplierDetails('unilever')" class="p-2 text-neutral-600 hover:text-accent hover:bg-accent/10 rounded-lg transition-colors">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr class="hover:bg-neutral-50">
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                                <span class="font-semibold text-red-600">C</span>
-                            </div>
-                            <div>
-                                <div class="font-semibold text-neutral-800">CP Việt Nam</div>
-                                <div class="text-sm text-neutral-600">Công ty CP Việt Nam</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm">
-                            <div class="text-neutral-800">📞 028 3925 1234</div>
-                            <div class="text-neutral-600">📧 contact@cpvietnam.com.vn</div>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-red-100 text-red-600">Thịt - Hải sản</span>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm" th:class="${supplier.productType == 'Sữa các loại'} ? 'bg-primary/10 text-primary' : ${supplier.productType == 'Bánh kẹo'} ? 'bg-accent/10 text-accent' : ${supplier.productType == 'Chăm sóc cá nhân'} ? 'bg-blue-100 text-blue-600' : 'bg-red-100 text-red-600'" th:text="${supplier.productType}"></span>
                     </td>
                     <td class="px-6 py-4">
                         <div class="text-sm">
@@ -452,24 +319,24 @@
                         </div>
                     </td>
                     <td class="px-6 py-4">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-red-100 text-red-600">
-                                    <div class="w-2 h-2 bg-red-600 rounded-full mr-2"></div>
-                                    Tạm ngưng
-                                </span>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm" th:class="${supplier.status == 'INACTIVE'} ? 'bg-red-100 text-red-600' : 'bg-primary/10 text-primary'">
+                            <div class="w-2 h-2 rounded-full mr-2" th:class="${supplier.status == 'INACTIVE'} ? 'bg-red-600' : 'bg-primary'"></div>
+                            <span th:text="${supplier.status == 'INACTIVE'} ? 'Tạm ngưng' : 'Đang hoạt động'"></span>
+                        </span>
                     </td>
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-2">
-                            <button onclick="editSupplier('cp')" class="p-2 text-neutral-600 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors">
+                            <a th:href="@{/suppliers/edit/{id}(id=${supplier.supplier_id})}" class="p-2 text-neutral-600 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                 </svg>
-                            </button>
-                            <button onclick="viewSupplierDetails('cp')" class="p-2 text-neutral-600 hover:text-accent hover:bg-accent/10 rounded-lg transition-colors">
+                            </a>
+                            <a th:href="@{/suppliers/view/{id}(id=${supplier.supplier_id})}" class="p-2 text-neutral-600 hover:text-accent hover:bg-accent/10 rounded-lg transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                 </svg>
-                            </button>
+                            </a>
                         </div>
                     </td>
                 </tr>
@@ -481,143 +348,23 @@
         <div class="px-6 py-4 border-t border-neutral-200">
             <div class="flex items-center justify-between">
                 <div class="text-sm text-neutral-600">
-                    Hiển thị 1-4 trong tổng số 24 nhà cung cấp
+                    Hiển thị <span th:text="${#lists.size(suppliers)}"></span> trong tổng số <span th:text="${stats.totalSuppliers}"></span> nhà cung cấp
                 </div>
                 <div class="flex items-center gap-2">
-                    <button class="px-3 py-2 border border-neutral-200 rounded-lg text-sm hover:bg-neutral-50 disabled:opacity-50" disabled>
-                        Trước
-                    </button>
-                    <button class="px-3 py-2 bg-primary text-white rounded-lg text-sm">1</button>
-                    <button class="px-3 py-2 border border-neutral-200 rounded-lg text-sm hover:bg-neutral-50">2</button>
-                    <button class="px-3 py-2 border border-neutral-200 rounded-lg text-sm hover:bg-neutral-50">3</button>
-                    <button class="px-3 py-2 border border-neutral-200 rounded-lg text-sm hover:bg-neutral-50">
-                        Sau
-                    </button>
+                    <a th:href="@{/suppliers(page=${currentPage - 1}, search=${search}, productType=${productType}, status=${status}, region=${region}, sortField=${sortField}, sortDir=${sortDir})}"
+                       th:class="${currentPage <= 1} ? 'px-3 py-2 border border-neutral-200 rounded-lg text-sm opacity-50' : 'px-3 py-2 border border-neutral-200 rounded-lg text-sm hover:bg-neutral-50'"
+                       th:attr="disabled=${currentPage <= 1} ? 'disabled' : null">Trước</a>
+                    <a th:each="pageNumber : ${pageNumbers}"
+                       th:href="@{/suppliers(page=${pageNumber}, search=${search}, productType=${productType}, status=${status}, region=${region}, sortField=${sortField}, sortDir=${sortDir})}"
+                       th:class="${pageNumber == currentPage} ? 'px-3 py-2 bg-primary text-white rounded-lg text-sm' : 'px-3 py-2 border border-neutral-200 rounded-lg text-sm hover:bg-neutral-50'"
+                       th:text="${pageNumber}"></a>
+                    <a th:href="@{/suppliers(page=${currentPage + 1}, search=${search}, productType=${productType}, status=${status}, region=${region}, sortField=${sortField}, sortDir=${sortDir})}"
+                       th:class="${currentPage >= totalPages} ? 'px-3 py-2 border border-neutral-200 rounded-lg text-sm opacity-50' : 'px-3 py-2 border border-neutral-200 rounded-lg text-sm hover:bg-neutral-50'"
+                       th:attr="disabled=${currentPage >= totalPages} ? 'disabled' : null">Sau</a>
                 </div>
             </div>
         </div>
     </div>
 </main>
-
-<!-- Supplier Modal -->
-<div id="supplierModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-    <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div class="p-6 border-b border-neutral-200">
-                <div class="flex items-center justify-between">
-                    <h3 id="modalTitle" class="font-display text-2xl font-bold text-neutral-800">Thêm nhà cung cấp mới</h3>
-                    <button onclick="closeSupplierModal()" class="text-neutral-400 hover:text-neutral-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <form class="p-6 space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-neutral-700 mb-2">Tên nhà cung cấp *</label>
-                        <input type="text" class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Nhập tên nhà cung cấp">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-neutral-700 mb-2">Mã nhà cung cấp</label>
-                        <input type="text" class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Tự động tạo">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-neutral-700 mb-2">Số điện thoại *</label>
-                        <input type="tel" class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Nhập số điện thoại">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-neutral-700 mb-2">Email</label>
-                        <input type="email" class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Nhập email">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-neutral-700 mb-2">Địa chỉ *</label>
-                    <textarea class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" rows="3" placeholder="Nhập địa chỉ đầy đủ"></textarea>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-neutral-700 mb-2">Loại sản phẩm *</label>
-                        <select class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                            <option value="">Chọn loại sản phẩm</option>
-                            <option value="sua">Sữa các loại</option>
-                            <option value="rau-cu">Rau - Củ - Trái cây</option>
-                            <option value="thit">Thịt - Hải sản</option>
-                            <option value="banh-keo">Bánh kẹo</option>
-                            <option value="cham-soc">Chăm sóc cá nhân</option>
-                            <option value="do-gia-dung">Đồ gia dụng</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-neutral-700 mb-2">Trạng thái</label>
-                        <select class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                            <option value="active">Đang hoạt động</option>
-                            <option value="inactive">Tạm ngưng</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-neutral-700 mb-2">Ghi chú</label>
-                    <textarea class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" rows="3" placeholder="Ghi chú thêm về nhà cung cấp"></textarea>
-                </div>
-
-                <div class="flex gap-4 pt-4">
-                    <button type="button" onclick="closeSupplierModal()" class="flex-1 px-6 py-3 border border-neutral-200 text-neutral-600 rounded-xl font-semibold hover:bg-neutral-50 transition-colors">
-                        Hủy
-                    </button>
-                    <button type="submit" class="flex-1 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition-colors">
-                        Lưu nhà cung cấp
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<script>
-    // Modal Functions
-    function openSupplierModal() {
-        document.getElementById('modalTitle').textContent = 'Thêm nhà cung cấp mới';
-        document.getElementById('supplierModal').classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeSupplierModal() {
-        document.getElementById('supplierModal').classList.add('hidden');
-        document.body.style.overflow = 'auto';
-    }
-
-    function editSupplier(supplierId) {
-        document.getElementById('modalTitle').textContent = 'Chỉnh sửa nhà cung cấp';
-        document.getElementById('supplierModal').classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-        // Load supplier data here
-    }
-
-    function viewSupplierDetails(supplierId) {
-        alert('Xem chi tiết nhà cung cấp: ' + supplierId);
-    }
-
-    // Close modal when clicking outside
-    document.getElementById('supplierModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeSupplierModal();
-        }
-    });
-
-    // Close modal with Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeSupplierModal();
-        }
-    });
-</script>
 </body>
 </html>
