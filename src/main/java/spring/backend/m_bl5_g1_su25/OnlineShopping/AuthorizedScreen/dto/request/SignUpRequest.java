@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignUpRequest {
+    String firstname,lastname;
     @NotBlank(message = "Username is required")
     String username;
     @NotBlank(message = "Password is required")

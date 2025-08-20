@@ -6,7 +6,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 
 public interface AuthorizedService {
     Customer signUp(SignUpRequest request);
-    User login(String email, String password);
+    User login(String username, String password);
 
 
 }
