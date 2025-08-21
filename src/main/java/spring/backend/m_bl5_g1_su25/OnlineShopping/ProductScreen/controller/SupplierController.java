@@ -56,6 +56,7 @@ public class SupplierController {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("stats", supplierService.getStats());
 
+
         return "product/supplier_manage";
     }
 

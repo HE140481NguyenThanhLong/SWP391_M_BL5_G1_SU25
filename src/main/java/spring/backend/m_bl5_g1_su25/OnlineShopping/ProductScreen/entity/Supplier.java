@@ -1,5 +1,6 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

@@ -1,7 +1,9 @@
-/*package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.controller;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,8 +25,7 @@ public class ProductAPIController {
     @Autowired
     private ProductService productService;
 
-    @Autowired
-    private SupplierService supplierService;
+
 
 
     @GetMapping("/api/suppliers/{supplierId}/products")
@@ -40,13 +41,19 @@ public class ProductAPIController {
         );
         return products.getContent();
     }
-
     @GetMapping("/api/products/{productId}")
-    public Product getProductById(@PathVariable Integer productId) {
+    public ResponseEntity<Map<String, Object>> getProductById(@PathVariable Integer productId) {
         Product product = productService.getProductById(productId);
         if (product == null) {
-            throw new IllegalArgumentException("Product not found with id: " + productId);
+            return ResponseEntity.notFound().build();
         }
-        return product;
+
+        Map<String, Object> dto = new HashMap<>();
+        dto.put("id", product.getProduct_id());
+        dto.put("name", product.getName());
+        dto.put("price", product.getPrice());
+        dto.put("importPrice", product.getImportPrice());
+        return ResponseEntity.ok(dto);
     }
-}*/
+
+}
