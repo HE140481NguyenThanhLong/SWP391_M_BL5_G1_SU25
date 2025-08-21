@@ -1,0 +1,49 @@
+package spring.backend.m_bl5_g1_su25.OnlineShopping.InventoryScreen.controller;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.InventoryScreen.service.InventoryService;
+
+@Slf4j
+@Controller
+@RequestMapping("/staff")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public class InventoryController {
+
+    InventoryService inventoryService;
+
+    @GetMapping("/inventory-detail")
+    public String getInventoryDetail(
+            @RequestParam(value = "status", defaultValue = "all") String status,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            Model model) {
+
+        log.info("=== INVENTORY CONTROLLER CALLED ===");
+        log.info("Parameters: status={}, keyword={}", status, keyword);
+
+        var inventoryData = inventoryService.getInventoryStatistics(status, keyword);
+        log.info("Data retrieved successfully: totalProducts={}", inventoryData.getTotalProducts());
+
+        // Add data to model
+        model.addAttribute("totalProducts", inventoryData.getTotalProducts());
+        model.addAttribute("lowStockProducts", inventoryData.getLowStockProducts());
+        model.addAttribute("outOfStockProducts", inventoryData.getOutOfStockProducts());
+        model.addAttribute("inventoryProducts", inventoryData.getInventoryProducts());
+
+        // Add current filters
+        model.addAttribute("currentStatus", status);
+        model.addAttribute("currentKeyword", keyword != null ? keyword : "");
+
+        log.info("Model attributes added successfully");
+        log.info("Returning view: staff/inventory-detail");
+        return "staff/inventory-detail";
+    }
+}
