@@ -61,6 +61,7 @@ public class Product {
     @Column()
     Integer sales_count = 0;
 
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
     Status status = Status.IN_STOCK;

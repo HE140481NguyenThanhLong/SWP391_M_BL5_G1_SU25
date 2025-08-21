@@ -159,7 +159,7 @@
                     Tổng tiền: <span id="totalAmount" class="text-primary">0 VND</span>
                 </div>
             </div>
-            <button id="confirmBtn" onclick="confirmImport()" class="bg-primary text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-dark transition-colors disabled:bg-neutral-300 disabled:cursor-not-allowed" disabled>
+            <button id="confirmBtn" onclick="confirmImport()" class="bg-primary text-white px-8 py-4 rounded-xl font-semibold hover:bg-primary-dark transition-colors ">
                 Xác nhận
             </button>
         </div>
@@ -413,7 +413,7 @@
 
                 const name = product.name ?? "Không rõ";
                 const category = product.category?.name ?? "Không rõ";
-                const price = product.importPrice ?? product.price ?? 0;
+                const price = product.price ?? product.price ?? 0;
 
                 // Nếu chưa có số lượng thì mặc định = 1
                 if (!p.quantity) p.quantity = 1;
@@ -425,10 +425,11 @@
                 <td class="py-3 px-6">${category}</td>
                 <td class="py-3 px-6 text-primary font-semibold">${formatPrice(price)}</td>
                 <td class="py-3 px-6">
-                    <input type="number" min="1" value="${p.quantity}"
-                        class="w-20 border rounded px-2 py-1 text-center"
-                        onchange="updateQuantity(${p.product_id}, this.value)">
-                </td>
+    <input type="number" min="1" value="${p.quantity}"
+        class="w-20 border rounded px-2 py-1 text-center"
+        onchange="setQuantity(${p.product_id}, this.value)">
+</td>
+
                 <td class="py-3 px-6 text-neutral-800 font-semibold">${formatPrice(price * p.quantity)}</td>
                 <td class="py-3 px-6">
                     <button onclick="removeSelectedProduct(${p.product_id})"
@@ -444,6 +445,7 @@
                 console.error(`❌ Error fetching product ${p.product_id}:`, error);
             }
         }
+        updateTotal();
     }
 
 
@@ -452,33 +454,16 @@
         selectedProducts = selectedProducts.filter(p => p.product_id !== productId);
         updateSelectedProductsList();
     }
-
-
     // Quantity management functions
-    function updateQuantity(productId, change) {
+    function setQuantity(productId, newValue) {
         const product = selectedProducts.find(p => p.product_id === productId);
         if (product) {
-            product.quantity = Math.max(1, product.quantity + change);
+            product.quantity = Math.max(1, Number(newValue)); // gán trực tiếp
             updateSelectedProductsList();
         }
     }
-
-    function setQuantity(productId, quantity) {
-        const product = selectedProducts.find(p => p.product_id === productId);
-        if (product) {
-            product.quantity = Math.max(1, parseInt(quantity) || 1);
-            updateSelectedProductsList();
-        }
-    }
-
-    function removeProduct(productId) {
-        selectedProducts = selectedProducts.filter(p => p.product_id !== productId);
-        updateSelectedProductsList();
-    }
-
-    // Update total amount
-    function updateTotal() {
-        const total = selectedProducts.reduce((sum, product) => sum + (product.importPrice * product.quantity), 0);
+        function updateTotal() {
+        const total = selectedProducts.reduce((sum, product) => sum + (product.price * product.quantity), 0);
         document.getElementById('totalAmount').textContent = formatPrice(total);
     }
 

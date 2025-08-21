@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -210,18 +211,4 @@ public class ProductController {
 
         return "product/import_product";
     }
-
-
-    /*@PostMapping("/import")
-    public String importProducts(@RequestParam Map<String, String> params) {
-        // Ví dụ duyệt toàn bộ params
-        params.forEach((key, value) -> {
-            System.out.println(key + " = " + value);
-        });
-        return "redirect:product/import";
-    }*/
-
-
-
-
 }
