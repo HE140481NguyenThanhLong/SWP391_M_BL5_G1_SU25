@@ -134,20 +134,13 @@
         <span class="opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">Đăng nhập </span>
       </a>
 
-      <a th:href="@{/authority/signup}"  class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
-                dark:text-gray-200 dark:hover:bg-gray-700">
-        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM3 20a6 6 0 0 1 12 0v1H3v-1z"/>
-        </svg>
-        <span class="opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">Đăng ký</span>
-      </a>
     </nav>
 
     <!-- Divider line for better view     -->
     <div class="my-4 border-t border-gray-200 dark:border-gray-700"></div>
 
     <!-- User Navigation (Dropdown) -->
-    <div class="mt-auto">
+    <div th:if="${session.loggedInUser!=null}" class="mt-auto">
       <button
               id="user-menu-button"
               type="button"
@@ -162,7 +155,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M16 14a4 4 0 1 0-8 0m8 0a4 4 0 1 1-8 0m8 0v2a4 4 0 0 1-4 4m0 0a4 4 0 0 1-4-4v-2m4-8a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/>
             </svg>
           </span>
-          <span class="font-medium">Account</span>
+          <span th:text="${session.loggedInUser.getUsername().toUpperCase()}" class="font-medium">Account</span>
         </span>
         <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
