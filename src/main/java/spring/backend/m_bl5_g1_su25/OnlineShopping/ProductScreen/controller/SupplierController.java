@@ -89,4 +89,9 @@ public class SupplierController {
         supplierService.deleteSupplier(id);
         return "redirect:/suppliers";
     }
+    @GetMapping("/detail")
+    public String detailSupplier() {
+
+        return "product/supplier-detail-template";
+    }
 }
