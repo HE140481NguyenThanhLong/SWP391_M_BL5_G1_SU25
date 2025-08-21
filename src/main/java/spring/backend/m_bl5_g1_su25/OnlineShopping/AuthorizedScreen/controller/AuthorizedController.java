@@ -87,6 +87,7 @@ public class AuthorizedController {
     public String resetPassword(@RequestParam String token,
                                @RequestParam String password,
                                @RequestParam String confirmPassword,
+                               HttpSession session,
                                Model model) {
 
         // Kiểm tra mật khẩu xác nhận
@@ -97,6 +98,8 @@ public class AuthorizedController {
         try {
             boolean success = passwordResetService.resetPassword(token, password);
             if (success) {
+                // Clean session after successful password reset
+                session.invalidate();
                 return "redirect:/auth/login?reset=success";
             } else {
                 return "redirect:/auth/reset-password?token=" + token + "&error=invalid";
