@@ -70,7 +70,7 @@ public class CartController {
                        Model model) {
 
         // --- Giả sử userId lấy từ session (ở đây tạm fix = 4) ---
-        int userId = 4;
+        int userId = 2;
 
         // Sắp xếp
         Sort sort = isDesc ? Sort.by(orderBy).descending() : Sort.by(orderBy).ascending();
@@ -116,8 +116,8 @@ public class CartController {
     @PostMapping("/add")
     public String addToCart(@RequestParam Long productId,
                             @RequestParam(defaultValue = "1") Integer quantity) {
-        cartItemService.addToCart(4, productId, quantity);
-        return "redirect:/cart";
+        cartItemService.addToCart(2, productId, quantity);
+        return "redirect:/cart/cart-list";
     }
 
     // Update cart item
@@ -126,7 +126,7 @@ public class CartController {
                                  @RequestParam Integer quantity,
                                  @RequestParam Integer userId) {
         cartItemService.updateCartItem(cartItemId, quantity);
-        return "redirect:/cart";
+        return "redirect:/cart/cart-list";
     }
 
     // Delete cart item
@@ -134,7 +134,7 @@ public class CartController {
     public String deleteCartItem(@RequestParam Integer cartItemId,
                                  @RequestParam Integer userId) {
         cartItemService.deleteCartItem(cartItemId);
-        return "redirect:/cart";
+        return "redirect:/cart/cart-list";
     }
 
 }
