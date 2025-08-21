@@ -10,10 +10,4 @@ public interface DashboardOrderRepository extends JpaRepository<Order, Integer> 
 
     @Query("SELECT COUNT(o) FROM Order o WHERE CAST(o.createdAt AS date) = CAST(CURRENT_TIMESTAMP AS date)")
     long countOrdersToday();
-
-    @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'PENDING'")
-    long countPendingOrders();
-
-    @Query("SELECT COUNT(o) FROM Order o WHERE o.status = 'PROCESSING'")
-    long countProcessingOrders();
 }

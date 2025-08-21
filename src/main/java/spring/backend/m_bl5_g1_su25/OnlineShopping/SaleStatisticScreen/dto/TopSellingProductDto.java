@@ -1,7 +1,9 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.SaleStatisticScreen.dto;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
@@ -9,11 +11,10 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 public class TopSellingProductDto {
-    Integer productId;
-    String name;
-    BigDecimal price;
-    Integer salesCount;
-    String imageUrl;
+    private Integer productId;
+    private String name;
+    private BigDecimal price;
+    private Integer salesCount;
+    private String imageUrl;
 }

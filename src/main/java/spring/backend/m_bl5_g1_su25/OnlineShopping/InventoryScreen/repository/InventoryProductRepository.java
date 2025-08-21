@@ -1,7 +1,5 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.InventoryScreen.repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,23 +12,7 @@ import java.util.List;
 public interface InventoryProductRepository extends JpaRepository<Product, Integer> {
 
     @Query("SELECT p FROM Product p ORDER BY p.quantity ASC, p.name ASC")
-    Page<Product> findAllInventoryProducts(Pageable pageable);
-
-    @Query("SELECT p FROM Product p ORDER BY p.quantity ASC, p.name ASC")
     List<Product> findAllInventoryProductsList();
-
-    @Query("SELECT p FROM Product p WHERE " +
-           "(:status = 'all' OR " +
-           "(:status = 'in-stock' AND p.quantity > 10) OR " +
-           "(:status = 'low-stock' AND p.quantity > 0 AND p.quantity <= 10) OR " +
-           "(:status = 'out-of-stock' AND p.quantity = 0)) AND " +
-           "(:keyword IS NULL OR :keyword = '' OR " +
-           "LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-           "LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
-           "ORDER BY p.quantity ASC, p.name ASC")
-    Page<Product> findByStatusAndKeyword(@Param("status") String status,
-                                        @Param("keyword") String keyword,
-                                        Pageable pageable);
 
     @Query("SELECT p FROM Product p WHERE " +
            "(:status = 'all' OR " +

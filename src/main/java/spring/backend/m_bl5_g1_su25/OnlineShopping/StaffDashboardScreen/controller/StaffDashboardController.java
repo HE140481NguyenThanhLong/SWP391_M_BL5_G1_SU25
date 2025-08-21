@@ -21,27 +21,23 @@ public class StaffDashboardController {
     @GetMapping("/dashboard")
     public String staffDashboard(Model model) {
         try {
-            // Lấy dữ liệu thống kê trực tiếp từ repository
             long ordersToday = orderRepository.countOrdersToday();
             long totalProducts = productRepository.countAllProducts();
             long lowStockProducts = productRepository.countLowStockProducts();
             long outOfStockProducts = productRepository.countOutOfStockProducts();
 
-            // Thêm dữ liệu vào model
             model.addAttribute("ordersToday", ordersToday);
             model.addAttribute("totalProducts", totalProducts);
             model.addAttribute("lowStockProducts", lowStockProducts);
             model.addAttribute("outOfStockProducts", outOfStockProducts);
 
         } catch (Exception e) {
-            // Log error và sử dụng giá trị mặc định
             System.err.println("Error loading dashboard data: " + e.getMessage());
             model.addAttribute("ordersToday", 0L);
             model.addAttribute("totalProducts", 0L);
             model.addAttribute("lowStockProducts", 0L);
             model.addAttribute("outOfStockProducts", 0L);
         }
-
         return "staff/staff-dashboard";
     }
 }

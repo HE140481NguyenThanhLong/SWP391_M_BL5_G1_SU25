@@ -15,6 +15,8 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Staff;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.Role;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 /**
  * GlobalControllerAdvice - Tự động inject thông tin user vào header
  */
@@ -28,55 +30,53 @@ public class GlobalControllerAdvice {
     private final StaffRepository staffRepository;
 
     @ModelAttribute
-    public void addUserInfoToModel(Model model) {
+    public void addUserInfoToModel(Model model, HttpServletRequest request) {
         try {
+            // Chỉ thực hiện cho các request không phải AJAX hoặc API
+            String requestURI = request.getRequestURI();
+            if (requestURI.contains("/api/") || requestURI.contains(".js") ||
+                requestURI.contains(".css") || requestURI.contains(".ico")) {
+                return;
+            }
+
+            // Kiểm tra xem đã có thông tin user trong model chưa
+            if (model.containsAttribute("currentUser")) {
+                return;
+            }
+
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (authentication != null && authentication.isAuthenticated()
                 && !authentication.getName().equals("anonymousUser")) {
 
                 String username = authentication.getName();
-                log.debug("Adding user info for username: {}", username);
 
                 // Lấy thông tin User từ database
                 User user = authorizedRepo.findByUsername(username).orElse(null);
 
                 if (user != null) {
                     model.addAttribute("currentUser", user);
-
-                    // Lấy tên đầy đủ dựa vào role
-                    String fullName = getFullName(user);
-                    model.addAttribute("currentUserFullName", fullName);
+                    model.addAttribute("currentUserFullName", getFullName(user));
                     model.addAttribute("currentUserEmail", user.getEmail());
                     model.addAttribute("currentUserRole", user.getRole().name());
 
-                    log.debug("Added user info: {} - {} ({})", fullName, user.getEmail(), user.getRole());
-                } else {
-                    log.warn("User not found in database: {}", username);
+                    log.debug("Added user info: {} - {} ({})", getFullName(user), user.getEmail(), user.getRole());
                 }
             }
         } catch (Exception e) {
-            log.error("Error adding user info to model: {}", e.getMessage(), e);
+            log.error("Error adding user info to model: {}", e.getMessage());
         }
     }
 
-    /**
-     * Lấy tên đầy đủ của user dựa vào role
-     */
     private String getFullName(User user) {
         try {
             if (user.getRole() == Role.CUSTOMER) {
                 Customer customer = customerRepository.findByUser(user).orElse(null);
-                if (customer != null) {
-                    return customer.getFirstname() + " " + customer.getLastname();
-                }
+                return customer != null ? customer.getFirstname() + " " + customer.getLastname() : user.getUsername();
             } else if (user.getRole() == Role.STAFF) {
                 Staff staff = staffRepository.findByUser(user).orElse(null);
-                if (staff != null) {
-                    return staff.getFirstname() + " " + staff.getLastname();
-                }
+                return staff != null ? staff.getFirstname() + " " + staff.getLastname() : user.getUsername();
             }
-            // Fallback cho ADMIN hoặc khi không tìm thấy profile
             return user.getUsername();
         } catch (Exception e) {
             log.error("Error getting full name for user {}: {}", user.getUsername(), e.getMessage());
