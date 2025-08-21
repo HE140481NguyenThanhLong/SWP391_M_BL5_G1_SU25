@@ -1,10 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
+<section class="min-h-screen bg-gray-100 dark:bg-gray-900 py-10 px-4">
+    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+        <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Report Submission History</h2>
 
+        <div id="accordion-report-history" data-accordion="collapse" class="space-y-4">
+            <!-- Report Item -->
+            <div class="border border-gray-200 dark:border-gray-700 rounded-md">
+                <h2>
+                    <button type="button"
+                            class="flex items-center justify-between w-full p-4 font-medium text-left text-gray-900 rounded-t-md bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+                            data-accordion-target="#report-body-1" aria-expanded="false" aria-controls="report-body-1">
+                        <span class="text-sm font-semibold">#1001 - Login bug issue</span>
+                        <svg data-accordion-icon class="w-4 h-4 rotate-0 shrink-0" fill="none" stroke="currentColor"
+                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                </h2>
+                <div id="report-body-1" class="hidden" aria-labelledby="report-heading-1">
+                    <div class="p-4 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300 space-y-3">
+                        <div>
+                            <strong>Description:</strong>
+                            <p>The login button doesn't work on mobile view.</p>
+                        </div>
+                        <div>
+                            <strong>Image:</strong><br />
+                            <img src="https://via.placeholder.com/300x180" alt="Report screenshot" class="rounded border w-64 mt-1" />
+                        </div>
+                        <div><strong>Issue Type:</strong> Bug</div>
+                        <div><strong>Status:</strong> <span class="text-yellow-500 font-semibold">Pending</span></div>
+                        <div><strong>Created At:</strong> 2025-08-18 14:45</div>
+                        <div><strong>Resolved At:</strong> —</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Another Report Item -->
+            <div class="border border-gray-200 dark:border-gray-700 rounded-md">
+                <h2>
+                    <button type="button"
+                            class="flex items-center justify-between w-full p-4 font-medium text-left text-gray-900 rounded-t-md bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+                            data-accordion-target="#report-body-2" aria-expanded="false" aria-controls="report-body-2">
+                        <span class="text-sm font-semibold">#1002 - Feature request for dark mode toggle</span>
+                        <svg data-accordion-icon class="w-4 h-4 rotate-0 shrink-0" fill="none" stroke="currentColor"
+                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                </h2>
+                <div id="report-body-2" class="hidden" aria-labelledby="report-heading-2">
+                    <div class="p-4 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300 space-y-3">
+                        <div>
+                            <strong>Description:</strong>
+                            <p>It would be helpful to have a toggle to switch between light and dark modes.</p>
+                        </div>
+                        <div>
+                            <strong>Image:</strong><br />
+                            <img src="https://via.placeholder.com/300x180" alt="Report screenshot" class="rounded border w-64 mt-1" />
+                        </div>
+                        <div><strong>Issue Type:</strong> Feature Request</div>
+                        <div><strong>Status:</strong> <span class="text-green-600 font-semibold">Resolved</span></div>
+                        <div><strong>Created At:</strong> 2025-08-12 09:20</div>
+                        <div><strong>Resolved At:</strong> 2025-08-15 16:00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add more report items below as needed -->
+        </div>
+    </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 </body>
 </html>
