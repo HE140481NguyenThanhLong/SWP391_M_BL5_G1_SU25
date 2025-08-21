@@ -12,7 +12,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.UserStatus;
 import java.util.List;
 
 /**
- * CustomUserDetailsService - Sử dụng Spring Security User thay vì custom UserPrincipal
+ * CustomUserDetailsService - Sử dụng Spring Security User để quản lý authentication
  *
  * Phù hợp với approach: Login bằng username, Forget password là trang riêng dùng email
  * Spring Security User đủ đáp ứng nhu cầu authentication đơn giản

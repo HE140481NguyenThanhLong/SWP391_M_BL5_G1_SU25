@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.dto.request.SignUpRequest;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.service.AuthorizedService;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.service.PasswordResetService;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Customer;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,6 +23,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Customer;
 @RequestMapping("/auth")
 public class AuthorizedController {
     AuthorizedService authorizedService;
+    PasswordResetService passwordResetService;
 
     @GetMapping("/login")
     public String loginPage(@RequestParam(value = "error", required = false) String error,
@@ -53,8 +56,53 @@ public class AuthorizedController {
 
     @PostMapping("/forgot-password")
     public String forgotPassword(@RequestParam String email, Model model) {
-        // TODO: Implement forgot password logic với SMTP
-        // Hiện tại chỉ redirect với thông báo thành công
-        return "redirect:/auth/forgot-password?sent=true";
+        try {
+            boolean success = passwordResetService.sendPasswordResetEmail(email);
+            if (success) {
+                return "redirect:/auth/forgot-password?sent=true";
+            } else {
+                return "redirect:/auth/forgot-password?error=true";
+            }
+        } catch (Exception e) {
+            return "redirect:/auth/forgot-password?error=true";
+        }
+    }
+
+    @GetMapping("/reset-password")
+    public String resetPasswordPage(@RequestParam String token, Model model) {
+        boolean isValidToken = passwordResetService.isValidToken(token);
+        User user = passwordResetService.getUserByToken(token);
+
+        model.addAttribute("validToken", isValidToken);
+        model.addAttribute("token", token);
+
+        if (isValidToken && user != null) {
+            model.addAttribute("username", user.getUsername());
+        }
+
+        return "auth/reset-password";
+    }
+
+    @PostMapping("/reset-password")
+    public String resetPassword(@RequestParam String token,
+                               @RequestParam String password,
+                               @RequestParam String confirmPassword,
+                               Model model) {
+
+        // Kiểm tra mật khẩu xác nhận
+        if (!password.equals(confirmPassword)) {
+            return "redirect:/auth/reset-password?token=" + token + "&error=mismatch";
+        }
+
+        try {
+            boolean success = passwordResetService.resetPassword(token, password);
+            if (success) {
+                return "redirect:/auth/login?reset=success";
+            } else {
+                return "redirect:/auth/reset-password?token=" + token + "&error=invalid";
+            }
+        } catch (Exception e) {
+            return "redirect:/auth/reset-password?token=" + token + "&error=failed";
+        }
     }
 }

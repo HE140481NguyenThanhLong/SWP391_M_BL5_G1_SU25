@@ -51,7 +51,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: smartshopforeveryone@gmail.com
-    password: ynzx kxzg upzh jhvk
+    password: ytyp smvp evjq qvzc
     properties:
       mail:
         smtp:
@@ -59,10 +59,8 @@ spring:
           starttls:
             enable: true
             required: true
-          ssl:
-            trust: smtp.gmail.com
           connectiontimeout: 5000
-          timeout: 5000
+          timeout: 3000
           writetimeout: 5000
 
   # Thymeleaf Configuration
@@ -74,7 +72,7 @@ spring:
 
 # Application specific properties
 app:
-  base-url: http://localhost:8080
+  base-url: ${BASE_URL:http://localhost:8080}
 
 # Logging configuration
 logging:
@@ -83,4 +81,3 @@ logging:
     org.springframework.mail: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-
