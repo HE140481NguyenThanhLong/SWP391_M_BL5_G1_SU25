@@ -36,6 +36,8 @@ public class Supplier {
 
     @Column(length = 500, columnDefinition = "NVARCHAR(500)")
     String address;
+    @Column(length = 500, columnDefinition = "NVARCHAR(500)")
+    String region;
 
     @Column(length = 100)
     String productType;

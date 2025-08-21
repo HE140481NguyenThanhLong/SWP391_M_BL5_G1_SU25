@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.dto.ProductDTO;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Supplier;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.SupplierRepository;
@@ -16,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/api/suppliers")
 public class SupplierRestController {
@@ -24,6 +24,7 @@ public class SupplierRestController {
     @Autowired
     private SupplierRepository supplierRepository;
 
+    // Lấy danh sách tất cả nhà cung cấp
     @GetMapping
     public List<Map<String, Object>> getAllSuppliers() {
         return supplierRepository.findAll()
@@ -37,19 +38,30 @@ public class SupplierRestController {
                 .toList();
     }
 
+    // Lấy sản phẩm theo nhà cung cấp
     @GetMapping("/{supplierId}/products")
-    public ResponseEntity<List<Product>> getProductsBySupplier(
+    public ResponseEntity<List<ProductDTO>> getProductsBySupplier(
             @PathVariable Integer supplierId,
             @RequestParam(name = "category_id", required = false) Integer categoryId
     ) {
         Supplier supplier = supplierRepository.findById(supplierId)
                 .orElseThrow(() -> new RuntimeException("Supplier not found"));
+
         List<Product> products = new ArrayList<>(supplier.getProducts());
+
         if (categoryId != null) {
             products = products.stream()
-                    .filter(p -> p.getCategories().stream().anyMatch(c -> c.getCategory_id().equals(categoryId)))
+                    .filter(p -> p.getCategories().stream()
+                            .anyMatch(c -> c.getCategory_id().equals(categoryId)))
                     .collect(Collectors.toList());
         }
-        return ResponseEntity.ok(products);
+
+        // map sang DTO
+        List<ProductDTO> productDTOs = products.stream()
+                .map(ProductDTO::new)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(productDTOs);
     }
+
 }

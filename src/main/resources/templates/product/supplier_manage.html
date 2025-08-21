@@ -45,10 +45,6 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Top Bar -->
         <div class="flex items-center justify-between py-2 text-sm text-neutral-600 border-b border-neutral-100">
-            <div class="flex items-center gap-6">
-                <span>📞 Hotline: 0247 1066866</span>
-                <span>📧 Email: cskh@winmart.masangroup.com</span>
-            </div>
             <div class="flex items-center gap-4">
                 <a href="#" class="hover:text-primary transition-colors">Tin tức WinMart</a>
                 <a href="#" class="hover:text-primary transition-colors">Tư vấn mua hàng</a>
@@ -159,7 +155,7 @@
 <!--            <div class="flex items-center gap-2 mt-4">-->
 <!--                <span class="text-sm text-primary font-medium" th:text="${#numbers.formatDecimal((stats.activeSuppliers * 100.0 / stats.totalSuppliers), 0, 1, ',')} + '%'"></span>-->
 <!--                <span class="text-sm text-neutral-500">tỷ lệ hoạt động</span>-->
-<!--            </div>-->
+<!--        </div>-->
         </div>
 
         <div class="bg-white rounded-xl p-6 shadow-sm border border-neutral-200">
@@ -180,23 +176,23 @@
 <!--            </div>-->
         </div>
 
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-neutral-200">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-neutral-600 mb-1">Đơn hàng tháng này</p>
-                    <p class="text-3xl font-bold text-neutral-800" th:text="${stats.monthlyOrders}"></p>
-                </div>
-                <div class="bg-primary/10 p-3 rounded-lg">
-                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                    </svg>
-                </div>
-            </div>
-            <div class="flex items-center gap-2 mt-4">
-                <span class="text-sm text-primary font-medium">+12%</span>
-                <span class="text-sm text-neutral-500">so với tháng trước</span>
-            </div>
-        </div>
+<!--        <div class="bg-white rounded-xl p-6 shadow-sm border border-neutral-200">-->
+<!--            <div class="flex items-center justify-between">-->
+<!--                <div>-->
+<!--                    <p class="text-sm text-neutral-600 mb-1">Đơn hàng tháng này</p>-->
+<!--                    <p class="text-3xl font-bold text-neutral-800" th:text="${stats.monthlyOrders}"></p>-->
+<!--                </div>-->
+<!--                <div class="bg-primary/10 p-3 rounded-lg">-->
+<!--                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
+<!--                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>-->
+<!--                    </svg>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="flex items-center gap-2 mt-4">-->
+<!--                <span class="text-sm text-primary font-medium">+12%</span>-->
+<!--                <span class="text-sm text-neutral-500">so với tháng trước</span>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
 
     <!-- Search and Filter -->
@@ -212,17 +208,14 @@
                         </svg>
                     </div>
                 </div>
-<!--                <div>-->
-<!--                    <label class="block text-sm font-medium text-neutral-700 mb-2">Loại sản phẩm</label>-->
-<!--                    <select name="productType" class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">-->
-<!--                        <option value="">Tất cả loại sản phẩm</option>-->
-<!--                        <option value="Sữa các loại" th:selected="${productType == 'Sữa các loại'}">Sữa các loại</option>-->
-<!--                        <option value="Rau - Củ - Trái cây" th:selected="${productType == 'Rau - Củ - Trái cây'}">Rau - Củ - Trái cây</option>-->
-<!--                        <option value="Thịt - Hải sản" th:selected="${productType == 'Thịt - Hải sản'}">Thịt - Hải sản</option>-->
-<!--                        <option value="Bánh kẹo" th:selected="${productType == 'Bánh kẹo'}">Bánh kẹo</option>-->
-<!--                        <option value="Chăm sóc cá nhân" th:selected="${productType == 'Chăm sóc cá nhân'}">Chăm sóc cá nhân</option>-->
-<!--                    </select>-->
-<!--                </div>-->
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">Loại sản phẩm</label>
+                    <select name="productType" class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="">Tất cả loại sản phẩm</option>
+                        <option th:each="type : ${productType}" th:value="${type}" th:text="${type}" th:selected="${type == productType}"></option>
+                    </select>
+
+                </div>
                 <div>
                     <label class="block text-sm font-medium text-neutral-700 mb-2">Trạng thái</label>
                     <select name="status" class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
@@ -233,13 +226,13 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-neutral-700 mb-2">Khu vực</label>
-<!--                    <select name="region" class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">-->
-<!--                        <option value="" th:selected="${region == null}">Tất cả khu vực</option>-->
-<!--                        <option value="Hà Nội" th:selected="${region == 'Hà Nội'}">Hà Nội</option>-->
-<!--                        <option value="TP. Hồ Chí Minh" th:selected="${region == 'TP. Hồ Chí Minh'}">TP. Hồ Chí Minh</option>-->
-<!--                        <option value="Đà Nẵng" th:selected="${region == 'Đà Nẵng'}">Đà Nẵng</option>-->
-<!--                        <option value="Khác" th:selected="${region == 'Khác'}">Khác</option>-->
-<!--                    </select>-->
+                    <select name="region" class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">-->
+                        <option value="" th:selected="${region == null}">Tất cả khu vực</option>-->
+                        <option value="Hà Nội" th:selected="${region == 'Hà Nội'}">Hà Nội</option>-->
+                        <option value="TP. Hồ Chí Minh" th:selected="${region == 'TP. Hồ Chí Minh'}">TP. Hồ Chí Minh</option>-->
+                        <option value="Đà Nẵng" th:selected="${region == 'Đà Nẵng'}">Đà Nẵng</option>-->
+                        <option value="Khác" th:selected="${region == 'Khác'}">Khác</option>-->
+                    </select>
                 </div>
             </div>
             <div class="mt-4">
@@ -264,7 +257,7 @@
                         <select name="sortField" class="px-3 py-2 border border-neutral-200 rounded-lg text-sm" onchange="this.form.submit()">
                             <option value="name" th:selected="${sortField == 'name'}">Sắp xếp theo tên</option>
                             <option value="createdAt" th:selected="${sortField == 'createdAt'}">Sắp xếp theo ngày tạo</option>
-                            <option value="id" th:selected="${sortField == 'id'}">Sắp xếp theo số đơn hàng</option>
+                            <option value="id" th:selected="${sortField == 'id'}">Sắp xếp theo số sản phẩm</option>
                         </select>
                         <input type="hidden" name="sortDir" th:value="${sortDir == 'asc' ? 'desc' : 'asc'}">
                     </form>
@@ -278,18 +271,20 @@
                 <tr>
                     <th class="px-6 py-4 text-left text-sm font-medium text-neutral-600">Nhà cung cấp</th>
                     <th class="px-6 py-4 text-left text-sm font-medium text-neutral-600">Liên hệ</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-neutral-600">Loại sản phẩm</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-neutral-600">Số đơn hàng</th>
+                    <th class="px-6 py-4 text-left text-sm font-medium text-neutral-600">Địa Chỉ</th>
+                    <th class="px-6 py-4 text-left text-sm font-medium text-neutral-600">Phân Loại</th>
                     <th class="px-6 py-4 text-left text-sm font-medium text-neutral-600">Trạng thái</th>
-                    <th class="px-6 py-4 text-left text-sm font-medium text-neutral-600">Thao tác</th>
                 </tr>
                 </thead>
                 <tbody class="divide-y divide-neutral-200" th:each="supplier : ${suppliers}">
                 <tr class="hover:bg-neutral-50" th:classappend="${supplier.status == 'INACTIVE'} ? 'bg-red-50'">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-lg flex items-center justify-center" th:class="${supplier.status == 'INACTIVE'} ? 'bg-red-100' : 'bg-primary/10'">
-                                <span class="font-semibold" th:class="${supplier.status == 'INACTIVE'} ? 'text-red-600' : 'text-primary'" th:text="${#strings.substring(supplier.name, 0, 1)}"></span>
+                            <div class="w-10 h-10 rounded-lg flex items-center justify-center"
+                                 th:classappend="${supplier.status == 'INACTIVE'} ? ' bg-red-100' : ' bg-primary/10'">
+            <span class="font-semibold"
+                  th:classappend="${supplier.status == 'INACTIVE'} ? ' text-red-600' : ' text-primary'"
+                  th:text="${#strings.substring(supplier.name, 0, 1)}"></span>
                             </div>
                             <div>
                                 <div class="font-semibold text-neutral-800" th:text="${supplier.name}"></div>
@@ -297,41 +292,32 @@
                             </div>
                         </div>
                     </td>
+
                     <td class="px-6 py-4">
                         <div class="text-sm">
                             <div class="text-neutral-800" th:text="'📞 ' + ${supplier.phone}"></div>
                             <div class="text-neutral-600" th:text="'📧 ' + ${supplier.email}"></div>
                         </div>
                     </td>
-<!--                    <td class="px-6 py-4">-->
-<!--                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm" th:class="${supplier.productType == 'Sữa các loại'} ? 'bg-primary/10 text-primary' : ${supplier.productType == 'Bánh kẹo'} ? 'bg-accent/10 text-accent' : ${supplier.productType == 'Chăm sóc cá nhân'} ? 'bg-blue-100 text-blue-600' : 'bg-red-100 text-red-600'" th:text="${supplier.productType}"></span>-->
-<!--                    </td>-->
                     <td class="px-6 py-4">
                         <div class="text-sm">
-                            <div class="font-semibold text-neutral-800">0 đơn</div>
-                            <div class="text-neutral-600">Tháng này</div>
+                            <div class="text-neutral-800" th:text="  ${supplier.address}"></div>
                         </div>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm" th:class="${supplier.status == 'INACTIVE'} ? 'bg-red-100 text-red-600' : 'bg-primary/10 text-primary'">
-                            <div class="w-2 h-2 rounded-full mr-2" th:class="${supplier.status == 'INACTIVE'} ? 'bg-red-600' : 'bg-primary'"></div>
-                            <span th:text="${supplier.status == 'INACTIVE'} ? 'Tạm ngưng' : 'Đang hoạt động'"></span>
-                        </span>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="flex items-center gap-2">
-                            <a th:href="@{/suppliers/edit/{id}(id=${supplier.supplier_id})}" class="p-2 text-neutral-600 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                </svg>
-                            </a>
-                            <a th:href="@{/suppliers/view/{id}(id=${supplier.supplier_id})}" class="p-2 text-neutral-600 hover:text-accent hover:bg-accent/10 rounded-lg transition-colors">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                </svg>
-                            </a>
+                        <div class="text-sm">
+                            <div class="text-neutral-800" th:text="  ${supplier.productType}"></div>
                         </div>
+                    </td>
+
+
+                    <td class="px-6 py-4">
+    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm"
+          th:classappend="${supplier.status.name() == 'INACTIVE'} ? ' bg-red-100 text-red-600' : ' bg-green-100 text-green-600'">
+        <span class="w-2 h-2 rounded-full mr-2"
+              th:classappend="${supplier.status.name() == 'INACTIVE'} ? ' bg-red-600' : ' bg-green-600'"></span>
+        <span th:text="${supplier.status.name() == 'INACTIVE'} ? 'Tạm ngưng' : 'Đang hoạt động'"></span>
+    </span>
                     </td>
                 </tr>
                 </tbody>
