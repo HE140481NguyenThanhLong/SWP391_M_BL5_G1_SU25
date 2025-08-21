@@ -7,8 +7,9 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 import java.util.Optional;
 
 @Repository
-public interface AuthorizedRepo extends JpaRepository<User, Long> {
-
-
+public interface AuthorizedRepo extends JpaRepository<User, Integer> {
     Optional<User> findByUsername(String username);
+    Optional<User> findByEmail(String email);
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
 }

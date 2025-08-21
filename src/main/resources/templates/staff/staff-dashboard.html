@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard - Smart Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+<div th:replace="~{component/header :: header}"></div>
+
+<!-- Main Content Area with left margin to account for sidebar -->
+<div class="ml-14 transition-all duration-300">
+    <!-- Dashboard Content -->
+    <div class="container mx-auto px-4 py-8">
+
+        <!-- Dashboard Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Orders Today -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Đơn hàng hôm nay</p>
+                        <p class="text-2xl font-bold text-gray-900">0</p>
+                        <p class="text-xs text-green-600 mt-1">Đơn được đặt trong ngày</p>
+                    </div>
+                    <div class="bg-blue-100 p-3 rounded-full">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Support Tickets -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Ticket chưa xử lý</p>
+                        <p class="text-2xl font-bold text-red-600">0</p>
+                        <p class="text-xs text-red-500 mt-1">Cần xử lý ngay</p>
+                    </div>
+                    <div class="bg-red-100 p-3 rounded-full">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Low Stock Warning -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Sắp hết hàng</p>
+                        <p class="text-2xl font-bold text-orange-600">0</p>
+                        <p class="text-xs text-orange-500 mt-1">Loại hàng cần nhập</p>
+                    </div>
+                    <div class="bg-orange-100 p-3 rounded-full">
+                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Products -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Tổng sản phẩm</p>
+                        <p class="text-2xl font-bold text-gray-900">0</p>
+                        <p class="text-xs text-gray-500 mt-1">Đang quản lý</p>
+                    </div>
+                    <div class="bg-purple-100 p-3 rounded-full">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.99 1.99 0 013 12V7a4 4 0 014-4z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Low Stock Alert Section -->
+        <div class="bg-gradient-to-r from-orange-50 to-red-50 border-l-4 border-orange-400 rounded-lg shadow-md p-6 mb-8">
+            <div class="flex items-start">
+                <div class="bg-orange-100 p-2 rounded-full mr-4 mt-1">
+                    <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-lg font-semibold text-orange-800 mb-2">⚠️ Cảnh báo tồn kho</h3>
+                    <div class="space-y-2">
+                        <div class="bg-white rounded-lg p-3 border border-orange-200">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="font-medium text-gray-800">Sản phẩm sắp hết hàng (≤ 10 sản phẩm)</p>
+                                    <p class="text-sm text-gray-600">Cần nhập hàng trong vài ngày tới</p>
+                                </div>
+                                <span class="bg-orange-100 text-orange-800 text-sm font-medium px-3 py-1 rounded-full">
+                                    0 loại
+                                </span>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-lg p-3 border border-red-200">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="font-medium text-gray-800">Sản phẩm hết hàng (= 0 sản phẩm)</p>
+                                    <p class="text-sm text-gray-600">Cần nhập hàng ngay lập tức</p>
+                                </div>
+                                <span class="bg-red-100 text-red-800 text-sm font-medium px-3 py-1 rounded-full">
+                                    0 loại
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <a href="#" class="inline-flex items-center px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                            Xem chi tiết tồn kho
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Section -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">📊 Hoạt động gần đây</h3>
+            <div class="space-y-3">
+                <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                    <div class="bg-blue-100 p-2 rounded-full mr-3">
+                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-gray-800">Chưa có hoạt động nào</p>
+                        <p class="text-xs text-gray-500">Hoạt động sẽ được hiển thị tại đây</p>
+                    </div>
+                    <span class="text-xs text-gray-400">Hôm nay</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

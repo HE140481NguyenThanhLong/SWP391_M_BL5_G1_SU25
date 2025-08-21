@@ -2,70 +2,59 @@ package spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.dto.request.SignInRequest;
+import org.springframework.web.bind.annotation.RequestParam;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.dto.request.SignUpRequest;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.service.AuthorizedService;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Customer;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.UserStatus;
 
 @Controller
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@RequestMapping("/authority")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequestMapping("/auth")
 public class AuthorizedController {
+    AuthorizedService authorizedService;
 
-    private final      AuthorizedService authorizedService;
-    @Autowired
-    public AuthorizedController(AuthorizedService authorizedService) {
-        this.authorizedService = authorizedService;
+    @GetMapping("/login")
+    public String loginPage(@RequestParam(value = "error", required = false) String error,
+                           @RequestParam(value = "logout", required = false) String logout,
+                           Model model) {
+        return "auth/login";
     }
 
     @GetMapping("/signup")
-    public String showSignUp(Model model) {
-        model.addAttribute("SignUprequest", new SignUpRequest());
-        return  "/authority/signup";
+    public String signupPage(Model model) {
+        model.addAttribute("signUpRequest", new SignUpRequest());
+        return "auth/signup";
     }
-    @GetMapping("/signin")
-    public String showLogin(){return  "/authority/signin";}
+
     @PostMapping("/signup")
-    public String signUp(@ModelAttribute SignUpRequest SignUprequest, Model model) {
+    public String signUp(@ModelAttribute SignUpRequest request, Model model) {
         try{
-            Customer signUpCus= authorizedService.signUp(SignUprequest);
-            return "redirect:/authority/signin";
+            Customer signUpCus = authorizedService.signUp(request);
+            return "redirect:/auth/login?success=true";
         } catch (Exception e) {
-            return "redirect:/authority/signup";
+            model.addAttribute("error", "Registration failed: " + e.getMessage());
+            return "auth/signup";
         }
     }
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/homeScreen/Home";
 
-    }
-    @PostMapping("/signin")
-    public String doLogin(@ModelAttribute SignInRequest SignInrequest, Model model, HttpSession session) {
-        User user = authorizedService.login(SignInrequest.getUsername(), SignInrequest.getPassword());
-        if (user != null) {
-            if(user.getStatus()== UserStatus.INACTIVE){
-                model.addAttribute("error", "Tài khoản không được phép hoạt động");
-                return "redirect:/authority/signin";
-            }
-            session.setAttribute("loggedInUser", user);
-            return "/homeScreen/Home";
-
-        }else{
-            model.addAttribute("error","Tài khoản hoặc mật khẩu không đúng");
-            return "redirect:/authority/signin";
-        }
-
+    @GetMapping("/forgot-password")
+    public String forgotPasswordPage() {
+        return "auth/forgot-password";
     }
 
+    @PostMapping("/forgot-password")
+    public String forgotPassword(@RequestParam String email, Model model) {
+        // TODO: Implement forgot password logic với SMTP
+        // Hiện tại chỉ redirect với thông báo thành công
+        return "redirect:/auth/forgot-password?sent=true";
+    }
 }
