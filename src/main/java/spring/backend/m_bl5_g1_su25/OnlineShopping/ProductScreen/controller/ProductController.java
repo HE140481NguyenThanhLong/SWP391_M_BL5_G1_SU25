@@ -159,7 +159,7 @@ public class ProductController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageNumbers", pageNumbers);
-        model.addAttribute("suppliers", productService.getSuppliers());
+        model.addAttribute("suppliers", supplierService.getAllSuppliers());
         model.addAttribute("categories", productService.getAllCategories());
         model.addAttribute("selectedCategory", selectedCategory);
 
