@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống Kê Bán Hàng - Smart Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+<div th:replace="~{component/header :: header}"></div>
+
+<div class="ml-14 transition-all duration-300">
+    <div class="container mx-auto px-6 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">📊 Thống Kê Bán Hàng</h1>
+            <p class="text-gray-600 mt-2">Tổng quan doanh thu và đơn hàng</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Total Revenue -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100 mr-4">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Tổng Doanh Thu</p>
+                        <p class="text-2xl font-bold text-gray-900">
+                            <span th:text="${#numbers.formatDecimal(totalRevenue, 0, 0)}">0</span> VND
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Orders -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100 mr-4">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Tổng Đơn Hàng</p>
+                        <p class="text-2xl font-bold text-gray-900" th:text="${totalOrders}">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Sold -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-100 mr-4">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Tổng Sản Phẩm Đã Bán</p>
+                        <p class="text-2xl font-bold text-gray-900" th:text="${totalProductsSold}">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Average Order -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-orange-100 mr-4">
+                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Trung Bình Giá Trị Đơn</p>
+                        <p class="text-2xl font-bold text-gray-900">
+                            <span th:text="${#numbers.formatDecimal(averageOrderValue, 0, 0)}">0</span> VND
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Products -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-xl font-semibold text-gray-900 mb-6">🏆 Top 5 Sản Phẩm Bán Chạy Nhất</h3>
+            <div class="space-y-4">
+                <div th:each="product, iterStat : ${topSellingProducts}"
+                     class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div class="flex items-center space-x-4">
+                        <!-- Ranking Badge -->
+                        <div class="flex-shrink-0">
+                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full text-white text-sm font-bold bg-blue-500"
+                                  th:classappend="${iterStat.index == 0} ? 'bg-yellow-500' : (${iterStat.index == 1} ? 'bg-gray-400' : (${iterStat.index == 2} ? 'bg-orange-500' : 'bg-blue-500'))"
+                                  th:text="${iterStat.index + 1}">1</span>
+                        </div>
+
+                        <!-- Product Image -->
+                        <div class="flex-shrink-0">
+                            <img th:src="${product.imageUrl}" th:alt="${product.name}"
+                                 class="w-16 h-16 object-cover rounded-lg border"
+                                 onerror="this.src='https://via.placeholder.com/64x64?text=No+Image'">
+                        </div>
+
+                        <!-- Product Info -->
+                        <div class="flex-1">
+                            <h4 class="font-semibold text-gray-900 text-lg" th:text="${product.name}">Tên sản phẩm</h4>
+                            <p class="text-sm text-gray-600">ID: <span th:text="${product.productId}">0</span></p>
+                            <p class="text-sm font-medium text-green-600">
+                                Giá: <span th:text="${#numbers.formatDecimal(product.price, 0, 0)}">0</span> VND
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Sales Info -->
+                    <div class="text-right">
+                        <p class="text-2xl font-bold text-gray-900" th:text="${product.salesCount}">0</p>
+                        <p class="text-sm text-gray-600">sản phẩm đã bán</p>
+                        <p class="text-sm font-medium text-blue-600">
+                            Doanh thu: <span th:text="${#numbers.formatDecimal(product.salesCount * product.price, 0, 0)}">0</span> VND
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div th:if="${#lists.isEmpty(topSellingProducts)}" class="text-center py-8">
+                    <div class="text-gray-400 mb-2">
+                        <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                    </div>
+                    <p class="text-gray-500">Chưa có sản phẩm nào được bán</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

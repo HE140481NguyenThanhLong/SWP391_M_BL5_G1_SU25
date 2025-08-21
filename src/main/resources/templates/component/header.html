@@ -80,7 +80,7 @@
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2V12H8v8a2 2 0 0 1-2 2H3z"/>
         </svg>
-        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Home</span>
+        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Trang Chủ</span>
       </a>
 
       <!-- Products -->
@@ -90,7 +90,7 @@
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M20 7h-8m8 5h-8m8 5h-8M9 7H4m5 5H4m5 5H4"/>
         </svg>
-        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Products</span>
+        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Danh Mục Sản Phẩm</span>
       </a>
 
       <!-- Links -->
@@ -100,7 +100,7 @@
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 0 1 0 5.656l-2 2a4 4 0 1 1-5.656-5.656l1-1M10.172 13.828a4 4 0 0 1 0-5.656l2-2a4 4 0 1 1 5.656 5.656l-1 1"/>
         </svg>
-        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Links</span>
+        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Đường Link</span>
       </a>
 
       <!-- Cart -->
@@ -110,7 +110,7 @@
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l3-8H6.4M7 13l-1.6-8M7 13l-2 9m12-9l-2 9M9 22a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
         </svg>
-        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Cart</span>
+        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Giỏ Hàng</span>
         <span id="cart-count"
               class="absolute right-2 top-1 inline-flex items-center justify-center rounded-full
                      bg-indigo-600 px-1.5 text-[10px] font-medium text-white">3</span>
@@ -123,7 +123,18 @@
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 8h18M3 10h18v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7zm4 5h4"/>
         </svg>
-        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Payment</span>
+        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Phương Thức Thanh Toán</span>
+      </a>
+
+      <!-- Sales Statistics - Only for Admin and Staff -->
+      <a th:href="@{/staff/sales-statistics}"
+         sec:authorize="hasRole('ADMIN') or hasRole('STAFF')"
+         class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
+                dark:text-gray-200 dark:hover:bg-gray-700">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2zm0 0V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v10m-6 0a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m0 0V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z"/>
+        </svg>
+        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Thống Kê Bán Hàng</span>
       </a>
     </nav>
 
@@ -170,7 +181,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 14a4 4 0 1 0-8 0m8 0a4 4 0 1 1-8 0m8 0v2a4 4 0 0 1-4 4m0 0a4 4 0 0 1-4-4v-2m4-8a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/>
               </svg>
             </span>
-            <span class="opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100 font-medium">Account</span>
+            <span class="opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100 font-medium">Tài Khoản</span>
           </span>
           <svg class="h-4 w-4 text-gray-500 dark:text-gray-400 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
@@ -188,10 +199,10 @@
           <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="user-menu-button">
             <!-- Profile - only show for STAFF and CUSTOMER (not ADMIN) -->
             <li sec:authorize="hasAnyRole('STAFF', 'CUSTOMER')">
-              <a th:href="@{/profile/view}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Profile</a>
+              <a th:href="@{/profile/view}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Thông Tin Tài Khoản</a>
             </li>
-            <li><a href="#orders" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Orders</a></li>
-            <li><a href="#settings" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Settings</a></li>
+            <li><a href="#orders" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Đơn hàng</a></li>
+            <li><a href="#settings" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Cài Đặt</a></li>
           </ul>
           <div class="py-1">
             <!-- Logout button with proper form submission -->
