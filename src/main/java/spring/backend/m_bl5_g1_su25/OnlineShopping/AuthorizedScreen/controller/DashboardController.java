@@ -39,11 +39,6 @@ public class DashboardController {
         return "admin/admin-dashboard";
     }
 
-    @GetMapping("/staff/dashboard")
-    public String staffDashboard() {
-        return "staff/staff-dashboard";
-    }
-
     @GetMapping("/customer/dashboard")
     public String customerDashboard() {
         return "customer/customer-dashboard";
