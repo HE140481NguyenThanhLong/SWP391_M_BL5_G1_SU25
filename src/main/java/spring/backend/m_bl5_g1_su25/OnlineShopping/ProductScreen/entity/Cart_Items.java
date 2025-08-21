@@ -4,10 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity.User;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
+
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -20,8 +20,7 @@ import java.util.Date;
 public class Cart_Items {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     Integer cart_item_id;
-
+    Integer cart_item_id;
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     User user;
@@ -31,7 +30,7 @@ public class Cart_Items {
     Product product;
 
     @Column( nullable = false)
-     Integer quantity;
+    Integer quantity;
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     LocalDateTime createdAt;

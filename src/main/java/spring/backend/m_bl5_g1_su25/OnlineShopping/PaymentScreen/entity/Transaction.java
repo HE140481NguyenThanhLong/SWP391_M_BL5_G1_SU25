@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     Integer trans_id;
+    Integer trans_id;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
@@ -28,7 +28,7 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "payment_id")
-     Payment paymentMethod;
+    Payment paymentMethod;
 
     @Column(precision = 18, scale = 2)  // amount of money
     BigDecimal amount;
@@ -38,6 +38,6 @@ public class Transaction {
     TransactionStatus status = TransactionStatus.PENDING;
 
     @Column(columnDefinition = "NVARCHAR(255)")
-     String verificationCode;
+    String verificationCode;
 
 }

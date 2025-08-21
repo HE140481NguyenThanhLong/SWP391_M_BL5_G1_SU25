@@ -1,4 +1,5 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.dto.response;
+
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;

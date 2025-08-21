@@ -5,11 +5,11 @@ import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.entity.User;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Customer;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -22,10 +22,10 @@ import java.util.Date;
 public class Voucher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     Integer voucher_id;
+    Integer voucher_id;
 
     @Column(length = 50, nullable = false, unique = true)
-     String code;
+    String code;
 
     @Column(nullable = false, precision = 18, scale = 2)
     BigDecimal discountAmount;
@@ -35,8 +35,8 @@ public class Voucher {
     @Column(nullable = false)
     Boolean isUsed = false;
     @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id")
-    User user;
+    @JoinColumn(name = "customer_id")
+    Customer customer;
 
     @CreationTimestamp
     @Column(nullable = false,updatable = false)

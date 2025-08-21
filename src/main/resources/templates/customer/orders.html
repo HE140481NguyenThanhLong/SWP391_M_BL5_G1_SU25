@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - Smart Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation -->
+    <nav class="bg-indigo-600 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold">Smart Shop</h1>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <span class="text-indigo-200">Welcome, <span th:text="${user.name}" class="font-semibold">Customer</span></span>
+                    <a href="/customer/dashboard" class="hover:text-indigo-200">Home</a>
+                    <a href="/customer/orders" class="hover:text-indigo-200">My Orders</a>
+                    <a href="/customer/profile" class="hover:text-indigo-200">Profile</a>
+                    <a href="/logout" class="bg-indigo-700 px-3 py-1 rounded hover:bg-indigo-800 transition-colors">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto mt-8 px-4">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">My Orders</h2>
+
+            <!-- Orders will be listed here when implemented -->
+            <div class="text-center py-12">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">No orders yet</h3>
+                <p class="mt-1 text-sm text-gray-500">Get started by placing your first order.</p>
+                <div class="mt-6">
+                    <a href="/customer/dashboard" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                        Start Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center p-4 mt-16">
+        <p>&copy; 2025 Smart Shop Portal. All rights reserved.</p>
+    </footer>
+</body>
+</html>

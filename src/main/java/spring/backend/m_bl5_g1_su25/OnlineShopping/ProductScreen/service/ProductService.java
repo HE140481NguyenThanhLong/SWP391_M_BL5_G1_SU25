@@ -63,9 +63,9 @@ public class ProductService {
     }
 
 
-    public List<String> getAllSuppliers() {
-        return productRepository.findAllSuppliers();
-    }
+//    public List<String> getAllSuppliers() {
+//        return productRepository.findAllSuppliers();
+//    }
 
     public Page<Product> filterProducts(
             BigDecimal minPrice,
@@ -127,22 +127,22 @@ public class ProductService {
     }
 
 
-    public List<String> getSuppliers() {
-        return productRepository.findAllSuppliers();
-    }
+//    public List<String> getSuppliers() {
+//        return productRepository.findAllSuppliers();
+//    }
     public Optional<Product> findById(Integer id) {
         return productRepository.findById(id);
     }
 
-    public List<Product> findRelatedProducts(Integer id) {
-        // Example: Find products in the same category
-        Optional<Product> productOptional = findById(id);
-        Product product = productOptional.orElse(null);
-        if (product == null) {
-            return Collections.emptyList(); // Trả về danh sách rỗng nếu sản phẩm không tồn tại
-        }
-        return productRepository.findByCategoriesIn(product.getCategories());
-    }
+//    public List<Product> findRelatedProducts(Integer id) {
+//        // Example: Find products in the same category
+//        Optional<Product> productOptional = findById(id);
+//        Product product = productOptional.orElse(null);
+//        if (product == null) {
+//            return Collections.emptyList(); // Trả về danh sách rỗng nếu sản phẩm không tồn tại
+//        }
+//        return productRepository.findByCategoriesIn(product.getCategories());
+//    }
     public Page<Product> findRelatedProducts(Integer productId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return productRepository.findRelatedProducts(productId, pageable);
