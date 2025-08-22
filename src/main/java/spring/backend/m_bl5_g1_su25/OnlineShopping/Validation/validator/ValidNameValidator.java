@@ -15,7 +15,6 @@ public class ValidNameValidator implements ConstraintValidator<ValidName, String
     public void initialize(ValidName validName) {
         this.validName = validName;
 
-        // Build regex pattern based on annotation parameters
         StringBuilder regexBuilder = new StringBuilder("^[a-zA-ZÀ-ÿĀ-žА-я");
 
         if (validName.allowSpaces()) {
@@ -47,29 +46,23 @@ public class ValidNameValidator implements ConstraintValidator<ValidName, String
 
         String trimmedValue = value.trim();
 
-        // Check length constraints
         if (trimmedValue.length() < validName.minLength() ||
             trimmedValue.length() > validName.maxLength()) {
             return false;
         }
 
-        // Check against pattern
         if (!pattern.matcher(trimmedValue).matches()) {
             return false;
         }
 
-        // Additional validations
-        // No leading or trailing spaces after trim
         if (!trimmedValue.equals(value.trim())) {
             return false;
         }
 
-        // No consecutive spaces
         if (validName.allowSpaces() && trimmedValue.contains("  ")) {
             return false;
         }
 
-        // No starting or ending with special characters
         char firstChar = trimmedValue.charAt(0);
         char lastChar = trimmedValue.charAt(trimmedValue.length() - 1);
 

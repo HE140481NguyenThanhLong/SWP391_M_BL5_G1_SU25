@@ -13,8 +13,6 @@ public class ProfileViewDto {
     private String firstName;
     private String lastName;
     private String fullName;
-
-    // Admin-only fields
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean showAdminFields = false;

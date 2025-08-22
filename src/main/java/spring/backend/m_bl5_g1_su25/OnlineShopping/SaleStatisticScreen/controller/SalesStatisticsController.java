@@ -18,13 +18,11 @@ public class SalesStatisticsController {
     @GetMapping("/sales-statistics")
     public String getSalesStatistics(Model model) {
         SalesStatisticsDto statistics = salesStatisticsService.getSalesStatistics();
-
         model.addAttribute("totalRevenue", statistics.getTotalRevenue());
         model.addAttribute("totalOrders", statistics.getTotalOrders());
         model.addAttribute("totalProductsSold", statistics.getTotalProductsSold());
         model.addAttribute("averageOrderValue", statistics.getAverageOrderValue());
         model.addAttribute("topSellingProducts", statistics.getTopSellingProducts());
-
         return "staff/sales-statistics";
     }
 }

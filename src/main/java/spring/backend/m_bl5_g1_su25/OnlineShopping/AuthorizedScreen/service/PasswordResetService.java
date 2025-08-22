@@ -32,25 +32,19 @@ public class PasswordResetService {
     @Value("${spring.mail.username:noreply@smartshop.com}")
     private String fromEmail;
 
-    /**
-     * Tạo và gửi email reset password
-     */
     @Transactional
     public boolean sendPasswordResetEmail(String email) {
         try {
-            // 1. Tìm user theo email
             User user = userRepository.findByEmail(email).orElse(null);
             if (user == null) {
                 log.warn("Password reset requested for non-existent email: {}", email);
                 return false;
             }
 
-            // 2. Xóa các token cũ của user này
             tokenRepository.deleteByUser(user);
 
-            // 3. Tạo token mới
             String token = generateResetToken();
-            LocalDateTime expiryDate = LocalDateTime.now().plusHours(1); // Token hết hạn sau 1 giờ
+            LocalDateTime expiryDate = LocalDateTime.now().plusHours(1);
 
             PasswordResetToken resetToken = PasswordResetToken.builder()
                     .token(token)
@@ -61,7 +55,6 @@ public class PasswordResetService {
 
             tokenRepository.save(resetToken);
 
-            // 4. Gửi email
             sendResetEmail(user.getEmail(), user.getUsername(), token);
 
             log.info("Password reset email sent successfully to: {}", email);
@@ -73,31 +66,22 @@ public class PasswordResetService {
         }
     }
 
-    /**
-     * Xác thực và reset password
-     */
     @Transactional
     public boolean resetPassword(String token, String newPassword) {
         try {
-            // 1. Tìm token
             PasswordResetToken resetToken = tokenRepository.findByToken(token).orElse(null);
             if (resetToken == null) {
                 log.warn("Invalid password reset token: {}", token);
                 return false;
             }
 
-            // 2. Kiểm tra token có hợp lệ không
             if (!resetToken.isValid()) {
                 log.warn("Expired or used password reset token: {}", token);
                 return false;
             }
-
-            // 3. Update mật khẩu user
             User user = resetToken.getUser();
             user.setPassword(passwordEncoder.encode(newPassword));
             userRepository.save(user);
-
-            // 4. Đánh dấu token đã sử dụng
             resetToken.setUsed(true);
             tokenRepository.save(resetToken);
 
@@ -109,36 +93,20 @@ public class PasswordResetService {
             return false;
         }
     }
-
-    /**
-     * Kiểm tra token có hợp lệ không
-     */
     public boolean isValidToken(String token) {
         return tokenRepository.findByToken(token)
                 .map(PasswordResetToken::isValid)
                 .orElse(false);
     }
-
-    /**
-     * Lấy user từ token
-     */
     public User getUserByToken(String token) {
         return tokenRepository.findByToken(token)
                 .filter(PasswordResetToken::isValid)
                 .map(PasswordResetToken::getUser)
                 .orElse(null);
     }
-
-    /**
-     * Tạo token ngẫu nhiên
-     */
     private String generateResetToken() {
         return UUID.randomUUID().toString();
     }
-
-    /**
-     * Gửi email reset password
-     */
     private void sendResetEmail(String toEmail, String username, String token) {
         try {
             String resetLink = baseUrl + "/auth/reset-password?token=" + token;
@@ -157,10 +125,6 @@ public class PasswordResetService {
             throw new RuntimeException("Failed to send email", e);
         }
     }
-
-    /**
-     * Tạo nội dung email
-     */
     private String createEmailContent(String username, String resetLink) {
         return String.format(
                 "Hi %s,\n\n" +
@@ -174,10 +138,6 @@ public class PasswordResetService {
                 username, resetLink
         );
     }
-
-    /**
-     * Cleanup expired tokens (chạy định kỳ)
-     */
     @Transactional
     public void cleanupExpiredTokens() {
         try {

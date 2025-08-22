@@ -31,10 +31,6 @@ public class ProfileController {
     private final ProfileService profileService;
     private final AuthorizedRepo authorizedRepo;
 
-    /**
-     * View current user's own profile
-     * Available to: STAFF, CUSTOMER, ADMIN
-     */
     @GetMapping("/view")
     public String viewOwnProfile(Model model) {
         User user = getCurrentUser();
@@ -44,15 +40,10 @@ public class ProfileController {
         return "profile/ViewProfile";
     }
 
-    /**
-     * Admin view any user's profile
-     * Available to: ADMIN only
-     */
     @GetMapping("/admin/{userId}")
     public String viewUserProfile(@PathVariable Integer userId, Model model) {
         User currentUser = getCurrentUser();
 
-        // Only admin can view other users' profiles
         if (!hasRole(currentUser, Role.ADMIN)) {
             return "redirect:/dashboard";
         }
@@ -70,29 +61,19 @@ public class ProfileController {
         return "profile/ViewProfile";
     }
 
-    /**
-     * Edit own profile form
-     * Available to: STAFF, CUSTOMER, ADMIN
-     */
     @GetMapping("/edit")
     public String editOwnProfile(Model model) {
         User user = getCurrentUser();
         ProfileViewDto profile = profileService.getProfileView(user);
         model.addAttribute("profile", profile);
         model.addAttribute("isOwnProfile", true);
-        // TODO: Return profile edit form
         return "profile/EditProfile";
     }
 
-    /**
-     * Admin edit user profile form
-     * Available to: ADMIN only
-     */
     @GetMapping("/admin/{userId}/edit")
     public String editUserProfile(@PathVariable Integer userId, Model model) {
         User currentUser = getCurrentUser();
 
-        // Only admin can edit other users' profiles
         if (!hasRole(currentUser, Role.ADMIN)) {
             return "redirect:/dashboard";
         }
@@ -107,16 +88,12 @@ public class ProfileController {
         model.addAttribute("profile", profile);
         model.addAttribute("isAdminEdit", true);
         model.addAttribute("targetUserId", userId);
-        // TODO: Return profile edit form
         return "profile/EditProfile";
     }
 
-    // Helper methods
     private User getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName(); // Lấy username từ Authentication
-
-        // Tìm user trong database dựa trên username
+        String username = auth.getName();
         return authorizedRepo.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));
     }

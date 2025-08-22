@@ -90,7 +90,6 @@ public class AuthorizedController {
                                HttpSession session,
                                Model model) {
 
-        // Kiểm tra mật khẩu xác nhận
         if (!password.equals(confirmPassword)) {
             return "redirect:/auth/reset-password?token=" + token + "&error=mismatch";
         }
@@ -98,7 +97,6 @@ public class AuthorizedController {
         try {
             boolean success = passwordResetService.resetPassword(token, password);
             if (success) {
-                // Clean session after successful password reset
                 session.invalidate();
                 return "redirect:/auth/login?reset=success";
             } else {

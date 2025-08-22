@@ -26,30 +26,23 @@ public class PasswordStrengthValidator implements ConstraintValidator<PasswordSt
     @Override
     public boolean isValid(String password, ConstraintValidatorContext context) {
         if (password == null) {
-            return true; // Let @NotBlank handle null validation
+            return true;
         }
-
-        // Check minimum length
         if (password.length() < minLength) {
             return false;
         }
-
-        // Check uppercase requirement
         if (requireUppercase && !Pattern.matches(".*[A-Z].*", password)) {
             return false;
         }
 
-        // Check lowercase requirement
+
         if (requireLowercase && !Pattern.matches(".*[a-z].*", password)) {
             return false;
         }
-
-        // Check digit requirement
         if (requireDigit && !Pattern.matches(".*\\d.*", password)) {
             return false;
         }
 
-        // Check special character requirement
         if (requireSpecialChar && !Pattern.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*", password)) {
             return false;
         }

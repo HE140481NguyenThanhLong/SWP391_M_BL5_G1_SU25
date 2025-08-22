@@ -7,7 +7,6 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.OrderScreen.entity.Order;
 
 @Repository
 public interface DashboardOrderRepository extends JpaRepository<Order, Integer> {
-
     @Query("SELECT COUNT(o) FROM Order o WHERE CAST(o.createdAt AS date) = CAST(CURRENT_TIMESTAMP AS date)")
     long countOrdersToday();
 }

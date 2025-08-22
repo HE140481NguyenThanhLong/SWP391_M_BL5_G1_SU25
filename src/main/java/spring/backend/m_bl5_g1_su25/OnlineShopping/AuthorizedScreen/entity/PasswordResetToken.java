@@ -40,12 +40,10 @@ public class PasswordResetToken {
     @Column(nullable = false, updatable = false)
     LocalDateTime createdAt;
 
-    // Check if token is expired
     public boolean isExpired() {
         return LocalDateTime.now().isAfter(expiryDate);
     }
 
-    // Check if token is valid (not expired and not used)
     public boolean isValid() {
         return !used && !isExpired();
     }

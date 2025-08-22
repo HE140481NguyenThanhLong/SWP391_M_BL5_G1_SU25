@@ -18,10 +18,8 @@ public class PhoneNumberValidator implements ConstraintValidator<ValidPhoneNumbe
     @Override
     public boolean isValid(String phoneNumber, ConstraintValidatorContext context) {
         if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
-            return true; // Let @NotBlank handle empty validation
+            return true;
         }
-
-        // Remove common formatting characters
         String cleanedPhone = phoneNumber.replaceAll("[\\s\\-\\(\\)\\+]", "");
 
         return Pattern.matches(pattern, cleanedPhone);

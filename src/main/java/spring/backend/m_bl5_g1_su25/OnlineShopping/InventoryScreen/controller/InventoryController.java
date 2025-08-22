@@ -26,24 +26,13 @@ public class InventoryController {
             @RequestParam(value = "keyword", required = false) String keyword,
             Model model) {
 
-        log.info("=== INVENTORY CONTROLLER CALLED ===");
-        log.info("Parameters: status={}, keyword={}", status, keyword);
-
         var inventoryData = inventoryService.getInventoryStatistics(status, keyword);
-        log.info("Data retrieved successfully: totalProducts={}", inventoryData.getTotalProducts());
-
-        // Add data to model
         model.addAttribute("totalProducts", inventoryData.getTotalProducts());
         model.addAttribute("lowStockProducts", inventoryData.getLowStockProducts());
         model.addAttribute("outOfStockProducts", inventoryData.getOutOfStockProducts());
         model.addAttribute("inventoryProducts", inventoryData.getInventoryProducts());
-
-        // Add current filters
         model.addAttribute("currentStatus", status);
         model.addAttribute("currentKeyword", keyword != null ? keyword : "");
-
-        log.info("Model attributes added successfully");
-        log.info("Returning view: staff/inventory-detail");
         return "staff/inventory-detail";
     }
 }

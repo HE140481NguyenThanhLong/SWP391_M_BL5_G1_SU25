@@ -32,14 +32,12 @@ public class GlobalControllerAdvice {
     @ModelAttribute
     public void addUserInfoToModel(Model model, HttpServletRequest request) {
         try {
-            // Chỉ thực hiện cho các request không phải AJAX hoặc API
             String requestURI = request.getRequestURI();
             if (requestURI.contains("/api/") || requestURI.contains(".js") ||
                 requestURI.contains(".css") || requestURI.contains(".ico")) {
                 return;
             }
 
-            // Kiểm tra xem đã có thông tin user trong model chưa
             if (model.containsAttribute("currentUser")) {
                 return;
             }
@@ -50,10 +48,7 @@ public class GlobalControllerAdvice {
                 && !authentication.getName().equals("anonymousUser")) {
 
                 String username = authentication.getName();
-
-                // Lấy thông tin User từ database
                 User user = authorizedRepo.findByUsername(username).orElse(null);
-
                 if (user != null) {
                     model.addAttribute("currentUser", user);
                     model.addAttribute("currentUserFullName", getFullName(user));

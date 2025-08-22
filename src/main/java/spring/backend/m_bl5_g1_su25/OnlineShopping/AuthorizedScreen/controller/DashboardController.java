@@ -21,7 +21,6 @@ public class DashboardController {
     public String dashboard() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
-            // Lấy role từ authorities thay vì User entity
             String role = auth.getAuthorities().iterator().next().getAuthority();
 
             return switch (role) {

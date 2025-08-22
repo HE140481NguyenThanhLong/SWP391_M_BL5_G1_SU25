@@ -11,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class InventoryStatisticsDto {
-    // Statistics
     Long totalProducts;
     Long lowStockProducts;
     Long outOfStockProducts;

@@ -37,16 +37,8 @@ public interface ProfileMapper {
         }
     }
 
-    // Helper methods for role checking
-    default boolean isAdmin(User user) {
-        return user.getRole().name().equals("ADMIN");
-    }
-
-    // Composite mapping method that handles the complete mapping including related entities
     default ProfileViewDto mapUserToProfileView(User user, Customer customer, Staff staff) {
         ProfileViewDto dto = toProfileViewDto(user);
-
-        // STAFF and CUSTOMER have the same security level - both show basic info only
         switch (user.getRole()) {
             case CUSTOMER:
                 setNamesFromCustomer(dto, user, customer);

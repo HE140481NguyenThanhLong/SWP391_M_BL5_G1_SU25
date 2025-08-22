@@ -18,7 +18,6 @@ public interface DashboardProductRepository extends JpaRepository<Product, Integ
     @Query("SELECT COUNT(p) FROM Product p WHERE p.quantity = 0 OR p.status = :outOfStock")
     long countOutOfStockProducts(Status outOfStock);
 
-    // Alternative method using default parameter
     default long countOutOfStockProducts() {
         return countOutOfStockProducts(Status.OUT_STOCK);
     }

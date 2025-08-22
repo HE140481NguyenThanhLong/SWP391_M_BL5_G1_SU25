@@ -15,12 +15,8 @@ public class ScheduledTasks {
 
     private final PasswordResetService passwordResetService;
 
-    /**
-     * Cleanup expired password reset tokens every hour
-     */
-    @Scheduled(fixedRate = 3600000) // 1 hour = 3600000 ms
+    @Scheduled(fixedRate = 3600000)
     public void cleanupExpiredTokens() {
-        log.info("Running scheduled cleanup of expired password reset tokens...");
         passwordResetService.cleanupExpiredTokens();
     }
 }
