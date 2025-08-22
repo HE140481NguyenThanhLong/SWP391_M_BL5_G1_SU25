@@ -5,4 +5,5 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
+
 }

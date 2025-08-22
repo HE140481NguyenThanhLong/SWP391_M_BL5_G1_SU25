@@ -117,13 +117,13 @@
       </a>
 
       <!-- Payment -->
-      <a href="#payment"
+      <a th:href="@{/customerService/reportForm}"
          class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
                 dark:text-gray-200 dark:hover:bg-gray-700">
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 8h18M3 10h18v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7zm4 5h4"/>
         </svg>
-        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Payment</span>
+        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Report Form</span>
       </a>
 
       <a th:if="${session.loggedInUser==null}" th:href="@{/authority/signin}"  class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
@@ -168,7 +168,7 @@
       >
         <div class="px-4 py-3">
           <p class="text-sm font-medium text-gray-900 dark:text-gray-100">John Doe</p>
-          <p class="truncate text-sm text-gray-500 dark:text-gray-400">john@example.com</p>
+          <p th:text="${session.loggedInUser.getEmail().toUpperCase()}" class="truncate text-sm text-gray-500 dark:text-gray-400">john@example.com</p>
         </div>
         <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="user-menu-button">
           <li><a href="#profile" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Profile</a></li>
@@ -176,7 +176,7 @@
           <li><a href="#settings" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Settings</a></li>
         </ul>
         <div class="py-1">
-          <a th:href="@{/auth/logout}" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-700">Sign out</a>
+          <a th:href="@{/authority/logout}" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:text-red-400 dark:hover:bg-gray-700">Sign out</a>
         </div>
       </div>
     </div>
