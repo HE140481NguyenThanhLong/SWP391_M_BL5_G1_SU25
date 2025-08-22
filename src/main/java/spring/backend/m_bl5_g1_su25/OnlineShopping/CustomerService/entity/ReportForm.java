@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.enums.IssueType;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.enums.ReportStatus;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Customer;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Staff;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
@@ -31,6 +32,9 @@ public class ReportForm {
     @ManyToOne(optional = false)
     @JoinColumn(name = "staff_id", nullable = false)
     Staff staff;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
+    Product product;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10, nullable = false)

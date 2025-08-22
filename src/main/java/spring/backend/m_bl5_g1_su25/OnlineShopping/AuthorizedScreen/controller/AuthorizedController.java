@@ -16,6 +16,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.service.Auth
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Customer;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.UserStatus;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.repository.CustomerRepository;
 
 @Controller
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -23,6 +24,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.UserStatus;
 public class AuthorizedController {
 
     private final      AuthorizedService authorizedService;
+    CustomerRepository customerRepository;
     @Autowired
     public AuthorizedController(AuthorizedService authorizedService) {
         this.authorizedService = authorizedService;
@@ -47,7 +49,7 @@ public class AuthorizedController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/homeScreen/Home";
+        return "/authority/signin";
 
     }
     @PostMapping("/signin")
@@ -56,16 +58,17 @@ public class AuthorizedController {
         if (user != null) {
             if(user.getStatus()== UserStatus.INACTIVE){
                 model.addAttribute("error", "Tài khoản không được phép hoạt động");
-                return "redirect:/authority/signin";
+                return "/authority/signin";
             }
             session.setAttribute("loggedInUser", user);
-            return "/homeScreen/Home";
+            return "redirect:/guest";
 
         }else{
             model.addAttribute("error","Tài khoản hoặc mật khẩu không đúng");
-            return "redirect:/authority/signin";
+            return "/authority/signin";
         }
 
     }
+
 
 }

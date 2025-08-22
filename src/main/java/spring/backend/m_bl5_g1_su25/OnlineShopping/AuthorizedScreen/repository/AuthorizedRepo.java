@@ -11,4 +11,6 @@ public interface AuthorizedRepo extends JpaRepository<User, Long> {
 
 
     Optional<User> findByUsername(String username);
+
+
 }
