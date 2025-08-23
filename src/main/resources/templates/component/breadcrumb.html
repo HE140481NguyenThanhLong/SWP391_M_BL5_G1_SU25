@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breadcrumb Component - WinMart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #10B981;
+            --secondary-color: #F59E0B;
+            --accent-color: #3B82F6;
+            --neutral-50: #F9FAFB;
+            --neutral-100: #F3F4F6;
+            --neutral-200: #E5E7EB;
+            --neutral-300: #D1D5DB;
+            --neutral-400: #9CA3AF;
+            --neutral-500: #6B7280;
+            --neutral-600: #4B5563;
+            --neutral-700: #374151;
+            --neutral-800: #1F2937;
+            --neutral-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .text-primary { color: var(--primary-color); }
+        .bg-primary { background-color: var(--primary-color); }
+        .border-primary { border-color: var(--primary-color); }
+        .hover\:bg-primary:hover { background-color: var(--primary-color); }
+        .hover\:text-primary:hover { color: var(--primary-color); }
+
+        .text-secondary { color: var(--secondary-color); }
+        .bg-secondary { background-color: var(--secondary-color); }
+
+        .text-accent { color: var(--accent-color); }
+        .bg-accent { background-color: var(--accent-color); }
+    </style>
+</head>
+<body class="bg-gray-50">
+<!-- Breadcrumb Component Examples -->
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-display font-bold text-neutral-800 mb-8">Breadcrumb Components</h1>
+
+    <!-- Basic Breadcrumb -->
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold text-neutral-700 mb-4">Basic Breadcrumb</h2>
+        <nav class="flex" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="#" class="inline-flex items-center text-sm font-medium text-neutral-700 hover:text-primary transition-colors">
+                        <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+                        </svg>
+                        Trang chủ
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-neutral-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                        <a href="#" class="ms-1 text-sm font-medium text-neutral-700 hover:text-primary md:ms-2 transition-colors">Sản phẩm</a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-neutral-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                        <span class="ms-1 text-sm font-medium text-neutral-500 md:ms-2">Danh sách sản phẩm</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Product Management Breadcrumb -->
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold text-neutral-700 mb-4">Product Management Breadcrumb</h2>
+        <nav class="flex" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="#" class="inline-flex items-center text-sm font-medium text-neutral-700 hover:text-primary transition-colors">
+                        <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+                        </svg>
+                        Trang chủ
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-neutral-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                        <a href="#" class="ms-1 text-sm font-medium text-neutral-700 hover:text-primary md:ms-2 transition-colors">Quản lý</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-neutral-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                        <a href="#" class="ms-1 text-sm font-medium text-neutral-700 hover:text-primary md:ms-2 transition-colors">Sản phẩm</a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-neutral-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                        <span class="ms-1 text-sm font-medium text-neutral-500 md:ms-2">Quản lý sản phẩm</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Supplier Detail Breadcrumb -->
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold text-neutral-700 mb-4">Supplier Detail Breadcrumb</h2>
+        <nav class="flex" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="#" class="inline-flex items-center text-sm font-medium text-neutral-700 hover:text-primary transition-colors">
+                        <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+                        </svg>
+                        Trang chủ
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-neutral-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                        <a href="#" class="ms-1 text-sm font-medium text-neutral-700 hover:text-primary md:ms-2 transition-colors">Nhà cung cấp</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-neutral-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                        <a href="#" class="ms-1 text-sm font-medium text-neutral-700 hover:text-primary md:ms-2 transition-colors">Danh sách nhà cung cấp</a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-neutral-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                        <span class="ms-1 text-sm font-medium text-neutral-500 md:ms-2">Vinamilk</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Compact Breadcrumb -->
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold text-neutral-700 mb-4">Compact Breadcrumb</h2>
+        <nav class="flex px-4 py-2 bg-white rounded-lg border border-neutral-200" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="#" class="inline-flex items-center text-sm font-medium text-neutral-600 hover:text-primary transition-colors">
+                        <svg class="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+                        </svg>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-neutral-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                        <a href="#" class="ms-1 text-sm font-medium text-neutral-600 hover:text-primary md:ms-2 transition-colors">Products</a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-neutral-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                        <span class="ms-1 text-sm font-medium text-primary md:ms-2">Milk Products</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Breadcrumb with Background -->
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold text-neutral-700 mb-4">Breadcrumb with Background</h2>
+        <nav class="flex px-5 py-3 bg-gradient-to-r from-neutral-50 to-neutral-100 rounded-lg border border-neutral-200" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="#" class="inline-flex items-center text-sm font-medium text-neutral-700 hover:text-primary transition-colors">
+                        <svg class="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+                        </svg>
+                        Trang chủ
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-neutral-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                        <a href="#" class="ms-1 text-sm font-medium text-neutral-700 hover:text-primary md:ms-2 transition-colors">Báo cáo</a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-neutral-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                        <span class="ms-1 text-sm font-medium text-primary font-semibold md:ms-2">Báo cáo doanh thu</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Usage Instructions -->
+    <div class="mt-12 p-6 bg-white rounded-lg border border-neutral-200">
+        <h3 class="text-lg font-semibold text-neutral-800 mb-4">Cách sử dụng Breadcrumb Component</h3>
+        <div class="space-y-3 text-sm text-neutral-600">
+            <p><strong>1. Copy HTML:</strong> Sao chép đoạn HTML của breadcrumb phù hợp với trang của bạn</p>
+            <p><strong>2. Cập nhật links:</strong> Thay đổi href="#" thành đường dẫn thực tế</p>
+            <p><strong>3. Cập nhật text:</strong> Thay đổi text trong các thẻ a và span</p>
+            <p><strong>4. Current page:</strong> Trang hiện tại sử dụng thẻ span với aria-current="page"</p>
+            <p><strong>5. Responsive:</strong> Component tự động responsive trên mobile và desktop</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+</body>
+</html>
