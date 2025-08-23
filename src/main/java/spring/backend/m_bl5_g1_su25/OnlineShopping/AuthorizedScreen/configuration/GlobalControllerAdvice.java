@@ -18,7 +18,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.Role;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
- * GlobalControllerAdvice - Tự động inject thông tin user vào header
+ * GlobalControllerAdvice - Tự động inject thông tin user vào header phần account dropdown
  */
 @ControllerAdvice
 @RequiredArgsConstructor

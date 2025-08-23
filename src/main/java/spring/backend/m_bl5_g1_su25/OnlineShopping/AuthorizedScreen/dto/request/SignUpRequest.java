@@ -29,7 +29,7 @@ public class SignUpRequest {
     String password;
 
     @NotBlank(message = "Email is required")
-    @ValidEmail(message = "Please provide a valid email address")
+    @ValidEmail()
     @UniqueEmail
     String email;
 

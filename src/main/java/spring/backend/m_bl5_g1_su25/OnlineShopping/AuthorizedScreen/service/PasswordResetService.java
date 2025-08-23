@@ -127,14 +127,20 @@ public class PasswordResetService {
     }
     private String createEmailContent(String username, String resetLink) {
         return String.format(
-                "Hi %s,\n\n" +
-                "You have requested to reset your password for Smart Shop.\n\n" +
-                "Please click the link below to reset your password:\n" +
-                "%s\n\n" +
-                "This link will expire in 1 hour.\n\n" +
-                "If you did not request this password reset, please ignore this email.\n\n" +
-                "Best regards,\n" +
-                "Smart Shop Team",
+                """
+                        Hi %s,
+                        
+                        You have requested to reset your password for Smart Shop.
+                        
+                        Please click the link below to reset your password:
+                        %s
+                        
+                        This link will expire in 1 hour.
+                        
+                        If you did not request this password reset, please ignore this email.
+                        
+                        Best regards,
+                        Smart Shop Team""",
                 username, resetLink
         );
     }

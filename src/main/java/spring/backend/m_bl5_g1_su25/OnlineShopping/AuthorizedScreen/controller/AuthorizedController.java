@@ -26,9 +26,7 @@ public class AuthorizedController {
     PasswordResetService passwordResetService;
 
     @GetMapping("/login")
-    public String loginPage(@RequestParam(value = "error", required = false) String error,
-                           @RequestParam(value = "logout", required = false) String logout,
-                           Model model) {
+    public String loginPage() {
         return "auth/login";
     }
 
@@ -55,7 +53,7 @@ public class AuthorizedController {
     }
 
     @PostMapping("/forgot-password")
-    public String forgotPassword(@RequestParam String email, Model model) {
+    public String forgotPassword(@RequestParam String email) {
         try {
             boolean success = passwordResetService.sendPasswordResetEmail(email);
             if (success) {
@@ -87,11 +85,10 @@ public class AuthorizedController {
     public String resetPassword(@RequestParam String token,
                                @RequestParam String password,
                                @RequestParam String confirmPassword,
-                               HttpSession session,
-                               Model model) {
+                               HttpSession session) {
 
         if (!password.equals(confirmPassword)) {
-            return "redirect:/auth/reset-password?token=" + token + "&error=mismatch";
+            return "redirect:/auth/reset-password?token=" + token;
         }
 
         try {
@@ -100,10 +97,10 @@ public class AuthorizedController {
                 session.invalidate();
                 return "redirect:/auth/login?reset=success";
             } else {
-                return "redirect:/auth/reset-password?token=" + token + "&error=invalid";
+                return "redirect:/auth/reset-password?token=" + token;
             }
         } catch (Exception e) {
-            return "redirect:/auth/reset-password?token=" + token + "&error=failed";
+            return "redirect:/auth/reset-password?token=" + token;
         }
     }
 }

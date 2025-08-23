@@ -21,7 +21,7 @@ import java.util.Optional;
  * - /profile/view: View own profile (STAFF, CUSTOMER, ADMIN)
  * - /profile/admin/{userId}: Admin view any user's profile (ADMIN only)
  * - /profile/edit: Edit own profile
- * - /profile/admin/{userId}/edit: Admin edit any user's profile (future implementation)
+ * - /profile/admin/{userId}/edit: Admin edit any user's profile? (ADMIN only)(idk, not merged yet)
  */
 @Controller
 @RequestMapping("/profile")

@@ -20,7 +20,7 @@ public interface ProfileMapper {
     ProfileViewDto toProfileViewDto(User user);
 
     @AfterMapping
-    default void setNamesFromCustomer(@MappingTarget ProfileViewDto dto, User user, Customer customer) {
+    default void setNamesFromCustomer(@MappingTarget ProfileViewDto dto, Customer customer) {
         if (customer != null) {
             dto.setFirstName(customer.getFirstname());
             dto.setLastName(customer.getLastname());
@@ -29,7 +29,7 @@ public interface ProfileMapper {
     }
 
     @AfterMapping
-    default void setNamesFromStaff(@MappingTarget ProfileViewDto dto, User user, Staff staff) {
+    default void setNamesFromStaff(@MappingTarget ProfileViewDto dto, Staff staff) {
         if (staff != null) {
             dto.setFirstName(staff.getFirstname());
             dto.setLastName(staff.getLastname());
@@ -41,11 +41,11 @@ public interface ProfileMapper {
         ProfileViewDto dto = toProfileViewDto(user);
         switch (user.getRole()) {
             case CUSTOMER:
-                setNamesFromCustomer(dto, user, customer);
+                setNamesFromCustomer(dto, customer);
                 break;
             case STAFF:
             case ADMIN:
-                setNamesFromStaff(dto, user, staff);
+                setNamesFromStaff(dto, staff);
                 break;
         }
 
