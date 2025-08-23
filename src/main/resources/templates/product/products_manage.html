@@ -59,6 +59,27 @@
             </a>
         </div>
     </div>
+    <div style="margin: 20px;">
+        <!-- Nút Export -->
+        <div class="flex space-x-4 mt-4">
+            <!-- Export Button -->
+            <a href="/api/products/export"
+               class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
+                📤 Xuất Excel
+            </a>
+
+            <!-- Import Button -->
+            <form action="/api/products/import" method="post" enctype="multipart/form-data" class="flex items-center space-x-2">
+                <label for="fileInput"
+                       class="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
+                    📥 Nhập Excel
+                </label>
+                <input id="fileInput" type="file" name="file" accept=".xlsx,.xls" class="hidden"
+                       onchange="this.form.submit()">
+            </form>
+        </div>
+
+    </div>
 
     <!-- Overview Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -131,7 +152,9 @@
                 <td class="py-4 px-6 text-gray-800 font-medium" th:text="${product.name}"></td>
                 <td class="py-4 px-6 text-gray-800 font-medium" th:text="${product.sku}"></td>
                 <td class="py-4 px-6 text-gray-800 font-medium" th:text="${product.brand}"></td>
-                <td class="py-4 px-6 text-gray-800 font-medium" th:text="${product.supplier}"></td>
+                <td class="py-4 px-6 text-gray-800 font-medium"
+                    th:text="${product.supplier != null ? product.supplier.name : 'N/A'}">
+                </td>
                 <td class="py-4 px-6">
                 <span th:unless="${product.categories == null or product.categories.isEmpty()}"
                       th:each="cat, iterStat : ${product.categories}"
@@ -192,7 +215,34 @@
         </span>
     </div>
 </main>
+<script>
+    async function uploadExcel() {
+        const fileInput = document.getElementById("fileInput");
+        if (!fileInput.files.length) {
+            alert("⚠️ Vui lòng chọn file Excel!");
+            return;
+        }
 
+        const formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+
+        try {
+            const response = await fetch("/api/products/import", {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error(await response.text());
+            }
+
+            const result = await response.text();
+            alert("✅ Import thành công: " + result);
+        } catch (error) {
+            alert("❌ Lỗi khi import file: " + error.message);
+        }
+    }
+</script>
 
 
 </body>

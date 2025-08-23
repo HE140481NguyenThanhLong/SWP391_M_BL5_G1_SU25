@@ -34,6 +34,9 @@ public class ProductController {
     private SupplierService supplierService;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private ProductRepository productRepository;
+
     @GetMapping
     public String listProducts(
             @RequestParam(defaultValue = "1") int page,
@@ -123,14 +126,15 @@ public class ProductController {
     public String productList(
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
-            @RequestParam(required = false) String supplier,
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String keyword,   // ✅ thêm keyword
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
             @RequestParam(name = "category_id", required = false) Integer categoryId,
             Model model
     ) {
-        // Xác định tên category để hiển thị
+        // ✅ Lấy tên category để hiển thị
         String selectedCategory = "Tất cả sản phẩm";
         if (categoryId != null) {
             Category categoryEntity = categoryRepository.findById(categoryId).orElse(null);
@@ -139,8 +143,9 @@ public class ProductController {
             }
         }
 
+        // ✅ Gọi service
         Page<Product> products = productService.filterProducts(
-                minPrice, maxPrice, supplier, categoryId, sortBy, page, size
+                minPrice, maxPrice, categoryId, brand, keyword, sortBy, page, size
         );
 
         int totalPages = products.getTotalPages();
@@ -155,17 +160,21 @@ public class ProductController {
             }
         }
 
-        // Truyền dữ liệu sang view
+        // ✅ Truyền dữ liệu sang view
         model.addAttribute("products", products.getContent());
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageNumbers", pageNumbers);
-        model.addAttribute("suppliers", supplierService.getAllSuppliers());
-        model.addAttribute("categories", productService.getAllCategories());
+        model.addAttribute("brands", productRepository.getBrand());
         model.addAttribute("selectedCategory", selectedCategory);
+        model.addAttribute("keyword", keyword); // ✅ giữ lại keyword sau khi search
+        model.addAttribute("selectedBrand", brand);
+        model.addAttribute("categories", productService.getAllCategories());
 
         return "product/list";
     }
+
+
 
 
     @GetMapping("/detailproduct/{id}")
