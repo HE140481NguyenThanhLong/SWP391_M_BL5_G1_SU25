@@ -9,15 +9,16 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
-public class ReportFormResponse {
-    String title, description, imageUrl;
+@Builder
+public class ReportFormDefault {
+    String title;
     IssueType issueType;
+    String imgUrl;
+    String description;
     ReportStatus status;
     LocalDateTime createdAt;
-    LocalDateTime resolvedAt;
+    Integer report_id;
 }

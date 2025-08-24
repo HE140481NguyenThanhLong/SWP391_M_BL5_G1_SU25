@@ -283,7 +283,6 @@
         <span th:if="${currentPage == 1}" class="px-3 py-1 bg-gray-100 rounded text-gray-400 cursor-not-allowed">
             &laquo;
         </span>
-
         <a th:each="i : ${#numbers.sequence(1, totalPages)}"
            th:href="@{/product(page=${i}, search=${search}, category=${selectedCategory})}"
            th:text="${i}"

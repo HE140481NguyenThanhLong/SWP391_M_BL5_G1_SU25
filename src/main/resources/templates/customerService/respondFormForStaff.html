@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<section class="min-h-screen bg-gray-100 dark:bg-gray-900 py-10 px-4">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+        <div  class="border border-gray-200 dark:border-gray-700 rounded-md">
+            <!--    get specific data of report form with thymealeaf injections        -->
+            <div id="report-body-1"  aria-labelledby="report-heading-1">
+                <div class="p-4 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300 space-y-3">
+                    <span th:text="${respondreport.title}" class="text-sm font-semibold">#1001 - Login bug issue</span>
+
+                    <div>
+                        <strong>Description:</strong>
+                        <p th:text="${respondreport.description}" >The login button doesn't work on mobile view.</p>
+                    </div>
+                    <div>
+                        <strong>Image:</strong><br />
+                        <img th:src="${respondreport.imgUrl}"  alt="Report screenshot" class="rounded border w-64 mt-1" />
+                    </div>
+                    <div th:text="${respondreport.issueType}" ><strong>Issue Type:</strong> Bug</div>
+                    <div th:text="${respondreport.status}"><strong>Status:</strong> <span class="text-yellow-500 font-semibold">Pending</span></div>
+                    <div th:text="${respondreport.createdAt}"><strong>Created At:</strong> 2025-08-18 14:45</div>
+
+                </div>
+
+            </div>
+            <!--    response here        -->
+            <div id="report-body-2"  aria-labelledby="report-heading-1">
+                <div class="p-4 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300 space-y-3">
+
+                    <form th:action="@{/customerService/{id}/respond(id=${respondreport.report_id})}" method="post" class="max-w-lg mx-auto space-y-2 ">
+                        <label for="message" class=" block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your message</label>
+                        <textarea name="responseText" id="message" rows="4" class="block p-2.5 w-full  text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Leave a comment..."></textarea>
+                        <div class="text-right pt-4">
+                            <button type="submit"
+                                    class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                Respond
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

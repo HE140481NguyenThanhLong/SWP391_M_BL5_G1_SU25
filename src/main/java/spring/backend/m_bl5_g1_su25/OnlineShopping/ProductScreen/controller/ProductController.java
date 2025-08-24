@@ -5,24 +5,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Category;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Supplier;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.CategoryRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.ProductRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.ProductService;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.SupplierService;
 
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/product")
@@ -31,7 +31,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
     @Autowired
-    private ProductRepository productRepository;
+    private SupplierService supplierService;
     @Autowired
     private CategoryRepository categoryRepository;
     @GetMapping
@@ -79,7 +79,7 @@ public class ProductController {
                 // Cập nhật các trường từ form
                 existingProduct.setName(product.getName());
                 existingProduct.setDescription(product.getDescription());
-                //existingProduct.setSalePrice(product.getSalePrice());
+                existingProduct.setSalePrice(product.getSalePrice());
                 existingProduct.setPrice(product.getPrice());
 
                 // PHẦN XỬ LÝ UPLOAD ẢNH (CỐT LÕI)
@@ -119,13 +119,6 @@ public class ProductController {
         }
 
     }
-//    @GetMapping("/import")
-//    public String importProduct(Model model) {
-//        // Lấy danh sách nhà cung cấp và sản phẩm từ DB
-//        List<String> suppliers = productService.getAllSuppliers();
-//        model.addAttribute("suppliers", suppliers);
-//        return "product/import_product";
-//    }
     @GetMapping("/list")
     public String productList(
             @RequestParam(required = false) BigDecimal minPrice,
@@ -167,7 +160,7 @@ public class ProductController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageNumbers", pageNumbers);
-//        model.addAttribute("suppliers", productService.getSuppliers());
+        model.addAttribute("suppliers", supplierService.getAllSuppliers());
         model.addAttribute("categories", productService.getAllCategories());
         model.addAttribute("selectedCategory", selectedCategory);
 
@@ -208,7 +201,14 @@ public class ProductController {
 
         return "product/detail";
     }
+    @GetMapping("/import")
+    public String importProduct(Model model) {
+        List<Supplier> suppliers = supplierService.getAllSuppliers();
+        List<Product> products = productService.getAllProducts();
 
+        model.addAttribute("suppliers", suppliers);
+        model.addAttribute("products", products);
 
-
+        return "product/import_product";
+    }
 }

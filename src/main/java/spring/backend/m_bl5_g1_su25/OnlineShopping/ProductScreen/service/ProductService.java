@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Category;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.CategoryRepository;
@@ -107,8 +108,10 @@ public class ProductService {
         }
 
         if (supplier != null && !supplier.isEmpty()) {
-            spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("supplier"), supplier));
+            spec = spec.and((root, query, cb) -> {
+                Join<Object, Object> supplierJoin = root.join("supplier", JoinType.INNER);
+                return cb.equal(supplierJoin.get("name"), supplier);
+            });
         }
         if (categoryId != null) {
             spec = spec.and((root, query, cb) -> {
@@ -144,6 +147,27 @@ public class ProductService {
     public Page<Product> findRelatedProducts(Integer productId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return productRepository.findRelatedProducts(productId, pageable);
+    }
+    public void importProducts(List<Product> importedProducts) {
+        for (Product p : importedProducts) {
+            Product existing = productRepository.findById(p.getProduct_id())
+                    .orElseThrow(() -> new RuntimeException("Product not found: " + p.getProduct_id()));
+            existing.setQuantity(existing.getQuantity() + p.getQuantity()); // cộng thêm số lượng nhập
+            productRepository.save(existing);
+        }
+    }
+
+
+    public List<Product> getAllProducts() {
+
+            return productRepository.findAll();
+    }
+    @Transactional
+    public void updateQuantity(Integer productId, Integer quantity) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        product.setQuantity(product.getQuantity() + quantity); // nhập thêm => cộng dồn
+        productRepository.save(product);
     }
 
 }
