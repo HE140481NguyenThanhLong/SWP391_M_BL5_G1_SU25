@@ -132,10 +132,10 @@
                                     Trạng Thái
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Giá Nhập
+                                    Giá Nhập (đồng)
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Giá Bán
+                                    Giá Bán (đồng)
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Đã Bán
@@ -173,12 +173,12 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900">
-                                        <span th:text="${#numbers.formatDecimal(product.importPrice, 0, 0)}">0</span> VND
+                                        <span th:text="${#numbers.formatDecimal(product.importPrice, 3, 'POINT', 0, 'COMMA')}">0</span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900">
-                                        <span th:text="${product.salePrice != null ? #numbers.formatDecimal(product.salePrice, 0, 0) : #numbers.formatDecimal(product.price, 0, 0)}">0</span> VND
+                                        <span th:text="${product.salePrice != null ? #numbers.formatDecimal(product.salePrice, 3, 'POINT', 0, 'COMMA') : #numbers.formatDecimal(product.price, 3, 'POINT', 0, 'COMMA')}">0</span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
