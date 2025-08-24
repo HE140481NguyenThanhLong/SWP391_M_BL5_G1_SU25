@@ -14,12 +14,12 @@
         <div id="staff-report-accordion" data-accordion="collapse" class="space-y-4">
 
 
-            <div th:each="report :${allReports}" class="border border-gray-200 dark:border-gray-700 rounded-md">
+            <div th:each="report, iterStat :${allReports}" class="border border-gray-200 dark:border-gray-700 rounded-md">
 
                 <h2>
                     <button type="button"
                             class="flex items-center justify-between w-full p-4 font-medium text-left text-gray-900 bg-gray-100 rounded-t-md hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
-                            data-accordion-target="#staff-report-body-1" aria-expanded="false" aria-controls="staff-report-body-1">
+                            th:attr="data-accordion-target='#staff-report-body-' + ${iterStat.index}, aria-controls='staff-report-body-' + ${iterStat.index}" aria-expanded="false" >
                         <span th:text="${report.title}">#1001 - Login button doesn't respond on mobile</span>
                         <svg data-accordion-icon class="w-4 h-4 rotate-0 shrink-0" fill="none" stroke="currentColor"
                              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -28,7 +28,7 @@
                     </button>
                 </h2>
 
-                <div id="staff-report-body-1" class="hidden" aria-labelledby="staff-report-heading-1">
+                <div th:id="'staff-report-body-' + ${iterStat.index}"   class="hidden" aria-labelledby="staff-report-heading-1">
                     <div   class="p-4 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300 space-y-4">
 
 
