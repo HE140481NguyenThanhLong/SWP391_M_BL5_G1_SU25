@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.dto.request.SignUpRequest;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.service.AuthorizedService;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.service.PasswordResetService;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Customer;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 
 @Controller
@@ -27,11 +28,20 @@ public class AuthorizedController {
 
     @GetMapping("/login")
     public String loginPage() {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
+            return "redirect:/";
+        }
         return "auth/login";
     }
 
     @GetMapping("/signup")
     public String signupPage(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
+            return "redirect:/";
+        }
         model.addAttribute("signUpRequest", new SignUpRequest());
         return "auth/signup";
     }
@@ -39,7 +49,7 @@ public class AuthorizedController {
     @PostMapping("/signup")
     public String signUp(@ModelAttribute SignUpRequest request, Model model) {
         try{
-            Customer signUpCus = authorizedService.signUp(request);
+            authorizedService.signUp(request);
             return "redirect:/auth/login?success=true";
         } catch (Exception e) {
             model.addAttribute("error", "Registration failed: " + e.getMessage());

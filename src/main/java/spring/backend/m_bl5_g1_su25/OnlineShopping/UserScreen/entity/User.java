@@ -51,4 +51,10 @@ public class User {
 
     @Column(nullable = false, length = 50)
     String phoneNumber;
+
+    @Column(length = 255, columnDefinition = "NVARCHAR(255)")
+    String address1;
+
+    @Column(length = 255, columnDefinition = "NVARCHAR(255)")
+    String address2;
 }

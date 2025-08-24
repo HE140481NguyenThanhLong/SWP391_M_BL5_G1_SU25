@@ -18,7 +18,8 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.Role;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
- * GlobalControllerAdvice - Tự động inject thông tin user vào header phần account dropdown
+ * GlobalControllerAdvice - Tự động inject thông tin user gồm email, tên đầy đủ vào header phần account dropdown
+ * bằng spring security context
  */
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -53,9 +54,8 @@ public class GlobalControllerAdvice {
                     model.addAttribute("currentUser", user);
                     model.addAttribute("currentUserFullName", getFullName(user));
                     model.addAttribute("currentUserEmail", user.getEmail());
-                    model.addAttribute("currentUserRole", user.getRole().name());
 
-                    log.debug("Added user info: {} - {} ({})", getFullName(user), user.getEmail(), user.getRole());
+                    log.debug("Added user info: {} - {}", getFullName(user), user.getEmail());
                 }
             }
         } catch (Exception e) {
