@@ -167,43 +167,66 @@
                             <input type="hidden" name="maxPrice" th:value="${param.maxPrice}">
 
 
+
                             <select name="sortBy" onchange="this.form.submit()" class="border rounded-lg p-2">
                                 <option value="createdAt" th:selected="${param.sortBy == 'createdAt'}">Mới nhất</option>
                                 <option value="price_asc" th:selected="${param.sortBy == 'price_asc'}">Giá tăng dần</option>
                                 <option value="price_desc" th:selected="${param.sortBy == 'price_desc'}">Giá giảm dần</option>
-                                <option value="" th:selected="${param.sortBy == 'soldCount'}">Bán chạy</option>
+                                <option value="sold_count" th:selected="${param.sortBy == 'sold_count'}">Bán chạy</option>
                             </select>
                         </form>
                     </div>
 
                     <!-- Product grid -->
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
-                        <div th:each="product : ${products}" class="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:scale-105" th:onclick="|window.location.href='/product/detailproduct/${product.product_id}'|"
-                        >
-                            <img th:src="${product.imageUrl}" th:alt="${product.name}" class="w-full h-48 object-cover">
-                            <div class="p-6">
-                                <h4 class="font-semibold text-neutral-800 mb-2 line-clamp-2" th:text="${product.name}">Tên sản phẩm</h4>
-                                <span class="text-2xl font-bold text-primary"
-                                      th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '₫'">
 
-                </span>
-                                <div class="flex items-center gap-6 mb-6">
-                                    <div class="flex items-center gap-2">
-                                        <div class="flex text-yellow-400" th:with="rating=${product.rating}">
-                                            <svg th:each="i : ${#numbers.sequence(1, 5)}" th:class="${i <= rating} ? 'w-6 h-6 fill-current' : 'w-6 h-6 text-neutral-300 fill-current'" viewBox="0 0 20 20">
-                                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                                            </svg>
-                                        </div>
-                                        <span class="text-lg font-medium" th:text="'(' + ${product.rating} + '/5)'"></span>
-                                    </div>
-                                </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
-                                <button class="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primary-dark transition-colors">
-                                    Thêm vào giỏ
-                                </button>
-                            </div>
+                        <!-- Nếu không có sản phẩm -->
+                        <div th:if="${#lists.isEmpty(products)}"
+                             class="text-center py-16 text-gray-500 col-span-full">
+                            <p class="text-lg font-semibold">Không tìm thấy sản phẩm nào phù hợp.</p>
                         </div>
+
+                        <!-- Nếu có sản phẩm -->
+                        <th:block th:if="${!#lists.isEmpty(products)}">
+                            <div th:each="product : ${products}"
+                                 class="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:scale-105"
+                                 th:onclick="|window.location.href='/product/detailproduct/${product.product_id}'|">
+
+                                <img th:src="${product.imageUrl}" th:alt="${product.name}" class="w-full h-48 object-cover">
+
+                                <div class="p-6">
+                                    <h4 class="font-semibold text-neutral-800 mb-2 line-clamp-2"
+                                        th:text="${product.name}">Tên sản phẩm</h4>
+
+                                    <span class="text-2xl font-bold text-primary"
+                                          th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + '₫'">
+                </span>
+
+                                    <div class="flex items-center gap-6 mb-6">
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex text-yellow-400" th:with="rating=${product.rating}">
+                                                <svg th:each="i : ${#numbers.sequence(1, 5)}"
+                                                     th:class="${i <= rating} ? 'w-6 h-6 fill-current' : 'w-6 h-6 text-neutral-300 fill-current'"
+                                                     viewBox="0 0 20 20">
+                                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                                </svg>
+                                            </div>
+                                            <span class="text-lg font-medium"
+                                                  th:text="'(' + ${product.rating} + '/5)'"></span>
+                                        </div>
+                                    </div>
+
+                                    <button class="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primary-dark transition-colors">
+                                        Thêm vào giỏ
+                                    </button>
+                                </div>
+                            </div>
+                        </th:block>
                     </div>
+
+
+
                 </div>
 
             </div>
@@ -262,6 +285,7 @@
 
         </div>
     </div>
+
 </div>
 
 <!-- Footer -->

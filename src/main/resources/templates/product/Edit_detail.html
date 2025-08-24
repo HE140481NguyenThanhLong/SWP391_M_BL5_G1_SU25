@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,130 +40,167 @@
 </script>
 <body class="font-sans bg-neutral-50 text-neutral-800">
 <div th:replace="~{component/header :: header}"></div>
-<!-- Main Content - Empty -->
+
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Breadcrumb -->
     <nav class="text-sm text-gray-600 mb-4" aria-label="Breadcrumb">
         <ol class="inline-flex space-x-1">
-            <li><a href="#" class="text-blue-600 hover:underline">Home</a></li>
+            <li><a href="/" class="text-blue-600 hover:underline">Home</a></li>
             <li><span>/</span></li>
             <li><a href="/product" class="text-blue-600 hover:underline">Product</a></li>
-            <li><span>/</span></li>
-            <li><a href="/product" class="text-blue-600 hover:underline">Product List</a></li>
             <li><span>/</span></li>
             <li class="text-gray-500">Product Detail</li>
         </ol>
     </nav>
-    <div class="container mx-auto px-4 py-8 flex-grow">
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Product Detail - Edit Mode</h2>
 
-            <form id="myForm" th:action="@{/product/update/{id}(id=${product.product_id})}"
-                  method="post" class="grid grid-cols-1 md:grid-cols-2 gap-6"
-                  enctype="multipart/form-data">
-                <!-- Cột trái: Ảnh và chỉnh sửa giá -->
-                <div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-semibold mb-2">Ảnh sản phẩm</label>
-                        <img id="imagePreview" th:src="${product.imageUrl != null ? product.imageUrl : 'https://via.placeholder.com/300'}" alt="Ảnh sản phẩm" class="w-64 h-64 object-cover border rounded">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">Chỉnh sửa sản phẩm</h2>
+
+        <form id="myForm" th:action="@{/product/update/{id}(id=${product.product_id})}"
+              method="post" class="grid grid-cols-1 md:grid-cols-2 gap-6"
+              enctype="multipart/form-data">
+
+            <!-- Cột trái -->
+            <div>
+                <!-- Ảnh -->
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">Ảnh sản phẩm</label>
+                    <img id="imagePreview"
+                         th:src="${product.imageUrl != null ? product.imageUrl : 'https://via.placeholder.com/300'}"
+                         alt="Ảnh sản phẩm"
+                         class="w-64 h-64 object-cover border rounded">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">Tải lên ảnh mới</label>
+                    <input type="file" id="imageInput" name="image"
+                           class="block w-full border rounded px-3 py-2"
+                           accept="image/*" onchange="previewImage(event)">
+                </div>
+
+                <!-- Giá -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-1">Giá nhập (VND)</label>
+                        <input type="number" th:value="${product.salePrice}" name="salePrice"
+                               class="w-full border rounded px-3 py-2" required>
                     </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-semibold mb-2">Tải lên ảnh mới</label>
-                        <input type="file" id="imageInput" name="image" class="block w-full border rounded px-3 py-2" accept="image/*" onchange="previewImage(event)">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-1">Giá bán (VND)</label>
+                        <input type="number" th:value="${product.price}" name="price"
+                               class="w-full border rounded px-3 py-2" required>
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
+                </div>
+            </div>
+
+            <!-- Cột phải -->
+            <div>
+                <!-- Thông tin chung -->
+                <div class="mb-3">
+                    <label class="block text-gray-700 font-semibold mb-1">Tên sản phẩm</label>
+                    <input type="text" th:value="${product.name}" name="name"
+                           class="w-full border rounded px-3 py-2" required>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-3">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-1">Mã sản phẩm</label>
+                        <input type="text" th:value="${product.product_id}" name="product_id"
+                               class="w-full border rounded px-3 py-2 bg-neutral-100" readonly>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-1">Ngày nhập</label>
+                        <input type="text" th:value="${product.createdAt}" name="createdAt"
+                               class="w-full border rounded px-3 py-2 bg-neutral-100" readonly>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-3">
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-1">Thương hiệu</label>
+                        <input type="text" th:value="${product.brand}" name="brand"
+                               class="w-full border rounded px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-1">Nhà cung cấp</label>
+                        <input type="text" th:value="${product.supplier}" name="supplier"
+                               class="w-full border rounded px-3 py-2">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="block text-gray-700 font-semibold mb-1">Trạng thái</label>
+                    <select name="status"
+                            class="w-full border rounded px-3 py-2">
+                        <option th:selected="${product.status == 'IN_STOCK'}" value="IN_STOCK">Hoạt động</option>
+                        <option th:selected="${product.status == 'OUT_STOCK'}" value="OUT_STOCK">Hết hàng</option>
+                    </select>
+                </div>
+
+                <!-- Thông tin kho -->
+                <div class="bg-neutral-50 rounded-2xl p-6 mb-4">
+                    <h3 class="font-semibold text-neutral-800 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                        Thông tin kho
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-gray-700 font-semibold mb-1">Giá Nhập (VND)</label>
-                            <input type="number" th:value="${product.salePrice}" name="salePrice" class="w-full border rounded px-3 py-2" required>
+                            <label class="block text-neutral-700 font-medium mb-2">Tồn kho</label>
+                            <input type="number" th:value="${product.quantity}" name="quantity"
+                                   class="w-full border border-neutral-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+                                   required>
                         </div>
                         <div>
-                            <label class="block text-gray-700 font-semibold mb-1">Giá Bán (VND)</label>
-                            <input type="number" th:value="${product.price}" name="price" class="w-full border rounded px-3 py-2">
+                            <label class="block text-neutral-700 font-medium mb-2">Đã bán</label>
+                            <input type="text" th:value="${product.sales_count}" name="sales_count"
+                                   class="w-full border border-neutral-300 rounded-xl px-4 py-3 bg-neutral-100 text-neutral-500"
+                                   readonly>
                         </div>
                     </div>
                 </div>
 
-                <!-- Cột phải: Thông tin sản phẩm -->
-                <div>
-                    <div class="mb-3">
-                        <label class="block text-gray-700 font-semibold mb-1">Tên sản phẩm</label>
-                        <input type="text" th:value="${product.name}" name="name" class="w-full border rounded px-3 py-2">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-3">
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-1">Mã sản phẩm</label>
-                            <input type="text" th:value="${product.product_id}" name="product_id" class="w-full border rounded px-3 py-2" readonly>
-                        </div>
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-1">Ngày Nhập</label>
-                            <input type="text" th:value="${product.createdAt}" name="product_id" class="w-full border rounded px-3 py-2" readonly>
-                        </div>
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-1">Thương Hiệu</label>
-                            <input type="text" th:value="${product.brand}" name="product_id" class="w-full border rounded px-3 py-2" readonly>
-                        </div>
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-1">Nhà Cung Cấp</label>
-                            <input type="text" th:value="${product.supplier}" name="product_id" class="w-full border rounded px-3 py-2" readonly>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-3">
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-1">Trạng thái</label>
-                            <input type="text" th:value="${product.status}" name="product_id" class="w-full border rounded px-3 py-2" readonly>
-                        </div>
-                    </div>
-                    <div class="bg-neutral-50 rounded-2xl p-6">
-                        <h3 class="font-semibold text-neutral-800 mb-4 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                            </svg>
-                            Thông tin kho
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-neutral-700 font-medium mb-2" >Tồn kho</label>
-                                <input type="number"  th:value="${product.quantity}" name="quantity" class="w-full border border-neutral-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" required>
-                            </div>
-                            <div>
-                                <label class="block text-neutral-700 font-medium mb-2">Đã bán</label>
-                                <input type="text" th:value="${product.sales_count}" name="sales_count" class="w-full border border-neutral-300 rounded-xl px-4 py-3 bg-neutral-100 text-neutral-500" readonly>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="bg-neutral-50 rounded-2xl p-6">
-                        <h3 class="font-semibold text-neutral-800 mb-4 flex items-center gap-2">
-                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            Mô tả sản phẩm
-                        </h3>
-                        <textarea rows="6" name="description" placeholder="Nhập mô tả chi tiết về sản phẩm..." class="w-full border border-neutral-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none" th:text="${product.description}"></textarea>
-                    </div>
-                    <div class="mt-4 flex gap-2">
-                        <button type="button" class="bg-gray-300 px-4 py-2 rounded" onclick="document.getElementById('myForm').reset()">
-                            Hoàn tác
-                        </button>
-                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Lưu thay đổi</button>
-                    </div>
+                <!-- Mô tả -->
+                <div class="bg-neutral-50 rounded-2xl p-6">
+                    <h3 class="font-semibold text-neutral-800 mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Mô tả sản phẩm
+                    </h3>
+                    <textarea rows="6" name="description"
+                              class="w-full border border-neutral-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                              th:text="${product.description}"></textarea>
                 </div>
-            </form>
-        </div>
+
+                <!-- Nút -->
+                <div class="mt-4 flex gap-2">
+                    <button type="button" class="bg-gray-300 px-4 py-2 rounded"
+                            onclick="document.getElementById('myForm').reset()">
+                        Hoàn tác
+                    </button>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
+                        Lưu thay đổi
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 </main>
+
 <script>
     function previewImage(event) {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 document.getElementById('imagePreview').src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
     }
 </script>
-
 </body>
 </html>

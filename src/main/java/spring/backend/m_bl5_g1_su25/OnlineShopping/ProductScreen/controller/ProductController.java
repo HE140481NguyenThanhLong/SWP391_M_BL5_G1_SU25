@@ -124,8 +124,7 @@ public class ProductController {
     }
     @GetMapping("/list")
     public String productList(
-            @RequestParam(required = false) BigDecimal minPrice,
-            @RequestParam(required = false) BigDecimal maxPrice,
+            @RequestParam(required = false) String priceRange,
             @RequestParam(required = false) String brand,
             @RequestParam(required = false) String keyword,   // ✅ thêm keyword
             @RequestParam(defaultValue = "createdAt") String sortBy,
@@ -140,6 +139,15 @@ public class ProductController {
             Category categoryEntity = categoryRepository.findById(categoryId).orElse(null);
             if (categoryEntity != null) {
                 selectedCategory = categoryEntity.getName();
+            }
+        } BigDecimal minPrice = null;
+        BigDecimal maxPrice = null;
+
+        if (priceRange != null && !priceRange.isEmpty()) {
+            String[] parts = priceRange.split("-");
+            minPrice = new BigDecimal(parts[0]);
+            if (parts.length > 1) {
+                maxPrice = new BigDecimal(parts[1]);
             }
         }
 
