@@ -34,7 +34,7 @@ public class ResponseService    {
                 .staff(staff)
                 .response(responseText)
                 .build();
-        originalReport.setCreatedAt(LocalDateTime.now());
+        originalReport.setResolvedAt(LocalDateTime.now());
         originalReport.setStatus(ReportStatus.RESOLVED);
         reportFormRepository.save(originalReport);
         reportFormResponseRepo.save(staffResponse);
