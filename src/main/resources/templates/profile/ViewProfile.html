@@ -99,10 +99,10 @@
                                         <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                         </svg>
-                                        Họ và Tên
+                                        Username
                                     </span>
                                     <span class="text-sm font-semibold text-gray-900"
-                                          th:text="${profile.fullName != null and profile.fullName != '' ? profile.fullName : 'Chưa có'}">
+                                          th:text="${profile.username != null and profile.username != '' ? profile.username : 'Chưa có'}">
                                         Chưa có
                                     </span>
                                 </div>
@@ -173,11 +173,21 @@
                                     </div>
                                 </div>
 
-                                <div class="space-y-1 md:col-span-2">
+                                <div class="space-y-1">
                                     <label class="text-sm font-medium text-gray-700">Số Điện Thoại</label>
                                     <div class="mt-1 p-3 bg-gray-50 rounded-lg border">
                                         <p class="text-sm text-gray-900"
                                            th:text="${profile.phoneNumber != null and profile.phoneNumber != '' ? profile.phoneNumber : 'Chưa cung cấp'}">
+                                           Chưa cung cấp
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-1">
+                                    <label class="text-sm font-medium text-gray-700">Ngày Sinh</label>
+                                    <div class="mt-1 p-3 bg-gray-50 rounded-lg border">
+                                        <p class="text-sm text-gray-900"
+                                           th:text="${profile.birthday != null ? #temporals.format(profile.birthday, 'dd/MM/yyyy') : 'Chưa cung cấp'}">
                                            Chưa cung cấp
                                         </p>
                                     </div>
@@ -287,14 +297,6 @@
                     <div class="bg-white shadow-xl rounded-2xl p-6">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Thao Tác</h3>
                         <div class="flex flex-wrap gap-4">
-                            <!-- Back Button -->
-                            <button onclick="history.back()"
-                                    class="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 transition-all duration-200 transform hover:scale-105">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                                </svg>
-                                Quay Lại
-                            </button>
 
                             <!-- Edit Profile Button (For both own profile and admin view) -->
                             <a href="/profile/edit"

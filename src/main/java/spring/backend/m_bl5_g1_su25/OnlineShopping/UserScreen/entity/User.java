@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.Role;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.UserStatus;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -45,12 +46,15 @@ public class User {
     @Enumerated(EnumType.STRING)
     Role role = Role.CUSTOMER;
 
-    @Column(nullable = false, length = 10, columnDefinition = "varchar(10) default 'ACTIVE'")
+    @Column(nullable = false, length = 10)
     @Enumerated(EnumType.STRING)
     UserStatus status = UserStatus.ACTIVE;
 
     @Column(nullable = false, length = 50)
     String phoneNumber;
+
+    @Column(nullable = false)
+    LocalDate birthday;
 
     @Column(length = 255, columnDefinition = "NVARCHAR(255)")
     String address1;

@@ -25,6 +25,7 @@ public class AuthorizedServiceImpl implements AuthorizedService {
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .phoneNumber(request.getPhoneNumber())
+                .birthday(request.getBirthday())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.CUSTOMER)
                 .status(UserStatus.ACTIVE)

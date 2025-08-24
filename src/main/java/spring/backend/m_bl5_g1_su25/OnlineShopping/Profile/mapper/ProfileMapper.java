@@ -10,6 +10,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.Profile.dto.ProfileViewDto;
 public interface ProfileMapper {
 
     @Mapping(target = "userId", source = "user_id")
+    @Mapping(target = "birthday", source = "birthday")
     @Mapping(target = "role", expression = "java(user.getRole().name())")
     @Mapping(target = "firstName", ignore = true)
     @Mapping(target = "lastName", ignore = true)

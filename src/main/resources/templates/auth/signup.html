@@ -84,6 +84,15 @@
                         <div th:if="${#fields.hasErrors('phoneNumber')}" class="mt-1 text-sm text-red-600" th:errors="*{phoneNumber}"></div>
                     </div>
 
+                    <!-- Birthday -->
+                    <div>
+                        <label for="birthday" class="block text-sm font-medium text-gray-700">Birthday *</label>
+                        <input id="birthday" name="birthday" th:field="*{birthday}" type="date" required
+                               class="mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                               max="2007-12-31">
+                        <div th:if="${#fields.hasErrors('birthday')}" class="mt-1 text-sm text-red-600" th:errors="*{birthday}"></div>
+                    </div>
+
                     <!-- Password -->
                     <div>
                         <label for="password" class="block text-sm font-medium text-gray-700">Password *</label>
