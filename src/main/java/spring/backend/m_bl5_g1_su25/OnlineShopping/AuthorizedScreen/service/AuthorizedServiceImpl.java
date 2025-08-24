@@ -15,6 +15,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.repository.Custome
 import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
+
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthorizedServiceImpl implements  AuthorizedService {
     CustomerRepository customerRepository;
@@ -39,7 +40,7 @@ public class AuthorizedServiceImpl implements  AuthorizedService {
     @Override
     public User login(String username, String password) {
         User user = findUserByUsername(username);
-        if(user!=null&&passwordEncoder.matches(password,user.getPassword())){
+        if (user != null && password.equals(user.getPassword())) {
             return user;
         }
         return null;

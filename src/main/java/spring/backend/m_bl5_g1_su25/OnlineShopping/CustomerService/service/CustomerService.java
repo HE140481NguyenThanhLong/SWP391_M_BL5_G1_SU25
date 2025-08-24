@@ -7,10 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.dto.request.ReportFormRequest;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.dto.response.ReportFormDefault;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.dto.response.ReportFormResponseForStaff;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.dto.response.ReportFormResponseForCustomer;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.entity.ReportForm;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.entity.ReportResponse;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.enums.ReportStatus;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.mapper.CustomerServiceMapper;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.repository.ReportFormRepository;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.repository.ReportFormResponseRepo;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.ProductRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Customer;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Staff;
@@ -18,7 +23,9 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.repository.StaffRe
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -28,42 +35,46 @@ public class CustomerService {
     ReportFormRepository reportRepo;
     StaffRepository staffRepo;
     ProductRepository productRepo;
+    CustomerServiceMapper customerServiceMapper;
+    ReportFormResponseRepo reportFormResponseRepo;
+
+
+
     @Autowired
-    public CustomerService(ReportFormRepository reportRepo, StaffRepository staffRepo, ProductRepository productRepo) {
+    public CustomerService(ReportFormRepository reportRepo, StaffRepository staffRepo, ProductRepository productRepo, CustomerServiceMapper customerServiceMapper, ReportFormResponseRepo reportFormResponseRepo) {
         this.reportRepo = reportRepo;
         this.staffRepo = staffRepo;
         this.productRepo = productRepo;
+        this.customerServiceMapper = customerServiceMapper;
+        this.reportFormResponseRepo = reportFormResponseRepo;
     }
+
+
+
     @Transactional
     public void createReportFromCustomer(ReportFormRequest request, Customer customer) {
         ReportForm newReport = new ReportForm();
-
-        // 1. Map all data from the DTO to the ReportForm entity
         newReport.setTitle(request.getTitle());
         newReport.setIssueType(request.getIssues());
         newReport.setDescription(request.getDescription());
         newReport.setImgUrl(request.getImgUrl());
-
-        // 2. Set the customer who submitted the report
         newReport.setCustomer(customer);
         newReport.setStatus(ReportStatus.IN_PROGRESS);
         newReport.setCreatedAt(LocalDateTime.now());
 
-        // 3. If a productId was submitted, find and link the product
-        if (request.getProductId() != null) {
-            Product product = productRepo.findById(request.getProductId())
-                    .orElse(null); // Find the product, or return null if not found
-            newReport.setProduct(product);
-        }
+//        if (request.getProductId() != null) {
+//            Product product = productRepo.findById(request.getProductId())
+//                    .orElse(null);
+//            newReport.setProduct(product);
+//        }
 
-        // 4. Find an available staff member to assign the report to
         Staff assignedStaff = findAvailableStaff();
-        newReport.setStaff(assignedStaff); // This can be null if no staff is available
+        newReport.setStaff(assignedStaff);
 
-        // 5. Set the initial status of the report
-        newReport.setStatus(ReportStatus.IN_PROGRESS); // Or "NEW", "OPEN", etc.
 
-        // 6. Save the completed entity to the database
+        newReport.setStatus(ReportStatus.IN_PROGRESS);
+
+
             reportRepo.save(newReport);
     }
 
@@ -71,12 +82,52 @@ public class CustomerService {
      * Logic to find a staff member for assignment.
      */
     private Staff findAvailableStaff() {
-        List<Staff> availableStaff = staffRepo.findAll(); // Or find only active staff
+        List<Staff> availableStaff = staffRepo.findAll();
         if (availableStaff.isEmpty()) {
-            return null; // Important: Handle this case gracefully
+            return null;
         }
-        // Use a simple random assignment for now
+
         int randomIndex = ThreadLocalRandom.current().nextInt(availableStaff.size());
         return availableStaff.get(randomIndex);
+    }
+//    public List<ReportFormResponseForCustomer> findReportByCustomer(String customerName) {
+//        List<ReportFormResponseForCustomer> reportForms = reportRepo.findAllByUsername(customerName)
+//                .stream()
+//                .map(customerServiceMapper::toReportFormForCustomer)
+//                .collect(Collectors.toList());
+//        return reportForms;
+//    }
+    public List<ReportFormResponseForCustomer> findReportByCustomer(String customerName) {
+        List<ReportForm> reportForms = reportRepo.findAllByUsername(customerName);
+
+        return reportForms.stream().map(reportForm -> {
+            Optional< ReportResponse> response =reportFormResponseRepo.findByReportFormId(reportForm.getReport_id());
+
+            return ReportFormResponseForCustomer.builder()
+                    .title(reportForm.getTitle())
+                    .status(reportForm.getStatus())
+                    .createdAt(reportForm.getCreatedAt())
+                    .description(reportForm.getDescription())
+                    .imgUrl(reportForm.getImgUrl())
+                    .resolveAt(reportForm.getResolvedAt())
+                    .staffResponse(response.map(ReportResponse::getResponse).orElse(null))
+                    .build();
+        }).collect(Collectors.toList());
+    }
+    public List<ReportFormResponseForStaff> findAllByReportId(Integer reportID) {
+        return reportRepo.findAllReportFormsByReport_id(reportID)
+                .stream()
+                .map(customerServiceMapper::toReportForm)
+                .collect(Collectors.toList());
+    }
+
+    public ReportForm findReportByReportId(Integer reportID) {
+        return  reportRepo.findByReportId(reportID);
+    }
+    public List<ReportFormDefault> findAllReports(){
+        return reportRepo.findAll()
+                .stream()
+                .map(customerServiceMapper::toReportFormDefault)
+                .collect(Collectors.toList());
     }
 }

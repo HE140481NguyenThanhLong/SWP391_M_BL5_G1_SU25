@@ -13,13 +13,14 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.enums.IssueTy
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class ReportFormRequest {
+    String imgUrl;
     @NotBlank(message = "Description not blank")
     String description;
     @NotBlank(message = "Title must not blank")
     String title;
     @NotNull
     IssueType issues;
-    String imgUrl;
-     Integer productId;
+
+//    Integer productId;
 
 }

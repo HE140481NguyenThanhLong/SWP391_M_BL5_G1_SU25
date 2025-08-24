@@ -10,16 +10,17 @@
     <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
         <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Staff Report Review</h2>
 
-        <!-- Accordion -->
+
         <div id="staff-report-accordion" data-accordion="collapse" class="space-y-4">
 
-            <!-- Report Item -->
-            <div class="border border-gray-200 dark:border-gray-700 rounded-md">
+
+            <div th:each="report :${allReports}" class="border border-gray-200 dark:border-gray-700 rounded-md">
+
                 <h2>
                     <button type="button"
                             class="flex items-center justify-between w-full p-4 font-medium text-left text-gray-900 bg-gray-100 rounded-t-md hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
                             data-accordion-target="#staff-report-body-1" aria-expanded="false" aria-controls="staff-report-body-1">
-                        <span>#1001 - Login button doesn't respond on mobile</span>
+                        <span th:text="${report.title}">#1001 - Login button doesn't respond on mobile</span>
                         <svg data-accordion-icon class="w-4 h-4 rotate-0 shrink-0" fill="none" stroke="currentColor"
                              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -28,64 +29,65 @@
                 </h2>
 
                 <div id="staff-report-body-1" class="hidden" aria-labelledby="staff-report-heading-1">
-                    <div class="p-4 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300 space-y-4">
+                    <div   class="p-4 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300 space-y-4">
 
-                        <!-- Title -->
+
                         <div>
                             <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Title</label>
-                            <p class="font-semibold text-gray-900 dark:text-white">Login button doesn't respond on mobile</p>
+                            <p th:text="${report.title}" class="font-semibold text-gray-900 dark:text-white">Login button doesn't respond on mobile</p>
                         </div>
 
-                        <!-- Description -->
+
                         <div>
                             <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Description</label>
-                            <p>When trying to log in from a mobile device, the button does not trigger any action. Tested on multiple browsers.</p>
+                            <p th:text="${report.description}" >When trying to log in from a mobile device, the button does not trigger any action. Tested on multiple browsers.</p>
                         </div>
 
-                        <!-- Image -->
+
                         <div>
                             <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Image</label>
-                            <img src="https://via.placeholder.com/600x300" alt="Screenshot"
+                            <img th:src="${report.imgUrl}" alt="Screenshot"
                                  class="mt-2 rounded-md border w-full max-w-md" />
                         </div>
 
-                        <!-- Issue Type -->
+
                         <div>
                             <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Issue Type</label>
-                            <p>Bug</p>
+                            <p th:text="${report.issueType}" >Bug</p>
                         </div>
 
-                        <!-- Report Status -->
+
                         <div>
                             <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Status</label>
-                            <span class="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">
-                Pending
-              </span>
+                            <span th:text="${report.status}" class="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">
+                                Pending
+                            </span>
                         </div>
 
-                        <!-- Created At -->
+
                         <div>
                             <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Created At</label>
-                            <p>2025-08-18 10:32 AM</p>
+                            <p th:text="${report.createdAt}">2025-08-18 10:32 AM</p>
                         </div>
 
-                        <!-- Respond Button -->
                         <div class="text-right pt-4">
-                            <button type="button"
-                                    class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            <a  th:href="@{/customerService/{id}/respondFormForStaff(id=${report.report_id})}"
+                                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                 Respond
-                            </button>
+                            </a>
                         </div>
+
                     </div>
+
                 </div>
             </div>
 
-            <!-- Add more reports below with the same structure -->
+
         </div>
     </div>
 </section>
 
-<!-- Flowbite JS for accordion functionality -->
+
 <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
 
 </body>
