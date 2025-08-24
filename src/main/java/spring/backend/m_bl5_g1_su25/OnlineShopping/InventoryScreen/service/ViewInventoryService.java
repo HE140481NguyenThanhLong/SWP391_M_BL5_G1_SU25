@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class InventoryService {
+public class ViewInventoryService {
 
     InventoryProductRepository inventoryProductRepository;
 

@@ -9,7 +9,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Customer;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.Role;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.UserStatus;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.Profile.repository.CustomerRepository;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.repository.CustomerRepository;
 
 @Service
 @RequiredArgsConstructor

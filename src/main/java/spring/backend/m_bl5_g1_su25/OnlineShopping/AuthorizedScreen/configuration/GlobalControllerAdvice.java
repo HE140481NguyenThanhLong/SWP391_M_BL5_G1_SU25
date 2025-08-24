@@ -8,14 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.repository.AuthorizedRepo;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.Profile.repository.CustomerRepository;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.Profile.repository.StaffRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Customer;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Staff;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.Role;
-
 import jakarta.servlet.http.HttpServletRequest;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.repository.CustomerRepository;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.repository.StaffRepository;
 
 /**
  * GlobalControllerAdvice - Tự động inject thông tin user gồm email, tên đầy đủ vào header phần account dropdown

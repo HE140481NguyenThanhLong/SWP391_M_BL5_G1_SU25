@@ -14,13 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/suppliers")
 public class SupplierController {
 
     @Autowired
     private SupplierService supplierService;
 
-    @GetMapping
+    @GetMapping("/staff/suppliers")
     public String listSuppliers(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(required = false) String search,
@@ -56,18 +55,17 @@ public class SupplierController {
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("stats", supplierService.getStats());
 
-
         return "product/supplier_manage";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/staff/suppliers/add")
     public String addSupplierForm(Model model) {
         model.addAttribute("supplier", new Supplier());
         model.addAttribute("action", "add");
         return "product/supplier-form";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/staff/suppliers/edit/{id}")
     public String editSupplierForm(@PathVariable Integer id, Model model) {
         Supplier supplier = supplierService.getSupplierById(id);
         model.addAttribute("supplier", supplier);
@@ -75,24 +73,27 @@ public class SupplierController {
         return "product/supplier-form";
     }
 
-    @PostMapping("/save")
+    @PostMapping("/staff/suppliers/save")
     public String saveSupplier(@Valid @ModelAttribute Supplier supplier, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("action", supplier.getSupplier_id() == null ? "add" : "edit");
             return "product/supplier-form";
         }
         supplierService.saveSupplier(supplier);
-        return "redirect:/suppliers";
+        return "redirect:/staff/suppliers";
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/staff/suppliers/{id}")
+    @ResponseBody
     public String deleteSupplier(@PathVariable Integer id) {
         supplierService.deleteSupplier(id);
-        return "redirect:/suppliers";
+        return "Supplier deleted successfully";
     }
-    @GetMapping("/detail")
-    public String detailSupplier() {
 
+    @GetMapping("/staff/suppliers/detail/{id}")
+    public String detailSupplier(@PathVariable Integer id, Model model) {
+        Supplier supplier = supplierService.getSupplierById(id);
+        model.addAttribute("supplier", supplier);
         return "product/supplier-detail-template";
     }
 }

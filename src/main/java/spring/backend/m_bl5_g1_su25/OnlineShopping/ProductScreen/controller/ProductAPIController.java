@@ -8,24 +8,20 @@ import org.springframework.web.bind.annotation.*;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.dto.request.ProductImportRequest;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.ProductService;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.SupplierService;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/product")
 public class ProductAPIController {
 
     @Autowired
     private ProductService productService;
 
+    // =================== PUBLIC API ENDPOINTS ===================
 
-
-
-    @GetMapping("/api/suppliers/{supplierId}/products")
+    @GetMapping("/api/products/supplier/{supplierId}")
     public List<Product> getProductsBySupplier(
             @PathVariable Integer supplierId,
             @RequestParam(name = "category_id", required = false) Integer categoryId
@@ -38,6 +34,7 @@ public class ProductAPIController {
         );
         return products.getContent();
     }
+
     @GetMapping("/api/products/{productId}")
     public ResponseEntity<Map<String, Object>> getProductById(@PathVariable Integer productId) {
         Product product = productService.getProductById(productId);
@@ -53,8 +50,9 @@ public class ProductAPIController {
         return ResponseEntity.ok(dto);
     }
 
+    // =================== STAFF/ADMIN ONLY API ENDPOINTS ===================
 
-    @PostMapping("/products/import")
+    @PostMapping("/staff/api/products/import")
     public ResponseEntity<?> importProducts(@RequestBody List<ProductImportRequest> imports) {
         try {
             for (ProductImportRequest req : imports) {
@@ -67,5 +65,3 @@ public class ProductAPIController {
         }
     }
 }
-
-

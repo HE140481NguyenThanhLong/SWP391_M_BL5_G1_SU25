@@ -6,9 +6,9 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Customer;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Staff;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Profile.dto.ProfileViewDto;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.Profile.repository.CustomerRepository;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.Profile.repository.StaffRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Profile.mapper.ProfileMapper;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.repository.CustomerRepository;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.repository.StaffRepository;
 
 import java.util.Optional;
 

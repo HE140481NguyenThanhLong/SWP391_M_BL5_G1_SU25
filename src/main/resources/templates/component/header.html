@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="h-full" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" class="h-full" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -58,38 +58,102 @@
       </span>
     </div>
 
-
-
     <!-- Nav -->
     <nav class="space-y-1 px-2">
       <!-- Home -->
-      <a th:href="@{/guest}"
+      <a th:href="@{/}"
          class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
                 dark:text-gray-200 dark:hover:bg-gray-700">
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2V12H8v8a2 2 0 0 1-2 2H3z"/>
         </svg>
-        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Home</span>
+        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Trang Chủ</span>
       </a>
 
-      <!-- Products -->
-      <a th:href="@{/product/products_manage}"
+      <!-- Product Browsing (Public) -->
+      <a th:href="@{/product/list}"
          class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
                 dark:text-gray-200 dark:hover:bg-gray-700">
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M20 7h-8m8 5h-8m8 5h-8M9 7H4m5 5H4m5 5H4"/>
         </svg>
-        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Danh Mục Sản Phẩm</span>
+        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Danh Sách Sản Phẩm</span>
       </a>
 
-      <!-- Links -->
-      <a href="#links"
+      <!-- Favorites - Only for authenticated customers -->
+      <a th:href="@{/customer/favorites}"
+         sec:authorize="hasAnyRole('CUSTOMER', 'STAFF', 'ADMIN')"
          class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
                 dark:text-gray-200 dark:hover:bg-gray-700">
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 0 1 0 5.656l-2 2a4 4 0 1 1-5.656-5.656l1-1M10.172 13.828a4 4 0 0 1 0-5.656l2-2a4 4 0 1 1 5.656 5.656l-1 1"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
         </svg>
-        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Đường Link</span>
+        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Sản Phẩm Yêu Thích</span>
+      </a>
+
+      <!-- Divider for Staff/Admin Section -->
+      <div sec:authorize="hasAnyRole('STAFF', 'ADMIN')" class="my-2 border-t border-gray-200 dark:border-gray-700"></div>
+
+      <!-- Staff Management Section Title -->
+      <div sec:authorize="hasAnyRole('STAFF', 'ADMIN')" class="px-3 py-2">
+        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
+          Quản Lý (Staff)
+        </span>
+      </div>
+
+      <!-- Product Management - Staff/Admin only -->
+      <a th:href="@{/staff/product/manage}"
+         sec:authorize="hasAnyRole('STAFF', 'ADMIN')"
+         class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
+                dark:text-gray-200 dark:hover:bg-gray-700">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h2M9 5a2 2 0 012 2v6a2 2 0 01-2 2M9 5V3a2 2 0 012-2h2a2 2 0 012 2v2M17 3v2M15 7h2a2 2 0 012 2v6a2 2 0 01-2 2h-2M15 13v4"/>
+        </svg>
+        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Quản Lý Sản Phẩm</span>
+      </a>
+
+      <!-- Inventory Management - Staff/Admin only -->
+      <a th:href="@{/staff/inventory}"
+         sec:authorize="hasAnyRole('STAFF', 'ADMIN')"
+         class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
+                dark:text-gray-200 dark:hover:bg-gray-700">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/>
+        </svg>
+        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Quản Lý Kho Hàng</span>
+      </a>
+
+      <!-- Supplier Management - Staff/Admin only -->
+      <a th:href="@{/staff/suppliers}"
+         sec:authorize="hasAnyRole('STAFF', 'ADMIN')"
+         class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
+                dark:text-gray-200 dark:hover:bg-gray-700">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1"/>
+        </svg>
+        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Nhà Cung Cấp</span>
+      </a>
+
+      <!-- Import Products - Staff/Admin only -->
+      <a th:href="@{/staff/product/import}"
+         sec:authorize="hasAnyRole('STAFF', 'ADMIN')"
+         class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
+                dark:text-gray-200 dark:hover:bg-gray-700">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 0 0 8 0M9 10v6M15 10v6M12 3v7m0 0-3-3m3 3 3-3"/>
+        </svg>
+        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Nhập Hàng</span>
+      </a>
+
+      <!-- Import Inventory - Staff/Admin only -->
+      <a th:href="@{/staff/inventory/import}"
+         sec:authorize="hasAnyRole('STAFF', 'ADMIN')"
+         class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
+                dark:text-gray-200 dark:hover:bg-gray-700">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 0 0 8 0M12 3v10m0 0-3-3m3 3 3-3m-2 4h4"/>
+        </svg>
+        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Nhập Kho</span>
       </a>
 
       <!-- Cart -->
@@ -105,18 +169,20 @@
                      bg-indigo-600 px-1.5 text-[10px] font-medium text-white">3</span>
       </a>
 
-      <a th:if="${session.loggedInUser!=null}" th:href="@{/customerService/reportHistoryForCustomer}"
+      <!-- Customer Service - Only for authenticated customers -->
+      <a th:href="@{/customerService/reportHistoryForCustomer}"
+         sec:authorize="hasAnyRole('CUSTOMER', 'STAFF', 'ADMIN')"
          class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
                 dark:text-gray-200 dark:hover:bg-gray-700">
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3 8h18M3 10h18v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7zm4 5h4"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
         </svg>
-        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Report Form</span>
+        <span class="opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">Báo Cáo Dịch Vụ</span>
       </a>
 
       <!-- Sales Statistics - Only for Admin and Staff -->
       <a th:href="@{/staff/sales-statistics}"
-         sec:authorize="hasRole('ADMIN') or hasRole('STAFF')"
+         sec:authorize="hasAnyRole('ADMIN', 'STAFF')"
          class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100
                 dark:text-gray-200 dark:hover:bg-gray-700">
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -126,7 +192,7 @@
       </a>
     </nav>
 
-    <!-- Divider line for better view     -->
+    <!-- Divider line for better view -->
     <div class="my-4 border-t border-gray-200 dark:border-gray-700"></div>
 
     <!-- User Navigation (Dropdown) -->
@@ -203,8 +269,6 @@
     </div>
   </aside>
 </section>
-
-
 
 <!-- Flowbite JS (for drawer & dropdown) -->
 <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>

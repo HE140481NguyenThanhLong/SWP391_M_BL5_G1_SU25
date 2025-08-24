@@ -25,7 +25,6 @@ import java.nio.file.Paths;
 import java.util.*;
 
 @Controller
-@RequestMapping("/product")
 public class ProductController {
 
     @Autowired
@@ -34,92 +33,10 @@ public class ProductController {
     private SupplierService supplierService;
     @Autowired
     private CategoryRepository categoryRepository;
-    @GetMapping
-    public String listProducts(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(required = false) String search,
-            @RequestParam(required = false) String category,
-            @RequestParam(defaultValue = "createdAt") String sortField,
-            @RequestParam(defaultValue = "desc") String sortDir,
-            Model model
-    ) {
-        int pageSize = 10; // số sản phẩm mỗi trang
 
-        // Gọi service với các tham số đúng
-        Page<Product> productPage = productService.getProducts(search, category, page, pageSize, sortField, sortDir);
+    // =================== PUBLIC ENDPOINTS ===================
 
-        model.addAttribute("products", productPage.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", productPage.getTotalPages());
-        model.addAttribute("search", search);
-        model.addAttribute("selectedCategory", category);
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("sortDir", sortDir);
-        model.addAttribute("stats", productService.getStats());
-        model.addAttribute("categories", productService.getAllCategories());
-
-        return "product/products_manage";
-    }
-
-    @GetMapping("/detail/{id}")
-    public String detailProduct(@PathVariable Integer id, Model model) {
-        Product product = productService.getProductById(id);
-        model.addAttribute("product", product);
-        return "product/Edit_detail";
-    }
-    @PostMapping("/update/{id}")
-    public String updateProduct(
-            @PathVariable Integer id,
-            @ModelAttribute Product product,
-            @RequestParam(value = "image", required = false) MultipartFile image,
-            Model model) {
-        try {
-            Product existingProduct = productService.getProductById(id);
-            if (existingProduct != null) {
-                // Cập nhật các trường từ form
-                existingProduct.setName(product.getName());
-                existingProduct.setDescription(product.getDescription());
-                existingProduct.setSalePrice(product.getSalePrice());
-                existingProduct.setPrice(product.getPrice());
-
-                // PHẦN XỬ LÝ UPLOAD ẢNH (CỐT LÕI)
-                if (image != null && !image.isEmpty()) {
-                    // 1. Tạo thư mục uploads trong thư mục tạm của hệ thống
-                    String tmpDir = System.getProperty("java.io.tmpdir");
-                    String uploadDir = tmpDir + "/ecom-uploads/";
-
-                    // 2. Đảm bảo thư mục tồn tại
-                    Path uploadPath = Paths.get(uploadDir);
-                    if (!Files.exists(uploadPath)) {
-                        Files.createDirectories(uploadPath);
-                    }
-
-                    // 3. Tạo tên file duy nhất
-                    String fileName = "img_" + System.currentTimeMillis() +
-                            image.getOriginalFilename().substring(
-                                    image.getOriginalFilename().lastIndexOf("."));
-
-                    // 4. Lưu file
-                    Path filePath = uploadPath.resolve(fileName);
-                    image.transferTo(filePath);
-
-                    // 5. Lưu đường dẫn tương đối
-                    existingProduct.setImageUrl("/temp-uploads/" + fileName);
-                }
-
-                productService.saveProduct(existingProduct);
-                return "redirect:/product/detail/" + id;
-            } else {
-                model.addAttribute("error", "Sản phẩm không tồn tại");
-                return "error";
-            }
-        }catch (Exception e) {
-            model.addAttribute("error", "Lỗi khi cập nhật: " + e.getMessage());
-            return "error";
-        }
-
-    }
-    @GetMapping("/list")
+    @GetMapping("/product/list")
     public String productList(
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
@@ -167,8 +84,7 @@ public class ProductController {
         return "product/list";
     }
 
-
-    @GetMapping("/detailproduct/{id}")
+    @GetMapping("/product/detail/{id}")
     public String detailProductInformation(
             @PathVariable Integer id,
             @RequestParam(defaultValue = "0") int page,
@@ -201,7 +117,96 @@ public class ProductController {
 
         return "product/detail";
     }
-    @GetMapping("/import")
+
+    // =================== STAFF/ADMIN ONLY ENDPOINTS ===================
+
+    @GetMapping("/staff/product/manage")
+    public String listProducts(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String category,
+            @RequestParam(defaultValue = "createdAt") String sortField,
+            @RequestParam(defaultValue = "desc") String sortDir,
+            Model model
+    ) {
+        int pageSize = 10; // số sản phẩm mỗi trang
+
+        // Gọi service với các tham số đúng
+        Page<Product> productPage = productService.getProducts(search, category, page, pageSize, sortField, sortDir);
+
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("search", search);
+        model.addAttribute("selectedCategory", category);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("stats", productService.getStats());
+        model.addAttribute("categories", productService.getAllCategories());
+
+        return "product/products_manage";
+    }
+
+    @GetMapping("/staff/product/detail/{id}")
+    public String detailProduct(@PathVariable Integer id, Model model) {
+        Product product = productService.getProductById(id);
+        model.addAttribute("product", product);
+        return "product/Edit_detail";
+    }
+
+    @PostMapping("/staff/product/update/{id}")
+    public String updateProduct(
+            @PathVariable Integer id,
+            @ModelAttribute Product product,
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            Model model) {
+        try {
+            Product existingProduct = productService.getProductById(id);
+            if (existingProduct != null) {
+                // Cập nhật các trường từ form
+                existingProduct.setName(product.getName());
+                existingProduct.setDescription(product.getDescription());
+                existingProduct.setSalePrice(product.getSalePrice());
+                existingProduct.setPrice(product.getPrice());
+
+                // PHẦN XỬ LÝ UPLOAD ẢNH (CỐT LÕI)
+                if (image != null && !image.isEmpty()) {
+                    // 1. Tạo thư mục uploads trong thư mục tạm của hệ thống
+                    String tmpDir = System.getProperty("java.io.tmpdir");
+                    String uploadDir = tmpDir + "/ecom-uploads/";
+
+                    // 2. Đảm bảo thư mục tồn tại
+                    Path uploadPath = Paths.get(uploadDir);
+                    if (!Files.exists(uploadPath)) {
+                        Files.createDirectories(uploadPath);
+                    }
+
+                    // 3. Tạo tên file duy nhất
+                    String fileName = "img_" + System.currentTimeMillis() +
+                            image.getOriginalFilename().substring(
+                                    image.getOriginalFilename().lastIndexOf("."));
+
+                    // 4. Lưu file
+                    Path filePath = uploadPath.resolve(fileName);
+                    image.transferTo(filePath);
+
+                    // 5. Lưu đường dẫn tương đối
+                    existingProduct.setImageUrl("/temp-uploads/" + fileName);
+                }
+
+                productService.saveProduct(existingProduct);
+                return "redirect:/staff/product/detail/" + id;
+            } else {
+                model.addAttribute("error", "Sản phẩm không tồn tại");
+                return "error";
+            }
+        }catch (Exception e) {
+            model.addAttribute("error", "Lỗi khi cập nhật: " + e.getMessage());
+            return "error";
+        }
+    }
+
+    @GetMapping("/staff/product/import")
     public String importProduct(Model model) {
         List<Supplier> suppliers = supplierService.getAllSuppliers();
         List<Product> products = productService.getAllProducts();
@@ -212,3 +217,4 @@ public class ProductController {
         return "product/import_product";
     }
 }
+

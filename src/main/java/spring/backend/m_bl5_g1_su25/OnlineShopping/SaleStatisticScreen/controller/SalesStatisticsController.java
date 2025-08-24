@@ -8,6 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.SaleStatisticScreen.dto.SalesStatisticsDto;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.SaleStatisticScreen.service.SalesStatisticsService;
 
+/**
+ *
+ *
+ * Endpoints:
+ * - /staff/sales-statistics: View sales statistics (STAFF only)
+ */
+
 @Controller
 @RequestMapping("/staff")
 @RequiredArgsConstructor

@@ -1,5 +1,4 @@
-
- package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.controller;
+package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,13 +15,12 @@ import java.util.List;
 import java.util.Locale;
 
 @Controller
-@RequestMapping("/inventory")
 public class InventoryController {
 
     @Autowired
     private InventoryService inventoryService;
 
-    @GetMapping
+    @GetMapping("/staff/inventory")
     public String listInventory(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(required = false) String search,
@@ -84,13 +82,13 @@ public class InventoryController {
         return "product/inventory_manage";
     }
 
-    @GetMapping("/import")
+    @GetMapping("/staff/inventory/import")
     public String importInventoryForm(Model model) {
         model.addAttribute("products", inventoryService.getAllProducts());
         return "product/import_inventory";
     }
 
-    @PostMapping("/import")
+    @PostMapping("/staff/inventory/import")
     public String importInventory(
             @RequestParam Integer productId,
             @RequestParam Integer quantity,
@@ -100,10 +98,10 @@ public class InventoryController {
             if (quantity <= 0) {
                 model.addAttribute("error", "Số lượng nhập phải lớn hơn 0");
                 model.addAttribute("products", inventoryService.getAllProducts());
-                return "inventory/import_inventory";
+                return "product/import_inventory";
             }
             inventoryService.importProduct(productId, quantity);
-            return "redirect:/inventory";
+            return "redirect:/staff/inventory";
         } catch (Exception e) {
             model.addAttribute("error", "Lỗi khi nhập hàng: " + e.getMessage());
             model.addAttribute("products", inventoryService.getAllProducts());
@@ -111,7 +109,7 @@ public class InventoryController {
         }
     }
 
-    @GetMapping("/export")
+    @GetMapping("/staff/inventory/export")
     public ResponseEntity<List<Product>> exportInventory() {
         List<Product> products = inventoryService.getAllProducts();
         return ResponseEntity.ok(products);

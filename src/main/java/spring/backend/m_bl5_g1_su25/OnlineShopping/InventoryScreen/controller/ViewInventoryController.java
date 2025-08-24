@@ -9,16 +9,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import spring.backend.m_bl5_g1_su25.OnlineShopping.InventoryScreen.service.InventoryService;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.InventoryScreen.service.ViewInventoryService;
 
 @Slf4j
 @Controller
 @RequestMapping("/staff")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class InventoryController {
+public class ViewInventoryController {
 
-    InventoryService inventoryService;
+    ViewInventoryService viewInventoryService;
 
     @GetMapping("/inventory-detail")
     public String getInventoryDetail(
@@ -26,7 +26,7 @@ public class InventoryController {
             @RequestParam(value = "keyword", required = false) String keyword,
             Model model) {
 
-        var inventoryData = inventoryService.getInventoryStatistics(status, keyword);
+        var inventoryData = viewInventoryService.getInventoryStatistics(status, keyword);
         model.addAttribute("totalProducts", inventoryData.getTotalProducts());
         model.addAttribute("lowStockProducts", inventoryData.getLowStockProducts());
         model.addAttribute("outOfStockProducts", inventoryData.getOutOfStockProducts());

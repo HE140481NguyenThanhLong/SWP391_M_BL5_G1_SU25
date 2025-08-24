@@ -25,12 +25,15 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/", "/guest/**", "/auth/**", "/css/**", "/js/**", "/images/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/staff/**").hasAnyRole("STAFF", "ADMIN")
-                .requestMatchers("/customer/**").hasAnyRole("CUSTOMER", "STAFF", "ADMIN")
-                .requestMatchers("/profile/**").authenticated()
-                .anyRequest().authenticated()
+                    // hiểu đơn giản là mấy cái mapping này chỉ cần có đầu như vậy là sẽ tuân theo logic như dưới
+                    .requestMatchers("/", "/guest/**", "/auth/**", "/css/**", "/js/**", "/images/**").permitAll()
+                    .requestMatchers("/product/list", "/product/detail/**").permitAll()
+                    .requestMatchers("/api/categories", "/api/products/**").permitAll()
+                    .requestMatchers("/admin/**").hasRole("ADMIN")
+                    .requestMatchers("/staff/**").hasAnyRole("STAFF", "ADMIN")
+                    .requestMatchers("/customer/**").hasAnyRole("CUSTOMER", "STAFF", "ADMIN")
+                    .requestMatchers("/profile/**").authenticated()
+                    .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/auth/login") //hiển thị trang login

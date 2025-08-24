@@ -15,8 +15,8 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.repository.A
 import java.util.Optional;
 
 /**
- * ProfileController handles all profile-related operations
- *
+ * Các chức năng quản lý hồ sơ người dùng: staff và customer tự xem bản thân
+ *admin thì xem của người khác
  * Endpoints:
  * - /profile/view: View own profile (STAFF, CUSTOMER, ADMIN)
  * - /profile/admin/{userId}: Admin view any user's profile (ADMIN only)
