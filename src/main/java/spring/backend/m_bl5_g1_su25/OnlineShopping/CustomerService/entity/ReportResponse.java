@@ -28,7 +28,7 @@ public class ReportResponse {
     @Column
     String response;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "staff_id")
     Staff staff;
 }
