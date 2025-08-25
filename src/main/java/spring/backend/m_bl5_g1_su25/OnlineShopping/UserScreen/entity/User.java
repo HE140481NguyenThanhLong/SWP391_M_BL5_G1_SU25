@@ -10,6 +10,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.Role;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.UserStatus;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -51,6 +52,11 @@ public class User {
 
     @Column(nullable = false,length = 50)
     String phoneNumber;
-
+    @Column(nullable = true)
+    LocalDate birthday;
+    @Column(length = 255, columnDefinition = "NVARCHAR(255)")
+    String address1;
+    @Column(length = 255, columnDefinition = "NVARCHAR(255)")
+    String address2;
    
 }
