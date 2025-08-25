@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Hàng Tồn Kho - Smart Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: '#10B981',
+                    'primary-dark': '#059669',
+                    'primary-light': '#34D399',
+                    accent: '#F59E0B',
+                    'accent-light': '#FCD34D',
+                    neutral: {
+                        50: '#F9FAFB',
+                        100: '#F3F4F6',
+                        200: '#E5E7EB',
+                        300: '#D1D5DB',
+                        400: '#9CA3AF',
+                        500: '#6B7280',
+                        600: '#4B5563',
+                        700: '#374151',
+                        800: '#1F2937',
+                        900: '#111827'
+                    }
+                },
+                fontFamily: {
+                    'sans': ['Inter', 'sans-serif'],
+                    'display': ['Playfair Display', 'serif']
+                }
+            }
+        }
+    }
+</script>
+<body class="bg-gray-50">
+    <div th:replace="~{component/header :: header}"></div>
+
+    <main class="ml-14 transition-all duration-300">
+        <div class="container mx-auto px-6 py-8">
+            <!-- Header -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900">📦 Chi Tiết Hàng Tồn Kho</h1>
+                <p class="text-gray-600 mt-2">Quản lý và theo dõi tình trạng tồn kho sản phẩm</p>
+            </div>
+
+            <!-- Statistics Cards -->
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Total Products Card -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-blue-100 mr-4">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Tổng Số Sản Phẩm</p>
+                            <p class="text-2xl font-bold text-gray-900" th:text="${totalProducts}">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Low Stock Products Card -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-orange-100 mr-4">
+                            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Sắp Hết Hàng (≤ 10)</p>
+                            <p class="text-2xl font-bold text-orange-600" th:text="${lowStockProducts}">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Out of Stock Products Card -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center">
+                        <div class="p-3 rounded-full bg-red-100 mr-4">
+                            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Hết Hàng (= 0)</p>
+                            <p class="text-2xl font-bold text-red-600" th:text="${outOfStockProducts}">0</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Filter and Search Section -->
+            <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <form th:action="@{/staff/inventory-detail}" method="get" id="filterForm">
+                    <div class="flex flex-col md:flex-row md:items-end md:justify-between space-y-4 md:space-y-0 md:space-x-4">
+                        <!-- Status Filter -->
+                        <div class="flex-1">
+                            <label for="statusFilter" class="block text-sm font-medium text-gray-700 mb-1">
+                                Lọc theo trạng thái
+                            </label>
+                            <select name="status" id="statusFilter"
+                                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    onchange="document.getElementById('filterForm').submit()">
+                                <option value="all" th:selected="${currentStatus == 'all'}">Tất cả</option>
+                                <option value="in-stock" th:selected="${currentStatus == 'in-stock'}">Còn hàng (&gt; 10)</option>
+                                <option value="low-stock" th:selected="${currentStatus == 'low-stock'}">Sắp hết hàng (1-10)</option>
+                                <option value="out-of-stock" th:selected="${currentStatus == 'out-of-stock'}">Hết hàng (= 0)</option>
+                            </select>
+                        </div>
+
+                        <!-- Search Input -->
+                        <div class="flex-1">
+                            <label for="keywordInput" class="block text-sm font-medium text-gray-700 mb-1">
+                                Tìm kiếm theo tên sản phẩm
+                            </label>
+                            <div class="flex">
+                                <input type="text"
+                                       name="keyword"
+                                       id="keywordInput"
+                                       th:value="${currentKeyword}"
+                                       placeholder="Nhập tên sản phẩm..."
+                                       class="flex-1 border border-gray-300 rounded-l-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Inventory Table -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900">Danh Sách Tồn Kho</h3>
+                    <p class="text-sm text-gray-600 mt-1">
+                        Hiển thị <span th:text="${#lists.size(inventoryProducts)}">0</span> sản phẩm
+                    </p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Sản Phẩm
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Mã SP
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Số Lượng
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Trạng Thái
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Giá Nhập (đồng)
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Giá Bán (đồng)
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Đã Bán
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr th:each="product : ${inventoryProducts}" class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-10 w-10">
+                                            <img th:src="${product.imageUrl}" th:alt="${product.name}"
+                                                 class="h-10 w-10 rounded-full object-cover">
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium text-gray-900" th:text="${product.name}">Tên sản phẩm</div>
+                                            <div class="text-sm text-gray-500" th:text="${product.description}">Mô tả ngắn</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900" th:text="${product.productId}">001</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-semibold"
+                                         th:classappend="${product.quantity == 0} ? 'text-red-600' : (${product.quantity <= 10} ? 'text-orange-600' : 'text-green-600')"
+                                         th:text="${product.quantity}">0</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                                          th:classappend="${product.quantity == 0} ? 'bg-red-100 text-red-800' : (${product.quantity <= 10} ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800')"
+                                          th:text="${product.quantity == 0} ? 'Hết hàng' : (${product.quantity <= 10} ? 'Sắp hết' : 'Còn hàng')">
+                                        Còn hàng
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">
+                                        <span th:text="${#numbers.formatDecimal(product.importPrice, 3, 'POINT', 0, 'COMMA')}">0</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">
+                                        <span th:text="${product.salePrice != null ? #numbers.formatDecimal(product.salePrice, 3, 'POINT', 0, 'COMMA') : #numbers.formatDecimal(product.price, 3, 'POINT', 0, 'COMMA')}">0</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900" th:text="${product.soldCount}">0</div>
+                                </td>
+                            </tr>
+
+                            <!-- Empty state row -->
+                            <tr th:if="${#lists.isEmpty(inventoryProducts)}">
+                                <td colspan="7" class="px-6 py-12 text-center">
+                                    <div class="text-gray-400">
+                                        <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                                        </svg>
+                                        <p class="text-lg font-medium">Không có sản phẩm nào</p>
+                                        <p class="text-gray-500">Không tìm thấy sản phẩm phù hợp</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Submit form khi Enter trong search input
+        const keywordInput = document.querySelector('input[name="keyword"]');
+        if (keywordInput) {
+            keywordInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    document.getElementById('filterForm').submit();
+                }
+            });
+        }
+    });
+    </script>
+
+</body>
+</html>

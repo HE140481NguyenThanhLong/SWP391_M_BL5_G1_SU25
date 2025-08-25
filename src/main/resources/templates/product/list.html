@@ -5,41 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Danh sách sản phẩm - WinMart</title>
     <script src="https://cdn.tailwindcss.com"></script>
-     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#10B981',
-                        'primary-dark': '#059669',
-                        'primary-light': '#34D399',
-                        accent: '#F59E0B',
-                        'accent-light': '#FCD34D',
-                        neutral: {
-                            50: '#F9FAFB',
-                            100: '#F3F4F6',
-                            200: '#E5E7EB',
-                            300: '#D1D5DB',
-                            400: '#9CA3AF',
-                            500: '#6B7280',
-                            600: '#4B5563',
-                            700: '#374151',
-                            800: '#1F2937',
-                            900: '#111827'
-                        }
-                    },
-                    fontFamily: {
-                        'sans': ['Inter', 'sans-serif'],
-                        'display': ['Playfair Display', 'serif']
-                    }
-                }
-            }
-        }
-    </script>
+
 </head>
 <body class="font-sans bg-neutral-50 text-neutral-800">
 <!-- Header -->
-<div th:replace="~{component/customer-header :: header}"></div>
+<div th:replace="~{component/header :: header}"></div>
 
 <!-- Breadcrumb -->
 <div class="bg-white border-b border-neutral-200">

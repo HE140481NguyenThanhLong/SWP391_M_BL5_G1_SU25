@@ -26,13 +26,14 @@ public interface ProductCartRepository extends JpaRepository<Product, Long> {
 
 
     // Lấy top 10 sản phẩm bán chạy
-//    List<Product> findTop10BySales_count();
+//    List<Product> findTop10ByOrderBySalesCountDesc();
 
     // Hoặc dạng pageable
     @Query("SELECT p FROM Product p ORDER BY p.soldCount DESC")
     List<Product> findBestSeller(Pageable pageable);
 
 
-
+    @Query("SELECT SUM(c.quantity) FROM Cart_Items c WHERE c.user.id = :userId")
+    Integer sumQuantityByUserId(@Param("userId") Long userId);
 }
 

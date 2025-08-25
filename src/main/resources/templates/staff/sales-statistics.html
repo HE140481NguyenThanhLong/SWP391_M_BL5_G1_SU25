@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống Kê Bán Hàng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: '#10B981',
+                    'primary-dark': '#059669',
+                    'primary-light': '#34D399',
+                    accent: '#F59E0B',
+                    'accent-light': '#FCD34D',
+                    neutral: {
+                        50: '#F9FAFB',
+                        100: '#F3F4F6',
+                        200: '#E5E7EB',
+                        300: '#D1D5DB',
+                        400: '#9CA3AF',
+                        500: '#6B7280',
+                        600: '#4B5563',
+                        700: '#374151',
+                        800: '#1F2937',
+                        900: '#111827'
+                    }
+                },
+                fontFamily: {
+                    'sans': ['Inter', 'sans-serif'],
+                    'display': ['Playfair Display', 'serif']
+                }
+            }
+        }
+    }
+</script>
+<body class="bg-gray-50">
+    <div th:replace="~{component/header :: header}"></div>
+
+    <div class="ml-14">
+        <div class="container mx-auto px-6 py-8">
+            <!-- Header -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900">📊 Thống Kê Bán Hàng</h1>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="grid grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow p-6 text-center">
+                    <p class="text-sm text-gray-600 mb-2">Tổng Doanh Thu</p>
+                    <p class="text-2xl font-bold text-green-600">
+                        <span th:text="${#numbers.formatDecimal(totalRevenue, 0, 0)}">0</span> VND
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-6 text-center">
+                    <p class="text-sm text-gray-600 mb-2">Tổng Đơn Hàng</p>
+                    <p class="text-2xl font-bold text-blue-600" th:text="${totalOrders}">0</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-6 text-center">
+                    <p class="text-sm text-gray-600 mb-2">Sản Phẩm Đã Bán</p>
+                    <p class="text-2xl font-bold text-purple-600" th:text="${totalProductsSold}">0</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-6 text-center">
+                    <p class="text-sm text-gray-600 mb-2">Giá Trị Đơn TB</p>
+                    <p class="text-2xl font-bold text-orange-600">
+                        <span th:text="${#numbers.formatDecimal(averageOrderValue, 0, 0)}">0</span> VND
+                    </p>
+                </div>
+            </div>
+
+            <!-- Top Products -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-xl font-semibold mb-6">🏆 Top 5 Sản Phẩm Bán Chạy</h3>
+
+                <div th:if="${!#lists.isEmpty(topSellingProducts)}" class="space-y-4">
+                    <div th:each="product, iterStat : ${topSellingProducts}"
+                         class="flex items-center justify-between p-4 border rounded-lg">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">
+                                <span th:text="${iterStat.index + 1}">1</span>
+                            </div>
+
+                            <img th:src="${product.imageUrl}" th:alt="${product.name}"
+                                 class="w-16 h-16 object-cover rounded border"
+                                 onerror="this.src='https://via.placeholder.com/64x64?text=No+Image'">
+
+                            <div>
+                                <h4 class="font-semibold" th:text="${product.name}">Tên sản phẩm</h4>
+                                <p class="text-sm text-gray-600">
+                                    Giá: <span th:text="${#numbers.formatDecimal(product.price, 0, 0)}">0</span> VND
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="text-right">
+                            <p class="text-xl font-bold" th:text="${product.salesCount}">0</p>
+                            <p class="text-sm text-gray-600">đã bán</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${#lists.isEmpty(topSellingProducts)}" class="text-center py-8">
+                    <p class="text-gray-500">Chưa có sản phẩm nào được bán</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
