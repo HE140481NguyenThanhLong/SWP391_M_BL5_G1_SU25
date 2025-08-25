@@ -98,7 +98,7 @@ public class CustomerServiceController {
 
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         if (loggedInUser == null || loggedInUser.getRole() != Role.CUSTOMER) {
-            return "redirect:/authority/sigin";
+            return "redirect:/authority/signin";
         }
         String  username = loggedInUser.getUsername();
 
