@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi" class="scroll-smooth">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WinMart Header Component</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>WinMart Header</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
     <script>
@@ -38,22 +38,23 @@
         }
     </script>
 </head>
-<body class="font-sans bg-neutral-50 text-neutral-800">
-<!-- Tạo header component tái sử dụng với dropdown Hội viên sử dụng Flowbite -->
+<body th:fragment="header" class="font-sans bg-neutral-50 text-neutral-800">
+
 <header class="bg-white shadow-sm sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Main Header -->
         <div class="flex items-center justify-between py-4">
+            <!-- Logo -->
             <div class="flex items-center gap-8">
-                <h1 class="font-display text-3xl font-bold text-primary">FlowMart</h1>
-
+                <h1 class="font-display text-3xl font-bold text-primary">FlowShop</h1>
             </div>
 
+            <!-- Search -->
             <form th:action="@{/product/list}" method="get" class="relative w-full max-w-xl">
-                <input type="text" name="keyword"
-                       th:value="${keyword}"
+                <input type="text" name="keyword" th:value="${keyword}"
                        placeholder="Tìm kiếm sản phẩm..."
-                       class="w-full px-4 py-3 pr-12 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+                       class="w-full px-4 py-3 pr-12 border border-neutral-200 rounded-xl
+                      focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"/>
                 <button type="submit"
                         class="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-primary">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,114 +64,60 @@
                 </button>
             </form>
 
-            <!-- Thêm dropdown cho button Hội viên sử dụng Flowbite -->
-            <div  class="flex items-center space-x-6">
+            <!-- Actions (Cart + Member) -->
+            <div class="flex items-center space-x-6">
+                <!-- Cart -->
                 <div class="relative">
-                    <button id="cartButton" class="flex items-center  gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
+                    <a th:href="@{/cart/cart-list}"
+                       class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 01-2 2v4.01">
-                            </path>
+                                  d="M3 3h2l.4 2M7 13h10l3-8H6.4M7 13l-1.6-8M7 13l-2 9m12-9l-2 9M9 22a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/>
                         </svg>
-                        (<span id="cartCount">0</span>)
-                    </button>
+                        (<span id="cart-count">0</span>)
+                    </a>
                 </div>
-                <button id="memberDropdownButton" data-dropdown-toggle="memberDropdown" class="flex items-center gap-2 px-4 py-2 text-neutral-600 hover:text-primary transition-colors">
+
+                <!-- Nếu chưa đăng nhập -->
+                <a th:if="${session.loggedInUser==null}"
+                   th:href="@{/authority/signin}"
+                   class="flex items-center gap-2 px-4 py-2 text-neutral-600 hover:text-primary transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
                     </svg>
-                    Hội viên
-                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <!-- Dropdown menu -->
-                <div id="memberDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-64 border border-neutral-200">
-                    <div class="px-4 py-3 text-sm text-neutral-900 border-b border-neutral-100">
-                        <div class="font-medium">Xin chào!</div>
-                        <div class="text-neutral-500">Đăng nhập để trải nghiệm tốt hơn</div>
-                    </div>
-                    <ul class="py-2 text-sm text-neutral-700">
-                        <li>
-                            <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 transition-colors">
-                                <svg class="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                </svg>
-                                Tài khoản
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 transition-colors">
-                                <svg class="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
-                                </svg>
-                                Tin tức giải thưởng
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 transition-colors">
-                                <svg class="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4 19h5v-5l-5 5zM4 5h5V0L4 5zM20 5h-5V0l5 5z"></path>
-                                </svg>
-                                Thông tin ưu thưởng
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 transition-colors">
-                                <svg class="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                                Điều kiện ưu thưởng
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 transition-colors">
-                                <svg class="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                </svg>
-                                Quay thưởng
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 transition-colors">
-                                <svg class="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                Lịch sử quay thưởng
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 transition-colors">
-                                <svg class="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                                </svg>
-                                Giải thưởng
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 transition-colors">
-                                <svg class="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                                </svg>
-                                Quản lý đơn hàng
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 transition-colors">
-                                <svg class="w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                                </svg>
-                                Sản phẩm đã mua
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="py-2 border-t border-neutral-100">
-                        <a href="#" class="flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                            </svg>
-                            Đăng xuất
-                        </a>
+                    Đăng nhập
+                </a>
+
+                <!-- Nếu đã đăng nhập -->
+                <div th:if="${session.loggedInUser!=null}" class="relative">
+                    <button id="memberDropdownButton" data-dropdown-toggle="memberDropdown"
+                            class="flex items-center gap-2 px-4 py-2 text-neutral-600 hover:text-primary transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                        <span th:text="${session.loggedInUser.getUsername().toUpperCase()}">Hội viên</span>
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown -->
+                    <div id="memberDropdown"
+                         class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-64 border border-neutral-200">
+                        <div class="px-4 py-3 text-sm text-neutral-900 border-b border-neutral-100">
+                            <div class="font-medium" th:text="${session.loggedInUser.getUsername().toUpperCase()}">Xin chào</div>
+                            <div class="text-neutral-500" th:text="${session.loggedInUser.getEmail()}">email@example.com</div>
+                        </div>
+                        <ul class="py-2 text-sm text-neutral-700">
+                            <li><a th:href="@{/customerService/reportHistoryForCustomer}" class="block px-4 py-2 hover:bg-neutral-50">Report Form</a></li>
+                            <li><a href="#" class="block px-4 py-2 hover:bg-neutral-50">Orders</a></li>
+                            <li><a href="#" class="block px-4 py-2 hover:bg-neutral-50">Settings</a></li>
+                        </ul>
+                        <div class="py-2 border-t border-neutral-100">
+                            <a th:href="@{/authority/logout}" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">Đăng xuất</a>
+                        </div>
                     </div>
                 </div>
 
@@ -178,20 +125,21 @@
         </div>
     </div>
 </header>
-<script src="https://unpkg.com/flowbite@2.5.1/dist/flowbite.min.js"></script>
-</body>
-<!-- Demo Content -->
+
+<!-- Flowbite JS -->
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+
 <script>
     async function updateCartCount() {
         try {
             const res = await fetch('/giohang/count');
             const count = await res.text();
-            document.getElementById('cartCount').textContent = count;
+            document.getElementById('cart-count').textContent = count;
         } catch (e) {
             console.error("Lỗi lấy giỏ hàng:", e);
         }
     }
-
     document.addEventListener("DOMContentLoaded", updateCartCount);
 </script>
+</body>
 </html>
