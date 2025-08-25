@@ -52,6 +52,9 @@ public class CheckoutController {
         if(result == null){
             return "redirect:/checkout?result=fail";
         }
+        if(request.getPaymentType() != PaymentType.CASH_ON_DELIVERY)
+            return "/rms/payment?orderId=" + result;
+
         return "redirect:/checkout?result=success&orderId=" + result;
     }
 

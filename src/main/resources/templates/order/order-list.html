@@ -31,7 +31,8 @@
                                     name="status"
                                     class="block w-full min-w-[8rem] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                                     onchange="this.form.submit()">
-                                <option >All orders</option>
+                                <option value="">Chọn trạng thái </option>
+                                <option value="all">Tất cả</option>
                                 <option th:each="item : ${allStatus}"
                                         th:value="${item.name()}"
                                         th:text="${item}">
@@ -74,10 +75,29 @@
 
 
                         <div class="w-full grid sm:grid-cols-2 lg:flex lg:w-64 lg:items-center lg:justify-end gap-4">
-                            <button type="button" class="w-full rounded-lg border border-red-700 px-3 py-2 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900 lg:w-auto">Cancel order</button>
+                            <!-- Nếu status = PENDING thì hiển thị nút hủy -->
+                            <form th:action="@{|/order/${item.order_id}/status|}" method="post" style="display:inline">
+                                <input type="hidden" name="status" value="CANCELLED"/>
+                                <button type="submit"
+                                        th:if="${item.status == T(spring.backend.m_bl5_g1_su25.OnlineShopping.OrderScreen.enums.OrderStatus).PENDING}"
+                                        class="w-full rounded-lg border border-red-700 px-3 py-2 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900 lg:w-auto">
+                                    Hủy hàng
+                                </button>
+                            </form>
+
+                            <!-- Nếu status = PROCESSING thì hiển thị nút delivered -->
+                            <form th:action="@{|/order/${item.order_id}/status|}" method="post" style="display:inline">
+                                <input type="hidden" name="status" value="DELIVERED"/>
+                                <button type="submit"
+                                        th:if="${item.status == T(spring.backend.m_bl5_g1_su25.OnlineShopping.OrderScreen.enums.OrderStatus).PROCESSING}"
+                                        class="w-full rounded-lg border border-green-700 px-3 py-2 text-center text-sm font-medium text-green-700 hover:bg-green-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-green-300 dark:border-green-500 dark:text-green-500 dark:hover:bg-green-600 dark:hover:text-white dark:focus:ring-green-900 lg:w-auto">
+                                    Đã nhận hàng
+                                </button>
+                            </form>
+
                             <a th:href="@{|/order/order-list/${item.order_id}|}"
                                class="w-full inline-flex justify-center rounded-lg  border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 lg:w-auto">
-                                View details</a>
+                                Chi tiết</a>
                         </div>
                     </div>
 

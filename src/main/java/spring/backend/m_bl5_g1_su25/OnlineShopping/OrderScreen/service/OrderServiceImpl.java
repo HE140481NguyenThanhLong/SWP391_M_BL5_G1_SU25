@@ -1,8 +1,11 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.OrderScreen.service;
 
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Cart.repository.CartItemRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Cart.service.CartItemService;
@@ -52,7 +55,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public Order changeOrderStatus(Integer orderId, OrderStatus newStatus) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng"));
         order.setStatus(newStatus);
         return orderRepository.save(order);
     }
@@ -120,7 +123,8 @@ public class OrderServiceImpl implements OrderService{
                         .orElseThrow(() -> new RuntimeException("Product not found"));
 
                 // Kiểm tra tồn kho
-                if (product.getQuantity() < cartItem.getQuantity()) {
+                if (product.getQuantity()
+                        < cartItem.getQuantity()) {
                     throw new RuntimeException("Not enough stock for product: " + product.getName());
                 }
 
@@ -146,7 +150,7 @@ public class OrderServiceImpl implements OrderService{
 //            orderRepository.save(order);
             orderDetailRepository.saveAll(orderDetails);
             // 6. Xóa giỏ hàng
-            cartItemRepository.clearCartByUser(user.getUser_id());
+//            cartItemRepository.clearCartByUser(user.getUser_id());
 
             return order.getOrder_id();
 
