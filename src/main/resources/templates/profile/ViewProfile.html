@@ -30,7 +30,7 @@
                 </svg>
             </div>
             <h2 class="text-2xl font-bold text-gray-900 mb-2">Không Tìm Thấy Hồ Sơ</h2>
-            <p class="text-gray-600 mb-6">Không thể tải thông tin hồ sơ. Vui lòng thử lại hoặc liên hệ hỗ trợ.</p>
+            <p class="text-gray-600 mb-6">Không thể tải thông tin hồ sơ. Vui lòng thử lại.</p>
             <a href="/dashboard"
                class="inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,10 +55,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h1 class="text-3xl font-bold text-gray-900">Hồ Sơ Người Dùng</h1>
-                        <p class="mt-1 text-sm text-gray-600" th:if="${isAdminView != null and isAdminView}">
-                            Chế độ xem quản trị - Xem hồ sơ người dùng
-                        </p>
-                        <p class="mt-1 text-sm text-gray-600" th:unless="${isAdminView != null and isAdminView}">
+                        <p class="mt-1 text-sm text-gray-600">
                             Quản lý thông tin cá nhân và cài đặt của bạn
                         </p>
                     </div>
@@ -216,89 +213,12 @@
                         </div>
                     </div>
 
-                    <!-- Admin-Only Information Card -->
-                    <div th:if="${profile.showAdminFields != null and profile.showAdminFields}"
-                         class="bg-white shadow-xl rounded-2xl overflow-hidden border-l-4 border-yellow-400">
-                        <div class="bg-yellow-50 px-6 py-4 border-b border-yellow-200">
-                            <h3 class="text-lg font-semibold text-gray-900 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                                </svg>
-                                Thông Tin Quản Trị
-                            </h3>
-                            <p class="text-sm text-yellow-700 mt-1">Chi tiết hệ thống và quản trị</p>
-                        </div>
-                        <div class="p-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="space-y-1">
-                                    <label class="text-sm font-medium text-gray-700">ID Người Dùng</label>
-                                    <div class="mt-1 p-3 bg-gray-50 rounded-lg border">
-                                        <p class="text-sm text-gray-900 font-mono"
-                                           th:text="${profile.userId != null ? profile.userId : 'Chưa có'}">
-                                           Chưa có
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="space-y-1">
-                                    <label class="text-sm font-medium text-gray-700">Tên Đăng Nhập</label>
-                                    <div class="mt-1 p-3 bg-gray-50 rounded-lg border">
-                                        <p class="text-sm text-gray-900 font-mono"
-                                           th:text="${profile.username != null and profile.username != '' ? profile.username : 'Chưa có'}">
-                                           Chưa có
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="space-y-1">
-                                    <label class="text-sm font-medium text-gray-700">Tên</label>
-                                    <div class="mt-1 p-3 bg-gray-50 rounded-lg border">
-                                        <p class="text-sm text-gray-900"
-                                           th:text="${profile.firstName != null and profile.firstName != '' ? profile.firstName : 'Chưa có'}">
-                                           Chưa có
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="space-y-1">
-                                    <label class="text-sm font-medium text-gray-700">Họ</label>
-                                    <div class="mt-1 p-3 bg-gray-50 rounded-lg border">
-                                        <p class="text-sm text-gray-900"
-                                           th:text="${profile.lastName != null and profile.lastName != '' ? profile.lastName : 'Chưa có'}">
-                                           Chưa có
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="space-y-1">
-                                    <label class="text-sm font-medium text-gray-700">Ngày Tạo</label>
-                                    <div class="mt-1 p-3 bg-gray-50 rounded-lg border">
-                                        <p class="text-sm text-gray-900"
-                                           th:text="${profile.createdAt != null ? #temporals.format(profile.createdAt, 'dd/MM/yyyy HH:mm') : 'Chưa có'}">
-                                           Chưa có
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="space-y-1">
-                                    <label class="text-sm font-medium text-gray-700">Cập Nhật Lần Cuối</label>
-                                    <div class="mt-1 p-3 bg-gray-50 rounded-lg border">
-                                        <p class="text-sm text-gray-900"
-                                           th:text="${profile.updatedAt != null ? #temporals.format(profile.updatedAt, 'dd/MM/yyyy HH:mm') : 'Chưa có'}">
-                                           Chưa có
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Action Buttons -->
                     <div class="bg-white shadow-xl rounded-2xl p-6">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Thao Tác</h3>
                         <div class="flex flex-wrap gap-4">
 
-                            <!-- Edit Profile Button (For both own profile and admin view) -->
+                            <!-- Edit Profile Button -->
                             <a href="/profile/edit"
                                class="inline-flex items-center px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-all duration-200 transform hover:scale-105">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -308,9 +228,8 @@
                                 Chỉnh Sửa Hồ Sơ
                             </a>
 
-                            <!-- Change Password Button - Only show for logged in users, not for admin view -->
-                            <a th:href="@{/authority/forgot-password}"
-                               th:if="${isOwnProfile != null and isOwnProfile}"
+                            <!-- Change Password Button -->
+                            <a href="/authority/forgot-password"
                                class="inline-flex items-center px-6 py-3 bg-orange-600 text-white font-medium rounded-lg hover:bg-orange-700 transition-all duration-200 transform hover:scale-105">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v-2L4.257 9.257a6 6 0 018.486-8.486L15 3z"/>
