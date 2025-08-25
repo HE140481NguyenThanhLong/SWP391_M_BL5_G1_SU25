@@ -15,38 +15,45 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.repository.Custome
 import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
-
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthorizedServiceImpl implements  AuthorizedService {
     CustomerRepository customerRepository;
-    PasswordEncoder passwordEncoder;
     ModelMapper modelMapper;
     AuthorizedRepo authorizedRepo;
+    PasswordEncoder passwordEncoder;
 
     @Override
     public Customer signUp(SignUpRequest request) {
-        User user=modelMapper.map(request,User.class);
-        user.setPassword(request.getPassword());
+        // Create User entity
+        User user = modelMapper.map(request, User.class);
+        // Encode password before saving
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setCreatedAt(LocalDateTime.now()); // Set createdAt before saving
+
+        // Save User first
         User savedUser = authorizedRepo.save(user);
 
-        Customer customer=modelMapper.map(savedUser,Customer.class);
-        customer.setUser(savedUser);// set user into customer
+        // Create Customer entity
+        Customer customer = modelMapper.map(savedUser, Customer.class);
+        customer.setUser(savedUser); // Link customer to user
         customer.setFirstname(request.getFirstname());
         customer.setLastname(request.getLastname());
-        user.setCreatedAt(LocalDateTime.now());
+
+        // Save and return Customer
         return customerRepository.save(customer);
     }
 
     @Override
     public User login(String username, String password) {
         User user = findUserByUsername(username);
-        if (user != null && password.equals(user.getPassword())) {
+        // Use PasswordEncoder to check password
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             return user;
         }
         return null;
     }
+
     public User findUserByUsername(String username) {
         return authorizedRepo.findByUsername(username).orElse(null);
     }
-
 }
