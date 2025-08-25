@@ -34,7 +34,7 @@ public class CartController {
         Product product = productCartRepository.findById(productId).orElse(null);
 
         if (product == null) {
-            // Nếu không tìm thấy -> trả về trang lỗi 404
+            // Nếu không tìm thấy -> trả về trang lỗi 4 0 4
             return "error/404";
         }
 
