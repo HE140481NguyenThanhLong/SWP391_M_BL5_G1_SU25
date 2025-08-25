@@ -158,5 +158,12 @@ public class CartController {
         }
         return "redirect:/cart/cart-list?result=success";
     }
+    @GetMapping("/count")
+    @ResponseBody
+    public int getCartCount(HttpSession session) {
+        User loggedIn = (User) session.getAttribute("loggedInUser");
+        if (loggedIn == null) return 0;
+        return cartItemService.getCartItemCount(loggedIn.getUser_id());
+    }
 
 }

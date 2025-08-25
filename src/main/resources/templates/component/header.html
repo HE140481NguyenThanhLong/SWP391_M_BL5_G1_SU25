@@ -6,40 +6,40 @@
   <title>WinMart Header</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#10B981',
-            'primary-dark': '#059669',
-            'primary-light': '#34D399',
-            accent: '#F59E0B',
-            'accent-light': '#FCD34D',
-            neutral: {
-              50: '#F9FAFB',
-              100: '#F3F4F6',
-              200: '#E5E7EB',
-              300: '#D1D5DB',
-              400: '#9CA3AF',
-              500: '#6B7280',
-              600: '#4B5563',
-              700: '#374151',
-              800: '#1F2937',
-              900: '#111827'
-            }
-          },
-          fontFamily: {
-            'sans': ['Inter', 'sans-serif'],
-            'display': ['Playfair Display', 'serif']
+</head>
+
+<body th:fragment="header" class="font-sans bg-neutral-50 text-neutral-800">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: '#10B981',
+          'primary-dark': '#059669',
+          'primary-light': '#34D399',
+          accent: '#F59E0B',
+          'accent-light': '#FCD34D',
+          neutral: {
+            50: '#F9FAFB',
+            100: '#F3F4F6',
+            200: '#E5E7EB',
+            300: '#D1D5DB',
+            400: '#9CA3AF',
+            500: '#6B7280',
+            600: '#4B5563',
+            700: '#374151',
+            800: '#1F2937',
+            900: '#111827'
           }
+        },
+        fontFamily: {
+          'sans': ['Inter', 'sans-serif'],
+          'display': ['Playfair Display', 'serif']
         }
       }
     }
-  </script>
-</head>
-<body th:fragment="header" class="font-sans bg-neutral-50 text-neutral-800">
-
+  }
+</script>
 <header class="bg-white shadow-sm sticky top-0 z-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Main Header -->
