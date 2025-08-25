@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="bg-light border-end min-vh-100" style="width:200px">
+        <div th:replace="component/header"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-grow-1 px-4">
+        <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
+            <h2 class="fw-bold fs-2 mb-0">Danh sách tài khoản</h2>
+
+        </div>
+
+        <!-- Filter Form -->
+        <form th:action="@{/account-list}" method="get" class="row g-2 mb-3 align-items-center">
+            <!-- Search by username -->
+            <div class="col-md-4">
+                <input type="text" class="form-control form-control-sm" name="username"
+                       placeholder="Tìm theo username..."
+                       th:value="${username}">
+            </div>
+
+            <!-- Filter by role -->
+            <div class="col-md-3">
+                <select class="form-select form-select-sm" name="role">
+                    <option value=""
+                            th:selected="${selectedRole == null}">-- Tất cả Role --</option>
+                    <option th:each="r : ${roles}"
+                            th:value="${r}"
+                            th:text="${r}"
+                            th:selected="${selectedRole == r}"></option>
+                </select>
+            </div>
+
+            <!-- Filter by status -->
+            <div class="col-md-3">
+                <select class="form-select form-select-sm" name="status">
+                    <option value=""
+                            th:selected="${selectedStatus == null}">-- Tất cả Trạng thái --</option>
+                    <option th:each="s : ${statuses}"
+                            th:value="${s}"
+                            th:text="${s}"
+                            th:selected="${selectedStatus == s}"></option>
+                </select>
+            </div>
+
+            <!-- Submit -->
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary btn-sm w-100">Lọc</button>
+            </div>
+        </form>
+
+        <!-- User Table -->
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <table class="table table-bordered table-hover mb-0">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Tên tài khoản</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Role</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày tạo</th>
+                        <th class="text-center">Thao tác</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${userPage.content}">
+
+                    <td th:text="${user.username}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${user.phoneNumber}"></td>
+                        <td th:text="${user.role}"></td>
+                        <td th:text="${user.status}"></td>
+                        <td th:text="${#temporals.format(user.created_at, 'dd/MM/yyyy')}"></td>
+                        <td class="text-center">
+                            <a th:href="@{'/account-edit/' + ${user.user_id}}"
+                               class="btn btn-sm btn-primary">Chỉnh sửa</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav th:if="${totalPages > 1}" class="mt-3">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/account-list(username=${username}, role=${selectedRole}, status=${selectedStatus}, page=${currentPage - 1})}">
+                        Trước
+                    </a>
+                </li>
+
+                <li class="page-item"
+                    th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+                    th:classappend="${i == currentPage} ? 'active'">
+                    <a class="page-link"
+                       th:text="${i + 1}"
+                       th:href="@{/account-list(username=${username}, role=${selectedRole}, status=${selectedStatus}, page=${i})}"></a>
+                </li>
+
+                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/account-list(username=${username}, role=${selectedRole}, status=${selectedStatus}, page=${currentPage + 1})}">
+                        Sau
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+
+    </div>
+</div>
+
+</body>
+</html>
