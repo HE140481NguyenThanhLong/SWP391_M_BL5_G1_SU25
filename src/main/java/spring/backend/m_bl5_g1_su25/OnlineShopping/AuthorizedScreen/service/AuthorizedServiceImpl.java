@@ -26,7 +26,7 @@ public class AuthorizedServiceImpl implements  AuthorizedService {
     @Override
     public Customer signUp(SignUpRequest request) {
         User user=modelMapper.map(request,User.class);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPassword(request.getPassword());
         User savedUser = authorizedRepo.save(user);
 
         Customer customer=modelMapper.map(savedUser,Customer.class);
