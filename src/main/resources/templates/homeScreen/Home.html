@@ -131,7 +131,7 @@
                         </div>
                         <p th:text="${product.description}" class="text-sm text-gray-600 dark:text-gray-300">Noise-cancelling, 30h battery, ultra-soft cushions.</p>
 
-                        <!-- Add to cart (POST to backend) -->
+                        <!-- Thêm vào giỏ hàng (POST to backend) -->
                         <form action="/cart/add" method="post" class="mt-4">
                             <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
                             <input type="hidden" name="productId" value="123" />

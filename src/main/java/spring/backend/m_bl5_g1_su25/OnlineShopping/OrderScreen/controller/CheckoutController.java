@@ -1,5 +1,6 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.OrderScreen.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,21 +47,34 @@ public class CheckoutController {
 
     @Transactional
     @PostMapping("create")
-    public String createOrder(@ModelAttribute OrderRequest request) {
+    public String createOrder(@ModelAttribute OrderRequest request,
+                              HttpSession session) {
+
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) return "redirect:/authority/signin";
+        int userId = loggedInUser.getUser_id();
+
+        request.setUserId(userId);
+
         Integer result = orderService.checkout(request);
 
         if(result == null){
             return "redirect:/checkout?result=fail";
         }
-        return "redirect:/checkout?result=success&orderId=" + result;
+        if(request.getPaymentType() != PaymentType.CASH_ON_DELIVERY)
+            return "redirect:/payment?orderId=" + result;
+
+        return "redirect:/order/order-list/" + result + "?result=success";
     }
 
 
 
     @GetMapping("")
-    public String home(Model model) {
+    public String home(Model model, HttpSession session) {
 
-        int userId = 2;
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) return "redirect:/authority/signin";
+        int userId = loggedInUser.getUser_id();
 
         // Tính toán giá trị giỏ hàng
         BigDecimal originalPrice = cartItemService.getCartTotalPrice(userId);

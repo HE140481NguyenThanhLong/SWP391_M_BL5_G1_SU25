@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.OrderScreen.entity.Order;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.enums.TransactionStatus;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -40,4 +42,16 @@ public class Transaction {
     @Column(columnDefinition = "NVARCHAR(255)")
     String verificationCode;
 
+    @Column(columnDefinition = "NVARCHAR(255)")
+    String cardFullName;
+    @Column(columnDefinition = "NVARCHAR(255)")
+    String cardNumber;
+    @Column(columnDefinition = "NVARCHAR(255)")
+    String cvv;
+    @Column(columnDefinition = "NVARCHAR(255)")
+    String expiryMonth;
+
+    @CreationTimestamp
+    @Column(nullable = false,updatable = false)
+    LocalDateTime createdAt;
 }

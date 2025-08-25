@@ -15,25 +15,79 @@
 <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
     <form action="#" class="mx-auto max-w-screen-xl px-4 2xl:px-0">
         <div class="mx-auto max-w-3xl">
+            <a href="/order/order-list">
+                <button type="button" class="mb-3 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                    Quay lại
+                </button>
+            </a>
+
             <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Chi tiết đơn hàng</h2>
 
-            <div class="mt-6 space-y-4 border-b border-t border-gray-200 py-8 dark:border-gray-700 sm:mt-8">
-                <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Thông tin người nhận</h4>
+            <div class="mt-6 border-b border-t border-gray-200 py-8 dark:border-gray-700 sm:mt-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Cột 1 -->
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Thông tin người nhận</h4>
+                        <dl>
+                            <dd th:text="${'Người nhận: ' + order.shippingInformation.getRecipientName()}"
+                                class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                                Bonnie Green
+                            </dd>
+                            <dd th:text="${'SĐT người nhận: ' + order.shippingInformation.getPhoneNumber()}"
+                                class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                                +1 234 567 890
+                            </dd>
+                            <dd th:text="${'Địa chỉ nhận: '
+                                + order.shippingInformation.getStreetAddress() + ', '
+                                + order.shippingInformation.wardName + ', '
+                                + order.shippingInformation.districtName + ', '
+                                + order.shippingInformation.provinceName}"
+                                class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                                San Francisco, California, United States
+                            </dd>
+                        </dl>
+                    </div>
 
-                <dl>
-                    <dt class="text-base font-medium text-gray-900 dark:text-white">Individual</dt>
-                    <dd
-                            th:text="${order.shippingInformation.getPhoneNumber() + ', '
-                            + order.shippingInformation.wardName + ', '
-                            + order.shippingInformation.districtName + ', '
-                            + order.shippingInformation.districtName + ', '
-                            + order.shippingInformation.provinceName
-                            }"
-                        class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">Bonnie Green - +1 234 567 890, San Francisco, California, United States, 3454, Scott Street</dd>
-                </dl>
+                    <!-- Cột 2 -->
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Phương thức thanh toán</h4>
+                        <dl>
+                            <dd th:text="${order.paymentMethod.paymentType}"
+                                class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                                VNPAY
+                            </dd>
+                        </dl>
 
-                <button type="button" data-modal-target="billingInformationModal" data-modal-toggle="billingInformationModal" class="text-base font-medium text-primary-700 hover:underline dark:text-primary-500">Edit</button>
+                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mt-4">Mã giao dịch (nếu có)</h4>
+                        <dl>
+                            <dd th:text="${order.paymentMethod.payment_id}"
+                                class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                                TXN123456
+                            </dd>
+                        </dl>
+
+                        <h4 th:if="${trans != null and order.paymentMethod.paymentType != T(spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.enums.PaymentType).CASH_ON_DELIVERY}" class="text-lg font-semibold text-gray-900 dark:text-white mt-4">
+                            Trạng thái thanh toán</h4>
+                        <dl>
+                            <!-- Nếu trans != null -->
+                            <dd th:if="${trans != null and order.paymentMethod.paymentType != T(spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.enums.PaymentType).CASH_ON_DELIVERY}"
+                                class="mt-1 text-base font-normal text-green-600 dark:text-green-400">
+                                Thành công
+                            </dd>
+
+                            <!-- Nếu trans == null -->
+                            <dd th:if="${trans == null and order.paymentMethod.paymentType != T(spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.enums.PaymentType).CASH_ON_DELIVERY}" class="mt-1">
+                                Thanh toán chưa thành công
+                                <a href="/payment"
+                                   class="inline-block px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                                    Thanh toán ngay
+                                </a>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
             </div>
+
 
             <div class="mt-6 sm:mt-8">
                 <div class="relative overflow-x-auto border-b border-gray-200 dark:border-gray-800">
@@ -52,7 +106,7 @@
 
                             <td th:text=" 'x' + ${item.quantity}" class="p-4 text-base font-normal text-gray-900 dark:text-white">x1</td>
 
-                            <td th:text="${item.quantity * item.product.price}" class="p-4 text-right text-base font-bold text-gray-900 dark:text-white">$1,499</td>
+                            <td th:text="${#numbers.formatDecimal(item.quantity * item.product.price, 1, 'COMMA', 1, 'POINT')}" class="p-4 text-right text-base font-bold text-gray-900 dark:text-white">$1,499</td>
                         </tr>
 
                         </tbody>
@@ -66,36 +120,36 @@
                         <div class="space-y-2">
                             <dl class="flex items-center justify-between gap-4">
                                 <dt class="text-gray-500 dark:text-gray-400">Giá gốc</dt>
-                                <dd class="text-base font-medium text-gray-900 dark:text-white" th:text="${originalPrice}">$6,592.00</dd>
+                                <dd class="text-base font-medium text-gray-900 dark:text-white" th:text="${#numbers.formatDecimal(originalPrice, 1, 'COMMA', 1, 'POINT')}">$6,592.00</dd>
                             </dl>
 
                             <dl class="flex items-center justify-between gap-4">
                                 <dt class="text-gray-500 dark:text-gray-400">Tiết kiệm</dt>
-                                <dd class="text-base font-medium text-green-500" th:text="${savings}">-$299.00</dd>
+                                <dd class="text-base font-medium text-green-500" th:text="${#numbers.formatDecimal(savings, 1, 'COMMA', 1, 'POINT')}">-$299.00</dd>
                             </dl>
 
                             <dl class="flex items-center justify-between gap-4">
                                 <dt class="text-gray-500 dark:text-gray-400">Thuế</dt>
-                                <dd class="text-base font-medium text-gray-900 dark:text-white" th:text="${tax}">$99</dd>
+                                <dd class="text-base font-medium text-gray-900 dark:text-white" th:text="${#numbers.formatDecimal(tax, 1, 'COMMA', 1, 'POINT')}">$99</dd>
                             </dl>
                         </div>
 
                         <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
                             <dt class="text-lg font-bold text-gray-900 dark:text-white">Tổng cộng</dt>
-                            <dd class="text-lg font-bold text-gray-900 dark:text-white" th:text="${total}">$7,191.00</dd>
+                            <dd class="text-lg font-bold text-gray-900 dark:text-white" th:text="${#numbers.formatDecimal(total, 1, 'COMMA', 1, 'POINT')}">$7,191.00</dd>
                         </dl>
                     </div>
 
-                    <div class="flex items-start sm:items-center">
-                        <input id="terms-checkbox-2" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" />
-                        <label for="terms-checkbox-2" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"> I agree with the <a href="#" title="" class="text-primary-700 underline hover:no-underline dark:text-primary-500">Terms and Conditions</a> of use of the Flowbite marketplace </label>
-                    </div>
+<!--                    <div class="flex items-start sm:items-center">-->
+<!--                        <input id="terms-checkbox-2" type="checkbox" value="" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" />-->
+<!--                        <label for="terms-checkbox-2" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"> I agree with the <a href="#" title="" class="text-primary-700 underline hover:no-underline dark:text-primary-500">Terms and Conditions</a> of use of the Flowbite marketplace </label>-->
+<!--                    </div>-->
 
-                    <div class="gap-4 sm:flex sm:items-center">
-                        <button type="button" class="w-full rounded-lg  border border-gray-200 bg-white px-5  py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">Return to Shopping</button>
+<!--                    <div class="gap-4 sm:flex sm:items-center">-->
+<!--                        <button type="button" class="w-full rounded-lg  border border-gray-200 bg-white px-5  py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">Return to Shopping</button>-->
 
-                        <button type="submit" class="mt-4 flex w-full items-center justify-center rounded-lg bg-primary-700  px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300  dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 sm:mt-0">Send the order</button>
-                    </div>
+<!--                        <button type="submit" class="mt-4 flex w-full items-center justify-center rounded-lg bg-primary-700  px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300  dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 sm:mt-0">Send the order</button>-->
+<!--                    </div>-->
                 </div>
             </div>
         </div>
@@ -450,6 +504,20 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+<script>
+    // Lấy param từ URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const result = urlParams.get('result');
+
+    if (result === "success") {
+        toastr.success("Đặt hàng thành công!");
+    } else if (result === "fail") {
+        toastr.error("Đặt hàng thất bại, vui lòng thử lại sau!");
+    }
+</script>
 </body>
 </html>

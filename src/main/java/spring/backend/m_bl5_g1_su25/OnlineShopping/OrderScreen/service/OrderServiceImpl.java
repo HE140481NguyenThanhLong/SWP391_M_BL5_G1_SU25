@@ -52,7 +52,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public Order changeOrderStatus(Integer orderId, OrderStatus newStatus) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng"));
         order.setStatus(newStatus);
         return orderRepository.save(order);
     }
@@ -70,8 +70,9 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public Integer checkout(OrderRequest request) {
         try {
+
             // 1. Lấy thông tin cần thiết
-            User user = userRepository.findById(2L)
+            User user = userRepository.findById(request.getUserId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             Province province = provinceRepository.findById(request.getProvince())
@@ -87,7 +88,7 @@ public class OrderServiceImpl implements OrderService{
 
             // 2. Tạo Payment
             Payment payment = new Payment();
-            payment.setPaymentType(PaymentType.CASH_ON_DELIVERY);
+            payment.setPaymentType(request.getPaymentType());
             payment.setUser(user);
             paymentRepository.save(payment);
 
