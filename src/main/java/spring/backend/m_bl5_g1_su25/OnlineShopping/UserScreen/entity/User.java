@@ -52,7 +52,7 @@ public class User {
 
     @Column(nullable = false,length = 50)
     String phoneNumber;
-    @Column(nullable = false)
+    @Column(nullable = true)
     LocalDate birthday;
     @Column(length = 255, columnDefinition = "NVARCHAR(255)")
     String address1;

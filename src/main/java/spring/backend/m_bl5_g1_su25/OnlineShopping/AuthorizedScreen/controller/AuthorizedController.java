@@ -18,6 +18,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.dto.request.
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.dto.request.SignInRequest;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.dto.request.SignUpRequest;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.service.AuthorizedService;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.service.AuthorizedServiceImpl;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.Role;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.UserStatus;
@@ -26,10 +27,10 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.UserStatus;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthorizedController {
 
-    private final AuthorizedService authorizedService;
+    private final AuthorizedServiceImpl authorizedService;
 
     @Autowired
-    public AuthorizedController(AuthorizedService authorizedService) {
+    public AuthorizedController(AuthorizedServiceImpl authorizedService) {
         this.authorizedService = authorizedService;
     }
 

@@ -3,6 +3,7 @@ package spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.service;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -10,12 +11,16 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class EmailService {
 
-    JavaMailSender mailSender;
+    private JavaMailSender mailSender;
+//    @Autowired
+//    public EmailService(JavaMailSender mailSender) {
+//        this.mailSender = mailSender;
+//    }
 
-public void sendPasswordResetEmail(User user, String token) {
+    public void sendPasswordResetEmail(User user, String token) {
 try {
 SimpleMailMessage message = new SimpleMailMessage();
 message.setTo(user.getEmail());
