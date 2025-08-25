@@ -1,147 +1,110 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.Profile.controller;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.repository.AuthorizedRepo;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Profile.dto.ProfileViewDto;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.Profile.dto.request.ProfileEditRequest;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Profile.service.ProfileService;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.Role;
 
-import java.util.Optional;
-
-/**
- * Các chức năng quản lý hồ sơ người dùng: staff và customer tự xem bản thân
- *admin thì xem của người khác
- * Endpoints:
- * - /profile/view: View own profile (STAFF, CUSTOMER, ADMIN)
- * - /profile/admin/{userId}: Admin view any user's profile (ADMIN only)
- * - /profile/edit: Edit own profile
- * - /profile/admin/{userId}/edit: Admin edit any user's profile? (ADMIN only)(idk, not merged yet)
- */
 @Controller
 @RequestMapping("/profile")
 @RequiredArgsConstructor
 public class ProfileController {
 
     private final ProfileService profileService;
-    private final AuthorizedRepo authorizedRepo;
+    private final AuthorizedRepo userRepository;
 
     @GetMapping("/view")
-    public String viewOwnProfile(Model model, HttpSession session) {
-        User loggedInUser = (User) session.getAttribute("loggedInUser");
-
-        // Check if user is logged in
-        if (loggedInUser == null) {
+    public String viewProfile(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        User user = (User) session.getAttribute("loggedInUser");
+        if (user == null) {
             return "redirect:/authority/signin";
         }
 
-        // Profile is only available for STAFF and CUSTOMER, not ADMIN
-        if (loggedInUser.getRole() != Role.STAFF && loggedInUser.getRole() != Role.CUSTOMER) {
-            return "redirect:/";
-        }
-
         try {
-            ProfileViewDto profile = profileService.getProfileView(loggedInUser);
+            ProfileViewDto profile = profileService.getProfileView(user);
             model.addAttribute("profile", profile);
-            model.addAttribute("isOwnProfile", true);
+            model.addAttribute("loggedInUser", user);
             return "profile/ViewProfile";
         } catch (Exception e) {
-            model.addAttribute("error", "Không thể tải thông tin hồ sơ: " + e.getMessage());
-            model.addAttribute("profile", null);
-            return "profile/ViewProfile";
-        }
-    }
-
-    @GetMapping("/admin/{userId}")
-    public String viewUserProfile(@PathVariable Integer userId, Model model, HttpSession session) {
-        User loggedInUser = (User) session.getAttribute("loggedInUser");
-
-        if (loggedInUser == null) {
-            return "redirect:/authority/signin";
-        }
-
-        if (loggedInUser.getRole() != Role.STAFF) {
-            return "redirect:/";
-        }
-
-        Optional<User> targetUserOpt = authorizedRepo.findById(userId.longValue());
-        if (targetUserOpt.isEmpty()) {
-            model.addAttribute("error", "User not found");
-            return "redirect:/";
-        }
-
-        try {
-            ProfileViewDto profile = profileService.getProfileView(targetUserOpt.get());
-            model.addAttribute("profile", profile);
-            model.addAttribute("isAdminView", true);
-            model.addAttribute("targetUserId", userId);
-            return "profile/ViewProfile";
-        } catch (Exception e) {
-            model.addAttribute("error", "Không thể tải thông tin hồ sơ: " + e.getMessage());
-            model.addAttribute("profile", null);
-            return "profile/ViewProfile";
+            redirectAttributes.addFlashAttribute("error", "Không thể tải thông tin hồ sơ");
+            return redirectToHome(user);
         }
     }
 
     @GetMapping("/edit")
-    public String editOwnProfile(Model model, HttpSession session) {
-        User loggedInUser = (User) session.getAttribute("loggedInUser");
-
-        // Check if user is logged in
-        if (loggedInUser == null) {
+    public String editProfile(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+        User user = (User) session.getAttribute("loggedInUser");
+        if (user == null) {
             return "redirect:/authority/signin";
         }
 
-        // Profile edit is only available for STAFF and CUSTOMER, not ADMIN
-        if (loggedInUser.getRole() != Role.STAFF && loggedInUser.getRole() != Role.CUSTOMER) {
-            return "redirect:/";
-        }
-
         try {
-            ProfileViewDto profile = profileService.getProfileView(loggedInUser);
-            model.addAttribute("profile", profile);
-            model.addAttribute("isOwnProfile", true);
+            ProfileViewDto profile = profileService.getProfileView(user);
+
+            ProfileEditRequest editRequest = ProfileEditRequest.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .address1(user.getAddress1())
+                .address2(user.getAddress2())
+                .firstname(profile.getFirstName())
+                .lastname(profile.getLastName())
+                .build();
+
+            model.addAttribute("profileEditRequest", editRequest);
+            model.addAttribute("loggedInUser", user);
             return "profile/EditProfile";
         } catch (Exception e) {
-            model.addAttribute("error", "Không thể tải thông tin hồ sơ: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Không thể tải thông tin hồ sơ");
             return "redirect:/profile/view";
         }
     }
 
-    @GetMapping("/admin/{userId}/edit")
-    public String editUserProfile(@PathVariable Integer userId, Model model, HttpSession session) {
-        User loggedInUser = (User) session.getAttribute("loggedInUser");
-
-        // Check if user is logged in and is staff (since there's no ADMIN role)
-        if (loggedInUser == null) {
+    @PostMapping("/edit")
+    public String updateProfile(@Valid @ModelAttribute("profileEditRequest") ProfileEditRequest request,
+                               BindingResult bindingResult,
+                               HttpSession session,
+                               Model model,
+                               RedirectAttributes redirectAttributes) {
+        User user = (User) session.getAttribute("loggedInUser");
+        if (user == null) {
             return "redirect:/authority/signin";
         }
 
-        if (loggedInUser.getRole() != Role.STAFF) {
-            return "redirect:/";
-        }
-
-        Optional<User> targetUserOpt = authorizedRepo.findById(userId.longValue());
-        if (targetUserOpt.isEmpty()) {
-            model.addAttribute("error", "User not found");
-            return "redirect:/";
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("loggedInUser", user);
+            return "profile/EditProfile";
         }
 
         try {
-            ProfileViewDto profile = profileService.getProfileView(targetUserOpt.get());
-            model.addAttribute("profile", profile);
-            model.addAttribute("isAdminEdit", true);
-            model.addAttribute("targetUserId", userId);
-            return "profile/EditProfile";
+            profileService.updateProfile(user, request);
+
+            User updatedUser = userRepository.findById(user.getUser_id().longValue()).orElse(user);
+            session.setAttribute("loggedInUser", updatedUser);
+
+            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật hồ sơ thành công!");
+            return "redirect:/profile/view";
         } catch (Exception e) {
-            model.addAttribute("error", "Không thể tải thông tin hồ sơ: " + e.getMessage());
-            return "redirect:/profile/admin/" + userId;
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("loggedInUser", user);
+            return "profile/EditProfile";
         }
+    }
+
+    private String redirectToHome(User user) {
+        return user.getRole() == Role.STAFF ? "redirect:/staff/staff-dashboard" : "redirect:/guest";
     }
 }

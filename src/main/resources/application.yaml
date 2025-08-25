@@ -51,7 +51,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: smartshopforeveryone@gmail.com
-    password: ynzx kxzg upzh jhvk
+    password: soiu epfg xlin hueb
     properties:
       mail:
         smtp:
