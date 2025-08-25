@@ -16,7 +16,11 @@ public interface ReportFormRepository extends JpaRepository<ReportForm, Integer>
 
     @Query("SELECT r FROM ReportForm r WHERE r.report_id = :reportID")
     List<ReportForm> findAllReportFormsByReport_id(@Param("reportID") Integer reportID);
-    List<ReportForm> findAll();
+    @Query(
+            value = "SELECT * FROM report_issue ORDER BY report_id DESC OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY",
+            nativeQuery = true
+    )
+    List<ReportForm> findAllWithOffsetLimit(@Param("limit") int limit, @Param("offset") int offset);
 
     @Query("SELECT e FROM ReportForm e WHERE e.report_id= :reportID")
     ReportForm findByReportId(@Param("reportID") Integer reportID);
