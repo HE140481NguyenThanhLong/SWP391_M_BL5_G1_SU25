@@ -176,7 +176,7 @@ public class AuthorizedController {
             SignUprequest.setUsername(SignUprequest.getUsername().trim());//xóa khoảng trắng
 
             if (authorizedService.findUserByUsername(SignUprequest.getUsername()) != null) {
-                model.addAttribute("error", "Tên đăng nhập đã tồn tại. Vui lòng chọn t��n đăng nhập khác.");
+                model.addAttribute("error", "Tên đăng nhập đã tồn tại. Vui lòng chọn tên đăng nhập khác.");
                 model.addAttribute("SignUprequest", SignUprequest);
                 return "authority/signup";
             }
