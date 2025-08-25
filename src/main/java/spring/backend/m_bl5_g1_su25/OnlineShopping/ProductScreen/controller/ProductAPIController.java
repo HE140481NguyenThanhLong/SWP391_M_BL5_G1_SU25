@@ -48,6 +48,9 @@ public class ProductAPIController {
         dto.put("name", product.getName());
         dto.put("price", product.getPrice());
         dto.put("importPrice", product.getImportPrice());
+        dto.put("createdAt", product.getCreatedAt());
+        dto.put("updatedAt", product.getUpdatedAt());
+
         return ResponseEntity.ok(dto);
     }
 
