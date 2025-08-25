@@ -32,7 +32,7 @@ public class TransactionController {
         Transaction trans = transactionService.create(transaction);
 
         model.addAttribute("transaction", trans);
-        return "redirect:/checkout?result=success&orderId=" + transaction.getOrderId();
+        return "redirect:/order/order-list/" + transaction.getOrderId() + "?result=success&orderId=";
     }
 
     @GetMapping("/{id}")

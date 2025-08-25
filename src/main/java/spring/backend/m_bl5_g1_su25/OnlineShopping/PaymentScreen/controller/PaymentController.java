@@ -1,5 +1,6 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.entity.Payment;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.entity.Transaction;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.repository.TransactionRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.service.TransactionService;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 
 import javax.management.Query;
 import java.math.BigDecimal;
@@ -35,16 +37,22 @@ public class PaymentController {
     @GetMapping("")
     public String home(Model model,
                        @RequestParam("orderId") int orderId,
-                       @RequestParam(value = "cardNumber", required = false) String cardNumber)
+                       @RequestParam(value = "cardNumber", required = false) String cardNumber,
+                       HttpSession session)
     {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) return "redirect:/authority/signin";
+        int userId = loggedInUser.getUser_id();
+
+
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng cần thực hiện"));
         Payment payment = paymentRepository.findByOrderId(orderId).orElseThrow(() -> new RuntimeException("Không tìm thấy thanh toán cần thực hiện"));
-        List<String> cardNumbers = transactionRepository.findCardNumbers(2);
+        List<String> cardNumbers = transactionRepository.findCardNumbers(userId);
 
-        Transaction trans = transactionRepository.findTopByUserIdAndDate(2).orElse(null);
+        Transaction trans = transactionRepository.findTopByUserIdAndDate(userId).orElse(null);
 
         if(cardNumbers != null || !cardNumbers.isEmpty()) {
-            trans = transactionRepository.findTopByUserIdAndCardNumber(2, cardNumber).orElse(null);
+            trans = transactionRepository.findTopByUserIdAndCardNumber(userId, cardNumber).orElse(null);
         }
 
 

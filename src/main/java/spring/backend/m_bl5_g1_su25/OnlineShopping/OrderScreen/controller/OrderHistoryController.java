@@ -1,5 +1,6 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.OrderScreen.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.OrderScreen.enums.OrderStatus
 import spring.backend.m_bl5_g1_su25.OnlineShopping.OrderScreen.service.OrderService;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.entity.Transaction;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.repository.TransactionRepository;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -41,10 +43,12 @@ public class OrderHistoryController {
                     @RequestParam(defaultValue = "5") int pageSize,
                     @RequestParam(defaultValue = "createdAt") String orderBy,
                     @RequestParam(defaultValue = "true") boolean isDesc,
-                   Model model) {
+                   Model model,
+                   HttpSession session) {
 
-        // --- Giả sử userId lấy từ session (ở đây tạm fix = 4) ---
-        int userId = 2;
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) return "redirect:/authority/signin";
+        int userId = loggedInUser.getUser_id();
 
         // Sắp xếp
         Sort sort = isDesc ? Sort.by(orderBy).descending() : Sort.by(orderBy).ascending();
@@ -102,8 +106,9 @@ public class OrderHistoryController {
             redirectAttributes.addFlashAttribute("success", "Cập nhật trạng thái thành công!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Có lỗi xảy ra: " + e.getMessage());
+            return "redirect:/order/order-list?result=fail";
         }
         // quay lại danh sách đơn hàng
-        return "redirect:/order/order-list";
+        return "redirect:/order/order-list?result=success";
     }
 }

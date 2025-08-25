@@ -1,6 +1,7 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.Cart.controller;
 
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Category
 
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Cart_Items;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -67,10 +69,12 @@ public class CartController {
                        @RequestParam(defaultValue = "5") int pageSize,
                        @RequestParam(defaultValue = "createdAt") String orderBy,
                        @RequestParam(defaultValue = "true") boolean isDesc,
-                       Model model) {
+                       Model model,
+                       HttpSession session) {
 
-        // --- Giả sử userId lấy từ session (ở đây tạm fix = 4) ---
-        int userId = 2;
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) return "redirect:/authority/signin";
+        int userId = loggedInUser.getUser_id();
 
         // Sắp xếp
         Sort sort = isDesc ? Sort.by(orderBy).descending() : Sort.by(orderBy).ascending();
@@ -112,12 +116,22 @@ public class CartController {
 
 
 
-    // Add to cart
+    // Thêm vào giỏ hàng
     @PostMapping("/add")
     public String addToCart(@RequestParam Long productId,
-                            @RequestParam(defaultValue = "1") Integer quantity) {
-        cartItemService.addToCart(2, productId, quantity);
-        return "redirect:/cart/cart-list";
+                            @RequestParam(defaultValue = "1") Integer quantity,
+                            HttpSession session) {
+
+        try{
+            User loggedInUser = (User) session.getAttribute("loggedInUser");
+            if (loggedInUser == null) return "redirect:/authority/signin";
+            int userId = loggedInUser.getUser_id();
+
+            cartItemService.addToCart(userId, productId, quantity);
+        }catch (Exception e){
+            return "redirect:/cart/cart-list?result=fail";
+        }
+        return "redirect:/cart/cart-list?result=success";
     }
 
     // Update cart item
@@ -125,16 +139,24 @@ public class CartController {
     public String updateCartItem(@RequestParam Integer cartItemId,
                                  @RequestParam Integer quantity,
                                  @RequestParam Integer userId) {
-        cartItemService.updateCartItem(cartItemId, quantity);
-        return "redirect:/cart/cart-list";
+        try{
+            cartItemService.updateCartItem(cartItemId, quantity);
+        }catch (Exception e){
+            return "redirect:/cart/cart-list?result=fail";
+        }
+        return "redirect:/cart/cart-list?result=success";
     }
 
     // Delete cart item
     @PostMapping("/delete")
     public String deleteCartItem(@RequestParam Integer cartItemId,
                                  @RequestParam Integer userId) {
-        cartItemService.deleteCartItem(cartItemId);
-        return "redirect:/cart/cart-list";
+        try {
+            cartItemService.deleteCartItem(cartItemId);
+        }catch (Exception e){
+            return "redirect:/cart/cart-list?result=fail";
+        }
+        return "redirect:/cart/cart-list?result=success";
     }
 
 }

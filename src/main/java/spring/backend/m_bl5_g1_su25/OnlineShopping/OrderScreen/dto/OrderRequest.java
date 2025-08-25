@@ -9,6 +9,8 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.enums.PaymentTy
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderRequest {
+    private Integer userId;
+
     private String name;          // tên người nhận
     private String email;
     private String phone;

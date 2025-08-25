@@ -1,11 +1,8 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.OrderScreen.service;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Cart.repository.CartItemRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Cart.service.CartItemService;
@@ -73,8 +70,9 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public Integer checkout(OrderRequest request) {
         try {
+
             // 1. Lấy thông tin cần thiết
-            User user = userRepository.findById(2L)
+            User user = userRepository.findById(request.getUserId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             Province province = provinceRepository.findById(request.getProvince())
@@ -90,7 +88,7 @@ public class OrderServiceImpl implements OrderService{
 
             // 2. Tạo Payment
             Payment payment = new Payment();
-            payment.setPaymentType(PaymentType.CASH_ON_DELIVERY);
+            payment.setPaymentType(request.getPaymentType());
             payment.setUser(user);
             paymentRepository.save(payment);
 
@@ -123,8 +121,7 @@ public class OrderServiceImpl implements OrderService{
                         .orElseThrow(() -> new RuntimeException("Product not found"));
 
                 // Kiểm tra tồn kho
-                if (product.getQuantity()
-                        < cartItem.getQuantity()) {
+                if (product.getQuantity() < cartItem.getQuantity()) {
                     throw new RuntimeException("Not enough stock for product: " + product.getName());
                 }
 
@@ -150,7 +147,7 @@ public class OrderServiceImpl implements OrderService{
 //            orderRepository.save(order);
             orderDetailRepository.saveAll(orderDetails);
             // 6. Xóa giỏ hàng
-//            cartItemRepository.clearCartByUser(user.getUser_id());
+            cartItemRepository.clearCartByUser(user.getUser_id());
 
             return order.getOrder_id();
 
