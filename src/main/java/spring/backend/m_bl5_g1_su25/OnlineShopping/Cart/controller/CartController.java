@@ -1,6 +1,7 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.Cart.controller;
 
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Category
 
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Cart_Items;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -67,21 +69,27 @@ public class CartController {
                        @RequestParam(defaultValue = "5") int pageSize,
                        @RequestParam(defaultValue = "createdAt") String orderBy,
                        @RequestParam(defaultValue = "true") boolean isDesc,
-                       Model model) {
+                       Model model,
+                       HttpSession session) {
 
-        // --- Giả sử userId lấy từ session (ở đây tạm fix = 4) ---
-        int userId = 2;
+        // --- Lấy user từ session ---
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/authority/signin"; // nếu chưa login thì chuyển sang trang login
+        }
 
-        // Sắp xếp
+        int userId = loggedInUser.getUser_id();
+
+        // --- Sắp xếp & phân trang ---
         Sort sort = isDesc ? Sort.by(orderBy).descending() : Sort.by(orderBy).ascending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
-        // Lấy giỏ hàng theo user có phân trang
+        // --- Lấy giỏ hàng theo user có phân trang ---
         Page<Cart_Items> cartItems = cartItemService.getCartByUserPaging(userId, pageable);
 
-        // Tính toán giá trị giỏ hàng
+        // --- Tính toán giá trị giỏ hàng ---
         BigDecimal originalPrice = cartItemService.getCartTotalPrice(userId);
-        BigDecimal savings = BigDecimal.ZERO; // chỗ này có thể sau này tính mã giảm giá
+        BigDecimal savings = BigDecimal.ZERO; // sau này có thể thêm mã giảm giá
         BigDecimal storePickup = BigDecimal.ZERO; // phí lấy tại cửa hàng (nếu có)
         BigDecimal tax = originalPrice.multiply(new BigDecimal("0.08")); // thuế 8%
 
@@ -89,7 +97,7 @@ public class CartController {
                 .add(storePickup)
                 .add(tax);
 
-        // Lấy danh sách sản phẩm bán chạy
+        // --- Lấy danh sách sản phẩm bán chạy ---
         List<Product> products = productCartRepository.findBestSeller(PageRequest.of(0, 5));
 
         // --- Đẩy dữ liệu ra view ---
@@ -112,11 +120,25 @@ public class CartController {
 
 
 
+
     // Add to cart
     @PostMapping("/add")
     public String addToCart(@RequestParam Long productId,
-                            @RequestParam(defaultValue = "1") Integer quantity) {
-        cartItemService.addToCart(2, productId, quantity);
+                            @RequestParam Integer quantity,
+                            HttpSession session) {
+        // Lấy user từ session
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            // Nếu chưa đăng nhập thì quay lại trang login
+            return "redirect:/authority/signin";
+        }
+
+        // Lấy userId từ user đang đăng nhập
+        Integer userId = loggedInUser.getUser_id();
+
+        // Thêm sản phẩm vào giỏ
+        cartItemService.addToCart(userId, productId, quantity);
+
         return "redirect:/cart/cart-list";
     }
 
@@ -136,5 +158,13 @@ public class CartController {
         cartItemService.deleteCartItem(cartItemId);
         return "redirect:/cart/cart-list";
     }
+    @GetMapping("/count")
+    @ResponseBody
+    public int getCartCount(HttpSession session) {
+        User loggedIn = (User) session.getAttribute("loggedInUser");
+        if (loggedIn == null) return 0;
+        return cartItemService.getCartItemCount(loggedIn.getUser_id());
+    }
+
 
 }

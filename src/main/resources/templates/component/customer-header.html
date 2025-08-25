@@ -165,13 +165,14 @@
 <script>
     async function updateCartCount() {
         try {
-            const res = await fetch('/giohang/count');
+            const res = await fetch('/cart/count');
             const count = await res.text();
             document.getElementById('cart-count').textContent = count;
         } catch (e) {
             console.error("Lỗi lấy giỏ hàng:", e);
         }
     }
+
     document.addEventListener("DOMContentLoaded", updateCartCount);
 </script>
 </body>
