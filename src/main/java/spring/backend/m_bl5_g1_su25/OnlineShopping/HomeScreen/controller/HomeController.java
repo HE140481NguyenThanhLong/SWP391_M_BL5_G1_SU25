@@ -1,5 +1,6 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.HomeScreen.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,6 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.dto.response.ProductResponse;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.HomeScreen.service.HomeService;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.FavoriteService;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Customer;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.repository.CustomerRepository;
 
 import java.util.List;
 
@@ -25,12 +31,14 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class HomeController {
     HomeService homeService;
+    FavoriteService favoriteService;
+    CustomerRepository customerRepository;
 
     @GetMapping
     public String getAll(Model model,
                          @RequestParam(defaultValue = "0") int page,
-                         @RequestParam(defaultValue = "10") int size
-                       ) {
+                         @RequestParam(defaultValue = "10") int size,
+                           HttpSession session ) {
 
         // Add user info to model for header display
 
@@ -44,6 +52,12 @@ public class HomeController {
         model.addAttribute("pageSize", size);
         model.addAttribute("content", products.getContent());
 
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser != null) {
+            List<Product> favoriteProducts = favoriteService.getFavoriteProducts(loggedInUser.getUsername());
+
+            model.addAttribute("homeFavorite", favoriteProducts);
+        }
         return "homeScreen/Home";
     }
 
@@ -78,45 +92,11 @@ public class HomeController {
         model.addAttribute("pageSize", size);
         model.addAttribute("content", lastestProducts.getContent());
 
+
+
         return "homeScreen/Home";
     }
-//    @GetMapping("/getLastestwithCategories/{categories}")
-//    public String getLastestwithCategories(Model model, @PathVariable String categories,
-//                                           @RequestParam(defaultValue = "0")int page,
-//                                           @RequestParam(defaultValue = "10")int size){
-//             Pageable pageable = PageRequest.of(page, size);
-//             Page<ProductResponse> lastestWcategories = productService.getAllByOrderByCreatedAtAscAndCategories(pageable, categories);
-//             model.addAttribute("products", lastestWcategories);
-//             return "HomeScreen/Home";
-//
-//    }
-//    @GetMapping("/getRecentwithCategories/{categories}")
-//    public String getRecentwithCategories(Model model, @PathVariable String categories,
-//                                          @RequestParam(defaultValue = "0")int page,
-//                                          @RequestParam(defaultValue = "10")int size){
-//            Pageable pageable = PageRequest.of(page, size);
-//            Page<ProductResponse> recentWcategories = productService.getAllByOrderByCreatedAtDescAndCategories(pageable, categories);
-//            model.addAttribute("products", recentWcategories);
-//            return "HomeScreen/Home";
-//    }
-//    @GetMapping("/priceAscwithCategories/{categories}")
-//    public String getAllByPriceAscWithCategories(Model model,@PathVariable Double price,@PathVariable String categories,
-//                                                 @RequestParam(defaultValue = "0")int page,
-//                                                 @RequestParam(defaultValue = "10")int size){
-//            Pageable pageable = PageRequest.of(page, size);
-//            Page<ProductResponse> priceCategoriesAsc= productService.getAllByCategoryNameOrderByPriceAsc(pageable,categories,price);
-//            model.addAttribute("products", priceCategoriesAsc);
-//            return "HomeScreen/Home";
-//    }
-//    @GetMapping("/priceDescWithCategories/{categories}")
-//    public String getAllByPriceDescWithCategories(Model model,@PathVariable Double price,@PathVariable String categories,
-//                                                 @RequestParam(defaultValue = "0")int page,
-//                                                 @RequestParam(defaultValue = "10")int size){
-//        Pageable pageable = PageRequest.of(page, size);
-//        Page<ProductResponse> priceCategoriesDesc= productService.getAllByCategoryNameOrderByPriceDesc(pageable,categories,price);
-//        model.addAttribute("products", priceCategoriesDesc);
-//        return "HomeScreen/Home";
-//    }
+
     @GetMapping("/byCategories/{categories}")
     public String getAllByCategories(Model model, @PathVariable String categories,
                                      @RequestParam(defaultValue = "0")int page,

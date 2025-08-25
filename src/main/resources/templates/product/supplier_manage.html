@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý nhà cung cấp - WinMart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10B981',
+                        'primary-dark': '#059669',
+                        'primary-light': '#34D399',
+                        accent: '#F59E0B',
+                        'accent-light': '#FCD34D',
+                        neutral: {
+                            50: '#F9FAFB',
+                            100: '#F3F4F6',
+                            200: '#E5E7EB',
+                            300: '#D1D5DB',
+                            400: '#9CA3AF',
+                            500: '#6B7280',
+                            600: '#4B5563',
+                            700: '#374151',
+                            800: '#1F2937',
+                            900: '#111827'
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'display': ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-sans bg-neutral-50 text-neutral-800">
+<!-- Header -->
+<header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Top Bar -->
+        <div class="flex items-center justify-between py-2 text-sm text-neutral-600 border-b border-neutral-100">
+            <div class="flex items-center gap-4">
+                <a href="#" class="hover:text-primary transition-colors">Tin tức WinMart</a>
+                <a href="#" class="hover:text-primary transition-colors">Tư vấn mua hàng</a>
+            </div>
+        </div>
+
+        <!-- Main Header -->
+        <div class="flex items-center justify-between py-4">
+            <div class="flex items-center gap-8">
+                <h1 class="font-display text-3xl font-bold text-primary">WinMart</h1>
+            </div>
+
+            <div class="flex-1 max-w-2xl mx-8">
+                <form th:action="@{/suppliers}" method="get">
+                    <div class="relative">
+                        <input type="text" name="search" th:value="${search}" placeholder="Tìm kiếm sản phẩm..." class="w-full px-4 py-3 pr-12 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <button type="submit" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-primary">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button class="flex items-center gap-2 px-4 py-2 text-neutral-600 hover:text-primary transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Giao hàng
+                </button>
+                <button class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+                    </svg>
+                    Giỏ hàng (0)
+                </button>
+                <button class="flex items-center gap-2 px-4 py-2 text-neutral-600 hover:text-primary transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    Hội viên
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-neutral-600 mb-8">
+        <a href="/product" class="hover:text-primary transition-colors">Trang chủ</a>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+        <span class="text-neutral-800 font-medium">Quản lý nhà cung cấp</span>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h2 class="font-display text-3xl font-bold text-neutral-800 mb-2">Quản lý nhà cung cấp</h2>
+            <p class="text-neutral-600">Quản lý thông tin các nhà cung cấp sản phẩm</p>
+        </div>
+        <a th:href="@{/suppliers/add}" class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            Thêm nhà cung cấp
+        </a>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-xl p-6 shadow-sm border border-neutral-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-neutral-600 mb-1">Tổng nhà cung cấp</p>
+                    <p class="text-3xl font-bold text-neutral-800" th:text="${stats.totalSuppliers}"></p>
+                </div>
+                <div class="bg-primary/10 p-3 rounded-lg">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 mt-4">
+                <span class="text-sm text-primary font-medium">+2 nhà cung cấp</span>
+                <span class="text-sm text-neutral-500">trong tháng này</span>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 shadow-sm border border-neutral-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-neutral-600 mb-1">Đang hoạt động</p>
+                    <p class="text-3xl font-bold text-primary" th:text="${stats.activeSuppliers}"></p>
+                </div>
+                <div class="bg-primary/10 p-3 rounded-lg">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+<!--            <div class="flex items-center gap-2 mt-4">-->
+<!--                <span class="text-sm text-primary font-medium" th:text="${#numbers.formatDecimal((stats.activeSuppliers * 100.0 / stats.totalSuppliers), 0, 1, ',')} + '%'"></span>-->
+<!--                <span class="text-sm text-neutral-500">tỷ lệ hoạt động</span>-->
+<!--        </div>-->
+        </div>
+
+        <div class="bg-white rounded-xl p-6 shadow-sm border border-neutral-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-neutral-600 mb-1">Tạm ngưng</p>
+                    <p class="text-3xl font-bold text-accent" th:text="${stats.inactiveSuppliers}"></p>
+                </div>
+                <div class="bg-accent/10 p-3 rounded-lg">
+                    <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+<!--            <div class="flex items-center gap-2 mt-4">-->
+<!--                <span class="text-sm text-accent font-medium" th:text="${#numbers.formatDecimal((stats.inactiveSuppliers * 100.0 / stats.totalSuppliers), 0, 1, ',')} + '%'"></span>-->
+<!--                <span class="text-sm text-neutral-500">cần xem xét</span>-->
+<!--            </div>-->
+        </div>
+
+<!--        <div class="bg-white rounded-xl p-6 shadow-sm border border-neutral-200">-->
+<!--            <div class="flex items-center justify-between">-->
+<!--                <div>-->
+<!--                    <p class="text-sm text-neutral-600 mb-1">Đơn hàng tháng này</p>-->
+<!--                    <p class="text-3xl font-bold text-neutral-800" th:text="${stats.monthlyOrders}"></p>-->
+<!--                </div>-->
+<!--                <div class="bg-primary/10 p-3 rounded-lg">-->
+<!--                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
+<!--                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>-->
+<!--                    </svg>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="flex items-center gap-2 mt-4">-->
+<!--                <span class="text-sm text-primary font-medium">+12%</span>-->
+<!--                <span class="text-sm text-neutral-500">so với tháng trước</span>-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="bg-white rounded-xl p-6 shadow-sm border border-neutral-200 mb-8">
+        <form th:action="@{/suppliers}" method="get">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">Tìm kiếm nhà cung cấp</label>
+                    <div class="relative">
+                        <input type="text" name="search" th:value="${search}" placeholder="Tên nhà cung cấp..." class="w-full px-4 py-2 pl-10 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <svg class="w-5 h-5 text-neutral-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">Loại sản phẩm</label>
+                    <select name="productType" class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="">Tất cả loại sản phẩm</option>
+                        <option th:each="type : ${productType}" th:value="${type}" th:text="${type}" th:selected="${type == productType}"></option>
+                    </select>
+
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">Trạng thái</label>
+                    <select name="status" class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="" th:selected="${status == null}">Tất cả trạng thái</option>
+                        <option value="ACTIVE" th:selected="${status == 'ACTIVE'}">Đang hoạt động</option>
+                        <option value="INACTIVE" th:selected="${status == 'INACTIVE'}">Tạm ngưng</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">Khu vực</label>
+                    <select name="region" class="w-full px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">-->
+                        <option value="" th:selected="${region == null}">Tất cả khu vực</option>-->
+                        <option value="Hà Nội" th:selected="${region == 'Hà Nội'}">Hà Nội</option>-->
+                        <option value="TP. Hồ Chí Minh" th:selected="${region == 'TP. Hồ Chí Minh'}">TP. Hồ Chí Minh</option>-->
+                        <option value="Đà Nẵng" th:selected="${region == 'Đà Nẵng'}">Đà Nẵng</option>-->
+                        <option value="Khác" th:selected="${region == 'Khác'}">Khác</option>-->
+                    </select>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
+                    Lọc kết quả
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Suppliers Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-neutral-200">
+            <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-lg text-neutral-800">Danh sách nhà cung cấp</h3>
+                <div class="flex items-center gap-4">
+                    <form th:action="@{/suppliers}" method="get">
+                        <input type="hidden" name="search" th:value="${search}">
+                        <input type="hidden" name="productType" th:value="${productType}">
+                        <input type="hidden" name="status" th:value="${status}">
+                        <input type="hidden" name="region" th:value="${region}">
+                        <select name="sortField" class="px-3 py-2 border border-neutral-200 rounded-lg text-sm" onchange="this.form.submit()">
+                            <option value="name" th:selected="${sortField == 'name'}">Sắp xếp theo tên</option>
+                            <option value="createdAt" th:selected="${sortField == 'createdAt'}">Sắp xếp theo ngày tạo</option>
+                            <option value="id" th:selected="${sortField == 'id'}">Sắp xếp theo số sản phẩm</option>
+                        </select>
+                        <input type="hidden" name="sortDir" th:value="${sortDir == 'asc' ? 'desc' : 'asc'}">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-neutral-50">
+                <tr>
+                    <th class="px-6 py-4 text-left text-sm font-medium text-neutral-600">Nhà cung cấp</th>
+                    <th class="px-6 py-4 text-left text-sm font-medium text-neutral-600">Liên hệ</th>
+                    <th class="px-6 py-4 text-left text-sm font-medium text-neutral-600">Địa Chỉ</th>
+                    <th class="px-6 py-4 text-left text-sm font-medium text-neutral-600">Phân Loại</th>
+                    <th class="px-6 py-4 text-left text-sm font-medium text-neutral-600">Trạng thái</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-neutral-200" th:each="supplier : ${suppliers}">
+                <tr class="hover:bg-neutral-50" th:classappend="${supplier.status == 'INACTIVE'} ? 'bg-red-50'">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg flex items-center justify-center"
+                                 th:classappend="${supplier.status == 'INACTIVE'} ? ' bg-red-100' : ' bg-primary/10'">
+            <span class="font-semibold"
+                  th:classappend="${supplier.status == 'INACTIVE'} ? ' text-red-600' : ' text-primary'"
+                  th:text="${#strings.substring(supplier.name, 0, 1)}"></span>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-neutral-800" th:text="${supplier.name}"></div>
+                                <div class="text-sm text-neutral-600" th:text="'Mã: ' + ${supplier.supplier_id}"></div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="px-6 py-4">
+                        <div class="text-sm">
+                            <div class="text-neutral-800" th:text="'📞 ' + ${supplier.phone}"></div>
+                            <div class="text-neutral-600" th:text="'📧 ' + ${supplier.email}"></div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm">
+                            <div class="text-neutral-800" th:text="  ${supplier.address}"></div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm">
+                            <div class="text-neutral-800" th:text="  ${supplier.productType}"></div>
+                        </div>
+                    </td>
+
+
+                    <td class="px-6 py-4">
+    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm"
+          th:classappend="${supplier.status.name() == 'INACTIVE'} ? ' bg-red-100 text-red-600' : ' bg-green-100 text-green-600'">
+        <span class="w-2 h-2 rounded-full mr-2"
+              th:classappend="${supplier.status.name() == 'INACTIVE'} ? ' bg-red-600' : ' bg-green-600'"></span>
+        <span th:text="${supplier.status.name() == 'INACTIVE'} ? 'Tạm ngưng' : 'Đang hoạt động'"></span>
+    </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="px-6 py-4 border-t border-neutral-200">
+            <div class="flex items-center justify-between">
+                <div class="text-sm text-neutral-600">
+                    Hiển thị <span th:text="${#lists.size(suppliers)}"></span> trong tổng số <span th:text="${stats.totalSuppliers}"></span> nhà cung cấp
+                </div>
+                <div class="flex items-center gap-2">
+                    <a th:href="@{/suppliers(page=${currentPage - 1}, search=${search}, productType=${productType}, status=${status}, region=${region}, sortField=${sortField}, sortDir=${sortDir})}"
+                       th:class="${currentPage <= 1} ? 'px-3 py-2 border border-neutral-200 rounded-lg text-sm opacity-50' : 'px-3 py-2 border border-neutral-200 rounded-lg text-sm hover:bg-neutral-50'"
+                       th:attr="disabled=${currentPage <= 1} ? 'disabled' : null">Trước</a>
+                    <a th:each="pageNumber : ${pageNumbers}"
+                       th:href="@{/suppliers(page=${pageNumber}, search=${search}, productType=${productType}, status=${status}, region=${region}, sortField=${sortField}, sortDir=${sortDir})}"
+                       th:class="${pageNumber == currentPage} ? 'px-3 py-2 bg-primary text-white rounded-lg text-sm' : 'px-3 py-2 border border-neutral-200 rounded-lg text-sm hover:bg-neutral-50'"
+                       th:text="${pageNumber}"></a>
+                    <a th:href="@{/suppliers(page=${currentPage + 1}, search=${search}, productType=${productType}, status=${status}, region=${region}, sortField=${sortField}, sortDir=${sortDir})}"
+                       th:class="${currentPage >= totalPages} ? 'px-3 py-2 border border-neutral-200 rounded-lg text-sm opacity-50' : 'px-3 py-2 border border-neutral-200 rounded-lg text-sm hover:bg-neutral-50'"
+                       th:attr="disabled=${currentPage >= totalPages} ? 'disabled' : null">Sau</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

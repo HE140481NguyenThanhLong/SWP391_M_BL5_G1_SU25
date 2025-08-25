@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Category;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.CategoryRepository;
@@ -70,30 +71,37 @@ public class ProductService {
     public Page<Product> filterProducts(
             BigDecimal minPrice,
             BigDecimal maxPrice,
-            String supplier,
             Integer categoryId,
+            String brand,
+            String keyword,
             String sortBy,
             int page,
             int size
     ) {
         Pageable pageable;
 
-        // Xử lý sắp xếp
-        switch (sortBy) {
-            case "price_asc":
-                pageable = PageRequest.of(page, size, Sort.by("price").ascending());
-                break;
-            case "price_desc":
-                pageable = PageRequest.of(page, size, Sort.by("price").descending());
-                break;
-            case "sales": // nếu bạn có cột sales
-                pageable = PageRequest.of(page, size, Sort.by("sales").descending());
-                break;
-            default: // createdAt
-                pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        // ✅ Special rule cho 3 trang đầu
+        if (page >= 0 && page <= 2) {
+            pageable = PageRequest.of(page, size,
+                    Sort.by("quantity").descending()
+                            .and(Sort.by("createdAt").ascending()));
+        } else {
+            switch (sortBy) {
+                case "price_asc":
+                    pageable = PageRequest.of(page, size, Sort.by("price").ascending());
+                    break;
+                case "price_desc":
+                    pageable = PageRequest.of(page, size, Sort.by("price").descending());
+                    break;
+                case "sold_count":
+                    pageable = PageRequest.of(page, size, Sort.by("soldCount").descending());
+                    break;
+                default:
+                    pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+            }
         }
 
-        // Khởi tạo Specification rỗng (thay cho where(null))
+        // ✅ Specification
         Specification<Product> spec = Specification.allOf();
 
         if (minPrice != null) {
@@ -106,26 +114,31 @@ public class ProductService {
                     cb.lessThanOrEqualTo(root.get("price"), maxPrice));
         }
 
-        if (supplier != null && !supplier.isEmpty()) {
-            spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("supplier"), supplier));
-        }
         if (categoryId != null) {
             spec = spec.and((root, query, cb) -> {
                 Join<Object, Object> categoryJoin = root.join("categories", JoinType.INNER);
                 return cb.equal(categoryJoin.get("id"), categoryId);
             });
         }
-         // mặc định mới nhất
 
+        if (brand != null && !brand.isEmpty()) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("brand"), brand));
+        }
 
-
+        if (keyword != null && !keyword.isEmpty()) {
+            String likePattern = "%" + keyword.trim().toLowerCase() + "%";
+            spec = spec.and((root, query, cb) ->
+                    cb.like(cb.lower(root.get("name")), likePattern));
+        }
 
         return productRepository.findAll(spec, pageable);
     }
 
 
-//    public List<String> getSuppliers() {
+
+
+    //    public List<String> getSuppliers() {
 //        return productRepository.findAllSuppliers();
 //    }
     public Optional<Product> findById(Integer id) {
@@ -144,6 +157,27 @@ public class ProductService {
     public Page<Product> findRelatedProducts(Integer productId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return productRepository.findRelatedProducts(productId, pageable);
+    }
+    public void importProducts(List<Product> importedProducts) {
+        for (Product p : importedProducts) {
+            Product existing = productRepository.findById(p.getProduct_id())
+                    .orElseThrow(() -> new RuntimeException("Product not found: " + p.getProduct_id()));
+            existing.setQuantity(existing.getQuantity() + p.getQuantity()); // cộng thêm số lượng nhập
+            productRepository.save(existing);
+        }
+    }
+
+
+    public List<Product> getAllProducts() {
+
+            return productRepository.findAll();
+    }
+    @Transactional
+    public void updateQuantity(Integer productId, Integer quantity) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        product.setQuantity(product.getQuantity() + quantity); // nhập thêm => cộng dồn
+        productRepository.save(product);
     }
 
 }

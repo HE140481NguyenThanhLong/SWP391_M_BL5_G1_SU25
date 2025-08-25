@@ -5,24 +5,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Category;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Supplier;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.CategoryRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.ProductRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.ProductService;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.SupplierService;
 
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/product")
@@ -31,9 +31,12 @@ public class ProductController {
     @Autowired
     private ProductService productService;
     @Autowired
-    private ProductRepository productRepository;
+    private SupplierService supplierService;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private ProductRepository productRepository;
+
     @GetMapping
     public String listProducts(
             @RequestParam(defaultValue = "1") int page,
@@ -79,7 +82,7 @@ public class ProductController {
                 // Cập nhật các trường từ form
                 existingProduct.setName(product.getName());
                 existingProduct.setDescription(product.getDescription());
-                //existingProduct.setSalePrice(product.getSalePrice());
+                existingProduct.setSalePrice(product.getSalePrice());
                 existingProduct.setPrice(product.getPrice());
 
                 // PHẦN XỬ LÝ UPLOAD ẢNH (CỐT LÕI)
@@ -119,35 +122,38 @@ public class ProductController {
         }
 
     }
-//    @GetMapping("/import")
-//    public String importProduct(Model model) {
-//        // Lấy danh sách nhà cung cấp và sản phẩm từ DB
-//        List<String> suppliers = productService.getAllSuppliers();
-//        model.addAttribute("suppliers", suppliers);
-//        return "product/import_product";
-//    }
     @GetMapping("/list")
     public String productList(
-            @RequestParam(required = false) BigDecimal minPrice,
-            @RequestParam(required = false) BigDecimal maxPrice,
-            @RequestParam(required = false) String supplier,
+            @RequestParam(required = false) String priceRange,
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String keyword,   // ✅ thêm keyword
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
             @RequestParam(name = "category_id", required = false) Integer categoryId,
             Model model
     ) {
-        // Xác định tên category để hiển thị
+        // ✅ Lấy tên category để hiển thị
         String selectedCategory = "Tất cả sản phẩm";
         if (categoryId != null) {
             Category categoryEntity = categoryRepository.findById(categoryId).orElse(null);
             if (categoryEntity != null) {
                 selectedCategory = categoryEntity.getName();
             }
+        } BigDecimal minPrice = null;
+        BigDecimal maxPrice = null;
+
+        if (priceRange != null && !priceRange.isEmpty()) {
+            String[] parts = priceRange.split("-");
+            minPrice = new BigDecimal(parts[0]);
+            if (parts.length > 1) {
+                maxPrice = new BigDecimal(parts[1]);
+            }
         }
 
+        // ✅ Gọi service
         Page<Product> products = productService.filterProducts(
-                minPrice, maxPrice, supplier, categoryId, sortBy, page, size
+                minPrice, maxPrice, categoryId, brand, keyword, sortBy, page, size
         );
 
         int totalPages = products.getTotalPages();
@@ -162,17 +168,21 @@ public class ProductController {
             }
         }
 
-        // Truyền dữ liệu sang view
+        // ✅ Truyền dữ liệu sang view
         model.addAttribute("products", products.getContent());
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageNumbers", pageNumbers);
-//        model.addAttribute("suppliers", productService.getSuppliers());
-        model.addAttribute("categories", productService.getAllCategories());
+        model.addAttribute("brands", productRepository.getBrand());
         model.addAttribute("selectedCategory", selectedCategory);
+        model.addAttribute("keyword", keyword); // ✅ giữ lại keyword sau khi search
+        model.addAttribute("selectedBrand", brand);
+        model.addAttribute("categories", productService.getAllCategories());
 
         return "product/list";
     }
+
+
 
 
     @GetMapping("/detailproduct/{id}")
@@ -208,7 +218,14 @@ public class ProductController {
 
         return "product/detail";
     }
+    @GetMapping("/import")
+    public String importProduct(Model model) {
+        List<Supplier> suppliers = supplierService.getAllSuppliers();
+        List<Product> products = productService.getAllProducts();
 
+        model.addAttribute("suppliers", suppliers);
+        model.addAttribute("products", products);
 
-
+        return "product/import_product";
+    }
 }

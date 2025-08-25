@@ -14,13 +14,41 @@
         class="ml-14 p-6 transition-[margin] duration-300
          peer-hover:ml-72 peer-focus-within:ml-72 bg-transparent"
 >
-<section
+    <!-- Favorite section with soft accent blob -->
+    <section th:if="${session.loggedInUser!=null}" class="relative py-6 px-4 rounded-xl mb-8 overflow-hidden">
+        <!-- Accent blob background -->
+        <div aria-hidden="true"
+             class="pointer-events-none absolute inset-0 z-0 opacity-70 [background:radial-gradient(40rem_40rem_at_10%_0%,rgba(99,102,241,0.08),transparent_70%),radial-gradient(32rem_32rem_at_90%_50%,rgba(16,185,129,0.07),transparent_70%)]">
+        </div>
+
+        <!-- Favorites content -->
+        <div class="relative z-10 max-w-6xl mx-auto">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white">Favorites</h2>
+                <a th:href="@{/favoriteScreen/favorite}" class="text-sm text-indigo-600 hover:underline dark:text-indigo-400">View all</a>
+            </div>
+
+            <div class="flex space-x-4 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800 pb-2">
+                <!-- Favorite Item -->
+                <div th:each="fproduct: ${homeFavorite}" class="min-w-[140px] bg-white dark:bg-gray-800 rounded-lg shadow p-3 flex-shrink-0">
+                    <img th:src="${fproduct.imageUrl}" src="https://via.placeholder.com/150" alt="Item Image" class="w-full h-24 object-cover rounded-md mb-2" />
+                    <p th:text="${fproduct.name}" class="text-sm font-medium text-gray-800 dark:text-white truncate">Item One</p>
+                </div>
+
+                <!-- Add more items here -->
+            </div>
+        </div>
+    </section>
+
+
+    <section
         class="relative rounded-2xl border border-gray-200 bg-gradient-to-br from-indigo-50 via-white to-white p-6 md:p-8 dark:border-gray-700 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800"
 >
     <!-- optional soft accent blobs (remove if you want plain bg) -->
     <div aria-hidden="true"
          class="pointer-events-none absolute inset-0 opacity-70 [background:radial-gradient(40rem_40rem_at_-10%_-10%,rgba(99,102,241,0.12),transparent_60%),radial-gradient(32rem_32rem_at_110%_110%,rgba(16,185,129,0.10),transparent_60%)]">
     </div>
+    <!-- Favorite section   -->
 
     <!-- Your content (unchanged, but with tag fixes) -->
     <div class="relative grid grid-cols-1 gap-6 lg:grid-cols-12">
@@ -65,24 +93,6 @@
                         <a th:href="@{/guest/byPriceDesc}">Giá giảm dần</a></button>
                     <button class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">
                         <a th:href="@{/guest/byPriceAsc}">Giá tăng dần</a></button>
-
-                    <!-- Category (single checkbox) -->
-<!--                    <div class="mt-4">-->
-<!--                        <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">-->
-<!--                            Loại sản phẩm-->
-<!--                        </label>-->
-<!--                        <select id="category" name="brand"-->
-<!--                                class="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-sm-->
-<!--                 focus:border-indigo-500 focus:ring-indigo-500-->
-<!--                 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200">-->
-<!--                            <option value="">Tất cả</option>-->
-<!--                            <option th:value="Electronics">Đồ điện tử</option>-->
-<!--                            <option th:value="Books">Sách</option>-->
-<!--                            <option th:value="Clothing">Quần Áo</option>-->
-<!--                            <option th:value="Kitchen">Đời sống</option>-->
-<!--                            <option th:value="Outdoors">Thể thao và Dã ngoại</option>-->
-<!--                        </select>-->
-<!--                    </div>-->
                 </div>
 
                 <!-- Submit filters -->

@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo doanh thu - WinMart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10B981',
+                        'primary-dark': '#059669',
+                        'primary-light': '#34D399',
+                        accent: '#F59E0B',
+                        'accent-light': '#FCD34D',
+                        neutral: {
+                            50: '#F9FAFB',
+                            100: '#F3F4F6',
+                            200: '#E5E7EB',
+                            300: '#D1D5DB',
+                            400: '#9CA3AF',
+                            500: '#6B7280',
+                            600: '#4B5563',
+                            700: '#374151',
+                            800: '#1F2937',
+                            900: '#111827'
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'display': ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-sans bg-neutral-50 text-neutral-800">
+<!-- Header -->
+
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-neutral-600 mb-8">
+        <a href="index.html" class="hover:text-primary transition-colors">Trang chủ</a>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+        <span class="text-primary font-medium">Báo cáo doanh thu</span>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h2 class="font-display text-3xl font-bold text-neutral-800 mb-2">Báo cáo doanh thu</h2>
+            <p class="text-neutral-600">Theo dõi và phân tích hiệu quả kinh doanh</p>
+        </div>
+        <div class="flex items-center gap-4">
+            <button onclick="refreshData()" class="flex items-center gap-2 px-4 py-2 border border-neutral-200 text-neutral-600 rounded-lg hover:bg-neutral-50 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                Làm mới
+            </button>
+            <button onclick="exportReport()" class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Xuất báo cáo
+            </button>
+        </div>
+    </div>
+
+    <!-- Time Filter -->
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="font-semibold text-neutral-800">Bộ lọc thời gian</h3>
+            <div class="flex items-center gap-2">
+                <button onclick="setTimeRange('today')" class="px-3 py-1 text-sm bg-primary text-white rounded-lg">Hôm nay</button>
+                <button onclick="setTimeRange('week')" class="px-3 py-1 text-sm border border-neutral-200 text-neutral-600 rounded-lg hover:bg-neutral-50">7 ngày</button>
+                <button onclick="setTimeRange('month')" class="px-3 py-1 text-sm border border-neutral-200 text-neutral-600 rounded-lg hover:bg-neutral-50">30 ngày</button>
+                <button onclick="setTimeRange('year')" class="px-3 py-1 text-sm border border-neutral-200 text-neutral-600 rounded-lg hover:bg-neutral-50">Năm nay</button>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-neutral-700 mb-2">Từ ngày</label>
+                <input type="date" id="startDate" class="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" value="2024-01-01">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-neutral-700 mb-2">Đến ngày</label>
+                <input type="date" id="endDate" class="w-full px-3 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" value="2024-12-31">
+            </div>
+            <div class="flex items-end">
+                <button onclick="applyFilter()" class="w-full px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
+                    Áp dụng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-neutral-600 mb-1">Tổng doanh thu</p>
+                    <p class="text-2xl font-bold text-neutral-800">2.847.500.000₫</p>
+                    <p class="text-sm text-primary flex items-center gap-1 mt-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                        +12.5% so với tháng trước
+                    </p>
+                </div>
+                <div class="bg-primary/10 p-3 rounded-full">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-neutral-600 mb-1">Tổng đơn hàng</p>
+                    <p class="text-2xl font-bold text-neutral-800">15.847</p>
+                    <p class="text-sm text-primary flex items-center gap-1 mt-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                        +8.3% so với tháng trước
+                    </p>
+                </div>
+                <div class="bg-accent/10 p-3 rounded-full">
+                    <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-neutral-600 mb-1">Giá trị đơn hàng TB</p>
+                    <p class="text-2xl font-bold text-neutral-800">179.600₫</p>
+                    <p class="text-sm text-primary flex items-center gap-1 mt-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                        +3.8% so với tháng trước
+                    </p>
+                </div>
+                <div class="bg-primary/10 p-3 rounded-full">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-neutral-600 mb-1">Khách hàng mới</p>
+                    <p class="text-2xl font-bold text-neutral-800">2.847</p>
+                    <p class="text-sm text-primary flex items-center gap-1 mt-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                        +15.2% so với tháng trước
+                    </p>
+                </div>
+                <div class="bg-accent/10 p-3 rounded-full">
+                    <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <!-- Revenue Chart -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-semibold text-neutral-800">Doanh thu theo thời gian</h3>
+                <select class="px-3 py-1 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                    <option>7 ngày qua</option>
+                    <option>30 ngày qua</option>
+                    <option>3 tháng qua</option>
+                    <option>12 tháng qua</option>
+                </select>
+            </div>
+            <div class="h-80">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Category Chart -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-semibold text-neutral-800">Doanh thu theo danh mục</h3>
+                <select class="px-3 py-1 text-sm border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                    <option>Tháng này</option>
+                    <option>Tháng trước</option>
+                    <option>Quý này</option>
+                    <option>Năm nay</option>
+                </select>
+            </div>
+            <div class="h-80">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Products Table -->
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="font-semibold text-neutral-800">Top sản phẩm bán chạy</h3>
+            <button class="text-primary hover:text-primary-dark transition-colors">Xem tất cả</button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                <tr class="border-b border-neutral-200">
+                    <th class="text-left py-3 px-4 font-medium text-neutral-600">Sản phẩm</th>
+                    <th class="text-left py-3 px-4 font-medium text-neutral-600">Danh mục</th>
+                    <th class="text-right py-3 px-4 font-medium text-neutral-600">Số lượng bán</th>
+                    <th class="text-right py-3 px-4 font-medium text-neutral-600">Doanh thu</th>
+                    <th class="text-right py-3 px-4 font-medium text-neutral-600">Tăng trưởng</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="border-b border-neutral-100 hover:bg-neutral-50">
+                    <td class="py-4 px-4">
+                        <div class="flex items-center gap-3">
+                            <img src="/placeholder.svg?height=40&width=40" alt="Product" class="w-10 h-10 rounded-lg object-cover">
+                            <div>
+                                <p class="font-medium text-neutral-800">Lốc 6 hộp sữa đậu nành Fami</p>
+                                <p class="text-sm text-neutral-600">SKU: 10196198</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 text-neutral-600">Sữa các loại</td>
+                    <td class="py-4 px-4 text-right font-medium">2.847</td>
+                    <td class="py-4 px-4 text-right font-medium text-primary">137.826.800₫</td>
+                    <td class="py-4 px-4 text-right">
+                                <span class="inline-flex items-center gap-1 text-sm text-green-600">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                    </svg>
+                                    +12.5%
+                                </span>
+                    </td>
+                </tr>
+                <tr class="border-b border-neutral-100 hover:bg-neutral-50">
+                    <td class="py-4 px-4">
+                        <div class="flex items-center gap-3">
+                            <img src="/placeholder.svg?height=40&width=40" alt="Product" class="w-10 h-10 rounded-lg object-cover">
+                            <div>
+                                <p class="font-medium text-neutral-800">Gạo Ngọc Nương ST25 3kg</p>
+                                <p class="text-sm text-neutral-600">SKU: 10196199</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 text-neutral-600">Thực phẩm khô</td>
+                    <td class="py-4 px-4 text-right font-medium">1.956</td>
+                    <td class="py-4 px-4 text-right font-medium text-primary">164.148.400₫</td>
+                    <td class="py-4 px-4 text-right">
+                                <span class="inline-flex items-center gap-1 text-sm text-green-600">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                    </svg>
+                                    +8.3%
+                                </span>
+                    </td>
+                </tr>
+                <tr class="border-b border-neutral-100 hover:bg-neutral-50">
+                    <td class="py-4 px-4">
+                        <div class="flex items-center gap-3">
+                            <img src="/placeholder.svg?height=40&width=40" alt="Product" class="w-10 h-10 rounded-lg object-cover">
+                            <div>
+                                <p class="font-medium text-neutral-800">Nước giặt Downy 2.65kg</p>
+                                <p class="text-sm text-neutral-600">SKU: 10196200</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 text-neutral-600">Chăm sóc nhà cửa</td>
+                    <td class="py-4 px-4 text-right font-medium">1.234</td>
+                    <td class="py-4 px-4 text-right font-medium text-primary">171.526.000₫</td>
+                    <td class="py-4 px-4 text-right">
+                                <span class="inline-flex items-center gap-1 text-sm text-green-600">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                    </svg>
+                                    +15.7%
+                                </span>
+                    </td>
+                </tr>
+                <tr class="border-b border-neutral-100 hover:bg-neutral-50">
+                    <td class="py-4 px-4">
+                        <div class="flex items-center gap-3">
+                            <img src="/placeholder.svg?height=40&width=40" alt="Product" class="w-10 h-10 rounded-lg object-cover">
+                            <div>
+                                <p class="font-medium text-neutral-800">Dầu đậu nành Meizan 1L</p>
+                                <p class="text-sm text-neutral-600">SKU: 10196201</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 text-neutral-600">Gia vị</td>
+                    <td class="py-4 px-4 text-right font-medium">987</td>
+                    <td class="py-4 px-4 text-right font-medium text-primary">41.947.500₫</td>
+                    <td class="py-4 px-4 text-right">
+                                <span class="inline-flex items-center gap-1 text-sm text-red-600">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                                    </svg>
+                                    -2.1%
+                                </span>
+                    </td>
+                </tr>
+                <tr class="hover:bg-neutral-50">
+                    <td class="py-4 px-4">
+                        <div class="flex items-center gap-3">
+                            <img src="/placeholder.svg?height=40&width=40" alt="Product" class="w-10 h-10 rounded-lg object-cover">
+                            <div>
+                                <p class="font-medium text-neutral-800">Sữa tươi Vinamilk 1L</p>
+                                <p class="text-sm text-neutral-600">SKU: 10196202</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 text-neutral-600">Sữa các loại</td>
+                    <td class="py-4 px-4 text-right font-medium">756</td>
+                    <td class="py-4 px-4 text-right font-medium text-primary">24.570.000₫</td>
+                    <td class="py-4 px-4 text-right">
+                                <span class="inline-flex items-center gap-1 text-sm text-green-600">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                    </svg>
+                                    +5.4%
+                                </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Revenue by Category Table -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="font-semibold text-neutral-800">Doanh thu theo danh mục</h3>
+            <button class="text-primary hover:text-primary-dark transition-colors">Xem chi tiết</button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                <tr class="border-b border-neutral-200">
+                    <th class="text-left py-3 px-4 font-medium text-neutral-600">Danh mục</th>
+                    <th class="text-right py-3 px-4 font-medium text-neutral-600">Số sản phẩm</th>
+                    <th class="text-right py-3 px-4 font-medium text-neutral-600">Đơn hàng</th>
+                    <th class="text-right py-3 px-4 font-medium text-neutral-600">Doanh thu</th>
+                    <th class="text-right py-3 px-4 font-medium text-neutral-600">% Tổng DT</th>
+                    <th class="text-right py-3 px-4 font-medium text-neutral-600">Tăng trưởng</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="border-b border-neutral-100 hover:bg-neutral-50">
+                    <td class="py-4 px-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <span class="text-xl">🥛</span>
+                            </div>
+                            <span class="font-medium text-neutral-800">Sữa các loại</span>
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 text-right">487</td>
+                    <td class="py-4 px-4 text-right">4.256</td>
+                    <td class="py-4 px-4 text-right font-medium text-primary">847.250.000₫</td>
+                    <td class="py-4 px-4 text-right">29.8%</td>
+                    <td class="py-4 px-4 text-right">
+                                <span class="inline-flex items-center gap-1 text-sm text-green-600">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                    </svg>
+                                    +12.5%
+                                </span>
+                    </td>
+                </tr>
+                <tr class="border-b border-neutral-100 hover:bg-neutral-50">
+                    <td class="py-4 px-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center">
+                                <span class="text-xl">🥬</span>
+                            </div>
+                            <span class="font-medium text-neutral-800">Rau - Củ - Trái cây</span>
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 text-right">756</td>
+                    <td class="py-4 px-4 text-right">3.847</td>
+                    <td class="py-4 px-4 text-right font-medium text-primary">625.480.000₫</td>
+                    <td class="py-4 px-4 text-right">22.0%</td>
+                    <td class="py-4 px-4 text-right">
+                                <span class="inline-flex items-center gap-1 text-sm text-green-600">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                    </svg>
+                                    +8.7%
+                                </span>
+                    </td>
+                </tr>
+                <tr class="border-b border-neutral-100 hover:bg-neutral-50">
+                    <td class="py-4 px-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <span class="text-xl">🧴</span>
+                            </div>
+                            <span class="font-medium text-neutral-800">Chăm sóc cá nhân</span>
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 text-right">623</td>
+                    <td class="py-4 px-4 text-right">2.956</td>
+                    <td class="py-4 px-4 text-right font-medium text-primary">456.780.000₫</td>
+                    <td class="py-4 px-4 text-right">16.0%</td>
+                    <td class="py-4 px-4 text-right">
+                                <span class="inline-flex items-center gap-1 text-sm text-green-600">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                    </svg>
+                                    +15.3%
+                                </span>
+                    </td>
+                </tr>
+                <tr class="border-b border-neutral-100 hover:bg-neutral-50">
+                    <td class="py-4 px-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center">
+                                <span class="text-xl">🍞</span>
+                            </div>
+                            <span class="font-medium text-neutral-800">Bánh kẹo</span>
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 text-right">394</td>
+                    <td class="py-4 px-4 text-right">2.145</td>
+                    <td class="py-4 px-4 text-right font-medium text-primary">325.670.000₫</td>
+                    <td class="py-4 px-4 text-right">11.4%</td>
+                    <td class="py-4 px-4 text-right">
+                                <span class="inline-flex items-center gap-1 text-sm text-green-600">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                    </svg>
+                                    +6.2%
+                                </span>
+                    </td>
+                </tr>
+                <tr class="hover:bg-neutral-50">
+                    <td class="py-4 px-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <span class="text-xl">🏠</span>
+                            </div>
+                            <span class="font-medium text-neutral-800">Đồ gia dụng</span>
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 text-right">287</td>
+                    <td class="py-4 px-4 text-right">1.643</td>
+                    <td class="py-4 px-4 text-right font-medium text-primary">591.320.000₫</td>
+                    <td class="py-4 px-4 text-right">20.8%</td>
+                    <td class="py-4 px-4 text-right">
+                                <span class="inline-flex items-center gap-1 text-sm text-red-600">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                                    </svg>
+                                    -1.8%
+                                </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Initialize Charts
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeRevenueChart();
+        initializeCategoryChart();
+    });
+
+    function initializeRevenueChart() {
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
+                datasets: [{
+                    label: 'Doanh thu (triệu đồng)',
+                    data: [120, 135, 145, 160, 155, 180, 175],
+                    borderColor: '#10B981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#E5E7EB'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function initializeCategoryChart() {
+        const ctx = document.getElementById('categoryChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Sữa các loại', 'Rau - Củ - Trái cây', 'Đồ gia dụng', 'Chăm sóc cá nhân', 'Bánh kẹo'],
+                datasets: [{
+                    data: [29.8, 22.0, 20.8, 16.0, 11.4],
+                    backgroundColor: [
+                        '#10B981',
+                        '#F59E0B',
+                        '#3B82F6',
+                        '#8B5CF6',
+                        '#EF4444'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Filter Functions
+    function setTimeRange(range) {
+        const buttons = document.querySelectorAll('[onclick^="setTimeRange"]');
+        buttons.forEach(btn => {
+            btn.classList.remove('bg-primary', 'text-white');
+            btn.classList.add('border', 'border-neutral-200', 'text-neutral-600');
+        });
+
+        event.target.classList.remove('border', 'border-neutral-200', 'text-neutral-600');
+        event.target.classList.add('bg-primary', 'text-white');
+
+        const today = new Date();
+        const startDate = document.getElementById('startDate');
+        const endDate = document.getElementById('endDate');
+
+        switch(range) {
+            case 'today':
+                startDate.value = today.toISOString().split('T')[0];
+                endDate.value = today.toISOString().split('T')[0];
+                break;
+            case 'week':
+                const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+                startDate.value = weekAgo.toISOString().split('T')[0];
+                endDate.value = today.toISOString().split('T')[0];
+                break;
+            case 'month':
+                const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+                startDate.value = monthAgo.toISOString().split('T')[0];
+                endDate.value = today.toISOString().split('T')[0];
+                break;
+            case 'year':
+                startDate.value = today.getFullYear() + '-01-01';
+                endDate.value = today.toISOString().split('T')[0];
+                break;
+        }
+    }
+
+    function applyFilter() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+
+        if (!startDate || !endDate) {
+            alert('Vui lòng chọn đầy đủ ngày bắt đầu và kết thúc');
+            return;
+        }
+
+        if (new Date(startDate) > new Date(endDate)) {
+            alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc');
+            return;
+        }
+
+        // Simulate loading
+        const button = event.target;
+        const originalText = button.textContent;
+        button.textContent = 'Đang tải...';
+        button.disabled = true;
+
+        setTimeout(() => {
+            button.textContent = originalText;
+            button.disabled = false;
+            alert('Đã cập nhật báo cáo theo khoảng thời gian đã chọn');
+        }, 1500);
+    }
+
+    function refreshData() {
+        const button = event.target;
+        const originalText = button.innerHTML;
+        button.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Đang tải...';
+        button.disabled = true;
+
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.disabled = false;
+            alert('Đã làm mới dữ liệu báo cáo');
+        }, 2000);
+    }
+
+    function exportReport() {
+        const button = event.target;
+        const originalText = button.innerHTML;
+        button.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Đang xuất...';
+        button.disabled = true;
+
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.disabled = false;
+            alert('Đã xuất báo cáo thành công! File sẽ được tải xuống.');
+        }, 2000);
+    }
+</script>
+</body>
+</html>

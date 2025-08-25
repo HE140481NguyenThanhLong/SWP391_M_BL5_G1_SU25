@@ -10,6 +10,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Category
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface ProductRepository extends JpaRepository<Product, Integer>, JpaSpecificationExecutor<Product> {
@@ -29,10 +30,11 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, JpaS
 
     long countByQuantityGreaterThan(int qty);
     long countByQuantityBetween(int min, int max);
-    long countByQuantity(int qty);
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.quantity = :quantity")
+    long countByQuantity(int quantity);
     // Thêm phương thức tùy chỉnh để lấy danh sách nhà cung cấp duy nhất
-//    @Query("SELECT DISTINCT p.supplier FROM Product p WHERE p.supplier IS NOT NULL")
-//    List<String> findAllSuppliers();
+    @Query("SELECT DISTINCT p.supplier.name FROM Product p WHERE p.supplier IS NOT NULL")
+    List<String> findAllSuppliers();
 
     List<Product> findByCategoriesIn(Set<Category> categories);
 
@@ -42,7 +44,20 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, JpaS
             "WHERE c IN (SELECT c2 FROM Product pr JOIN pr.categories c2 WHERE pr.product_id = :productId) " +
             "AND p.product_id <> :productId")
     Page<Product> findRelatedProducts(@Param("productId") Integer productId, Pageable pageable);
+    @Query("SELECT DISTINCT p.supplier FROM Product p")
+    List<String> findDistinctSuppliers();
 
+
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.quantity > p.minQuantity")
+    long countByQuantityGreaterThanMinQuantity();
+
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.quantity BETWEEN 1 AND p.minQuantity")
+    long countByQuantityBetween(int min, String maxField);
+
+
+    @Query("SELECT DISTINCT p.brand FROM Product p")
+    List<String> getBrand();
+    Optional<Product> findBySku(String sku);
 }
 
 
