@@ -63,7 +63,7 @@ public class AuthorizedController {
             }
             session.setAttribute("loggedInUser", user);
             if(user.getRole()== Role.STAFF){
-                return "redirect:/customerService/reportViewForStaff";
+                return "redirect:/staff/orders";
             }
             return "redirect:/guest";
 
