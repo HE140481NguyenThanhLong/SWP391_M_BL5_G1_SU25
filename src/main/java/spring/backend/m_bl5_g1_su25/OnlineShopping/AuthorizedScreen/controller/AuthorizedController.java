@@ -15,6 +15,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.dto.request.
 import spring.backend.m_bl5_g1_su25.OnlineShopping.AuthorizedScreen.service.AuthorizedService;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Customer;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.Role;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.UserStatus;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.repository.CustomerRepository;
 
@@ -61,6 +62,9 @@ public class AuthorizedController {
                 return "/authority/signin";
             }
             session.setAttribute("loggedInUser", user);
+            if(user.getRole()== Role.STAFF){
+                return "redirect:/customerService/reportViewForStaff";
+            }
             return "redirect:/guest";
 
         }else{

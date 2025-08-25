@@ -10,7 +10,8 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-public class ReportFormResponse {
+public class ReportFormResponseForStaff {
+
     @NotBlank
     String response;
 }
