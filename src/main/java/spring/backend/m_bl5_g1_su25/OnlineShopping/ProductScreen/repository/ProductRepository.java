@@ -10,6 +10,7 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Category
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface ProductRepository extends JpaRepository<Product, Integer>, JpaSpecificationExecutor<Product> {
@@ -54,6 +55,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, JpaS
     long countByQuantityBetween(int min, String maxField);
 
 
+    @Query("SELECT DISTINCT p.brand FROM Product p")
+    List<String> getBrand();
+    Optional<Product> findBySku(String sku);
 }
 
 

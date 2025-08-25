@@ -33,10 +33,8 @@ public class ProductAPIController {
         if (supplierId == null) {
             throw new IllegalArgumentException("Supplier ID is required");
         }
-        Page<Product> products = productService.filterProducts(
-                null, null, supplierId.toString(), categoryId, "createdAt", 0, 12
-        );
-        return products.getContent();
+        List<Product> products = productService.getAllProducts();
+        return products;
     }
     @GetMapping("/api/products/{productId}")
     public ResponseEntity<Map<String, Object>> getProductById(@PathVariable Integer productId) {
