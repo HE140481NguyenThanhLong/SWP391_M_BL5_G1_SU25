@@ -31,10 +31,12 @@ public interface CartItemRepository extends JpaRepository<Cart_Items, Integer> {
         Select c from Cart_Items c
         Where c.user.user_id = :user_id AND c.product.product_id = :product_id
     """)
-    Cart_Items findByUser_UserIdAndProduct_ProductId(@Param("user_id")Integer user_id, @Param("product_id")Long product_id);
+    Cart_Items findByUser_UserIdAndProduct_ProductId(@Param("user_id") Integer user_id, @Param("product_id") Long product_id);
 
     @Modifying
     @Transactional
     @Query("DELETE FROM Cart_Items c WHERE c.user.user_id = :userId")
     void clearCartByUser(@Param("userId") Integer userId);
+    @Query("SELECT SUM(c.quantity) FROM Cart_Items c WHERE c.user.user_id = :userId")
+    Integer sumQuantityByUserId(@Param("userId") Integer userId);
 }

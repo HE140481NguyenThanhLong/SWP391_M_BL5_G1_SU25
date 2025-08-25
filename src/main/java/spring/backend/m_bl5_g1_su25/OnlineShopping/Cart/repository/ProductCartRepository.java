@@ -33,6 +33,7 @@ public interface ProductCartRepository extends JpaRepository<Product, Long> {
     List<Product> findBestSeller(Pageable pageable);
 
 
-
+    @Query("SELECT SUM(c.quantity) FROM Cart_Items c WHERE c.user.id = :userId")
+    Integer sumQuantityByUserId(@Param("userId") Long userId);
 }
 

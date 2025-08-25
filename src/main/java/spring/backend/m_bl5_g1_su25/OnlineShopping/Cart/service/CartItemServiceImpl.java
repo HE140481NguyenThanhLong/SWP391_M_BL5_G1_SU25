@@ -114,5 +114,12 @@ public class CartItemServiceImpl implements CartItemService{
     public void deleteCartItem(Integer cartItemId) {
         cartItemRepository.deleteById(cartItemId);
     }
+
+    public int getCartItemCount(Integer userId) {
+        Integer totalQuantity = cartItemRepository.sumQuantityByUserId(userId);
+        return totalQuantity != null ? totalQuantity : 0;
+    }
+
+
 }
 

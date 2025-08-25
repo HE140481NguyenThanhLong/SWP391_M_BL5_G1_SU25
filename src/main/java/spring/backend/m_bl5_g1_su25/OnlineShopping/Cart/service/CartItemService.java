@@ -23,5 +23,7 @@ public interface CartItemService {
     public Cart_Items updateCartItem(Integer cartItemId, Integer quantity);
 
     public void deleteCartItem(Integer cartItemId);
+
+    public int getCartItemCount(Integer userId);
 }
 

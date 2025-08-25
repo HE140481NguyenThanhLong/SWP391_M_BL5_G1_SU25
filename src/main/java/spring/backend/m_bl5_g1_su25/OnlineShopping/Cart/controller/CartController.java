@@ -72,20 +72,27 @@ public class CartController {
                        Model model,
                        HttpSession session) {
 
+        // --- Lấy user từ session ---
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/authority/signin"; // nếu chưa login thì chuyển sang trang login
+        }
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         if (loggedInUser == null) return "redirect:/authority/signin";
         int userId = loggedInUser.getUser_id();
 
-        // Sắp xếp
+        int userId = loggedInUser.getUser_id();
+
+        // --- Sắp xếp & phân trang ---
         Sort sort = isDesc ? Sort.by(orderBy).descending() : Sort.by(orderBy).ascending();
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
-        // Lấy giỏ hàng theo user có phân trang
+        // --- Lấy giỏ hàng theo user có phân trang ---
         Page<Cart_Items> cartItems = cartItemService.getCartByUserPaging(userId, pageable);
 
-        // Tính toán giá trị giỏ hàng
+        // --- Tính toán giá trị giỏ hàng ---
         BigDecimal originalPrice = cartItemService.getCartTotalPrice(userId);
-        BigDecimal savings = BigDecimal.ZERO; // chỗ này có thể sau này tính mã giảm giá
+        BigDecimal savings = BigDecimal.ZERO; // sau này có thể thêm mã giảm giá
         BigDecimal storePickup = BigDecimal.ZERO; // phí lấy tại cửa hàng (nếu có)
         BigDecimal tax = originalPrice.multiply(new BigDecimal("0.08")); // thuế 8%
 
@@ -93,7 +100,7 @@ public class CartController {
                 .add(storePickup)
                 .add(tax);
 
-        // Lấy danh sách sản phẩm bán chạy
+        // --- Lấy danh sách sản phẩm bán chạy ---
         List<Product> products = productCartRepository.findBestSeller(PageRequest.of(0, 5));
 
         // --- Đẩy dữ liệu ra view ---
@@ -117,6 +124,8 @@ public class CartController {
 
 
     // Thêm vào giỏ hàng
+
+    // Add to cart
     @PostMapping("/add")
     public String addToCart(@RequestParam Long productId,
                             @RequestParam(defaultValue = "1") Integer quantity,
@@ -132,6 +141,22 @@ public class CartController {
             return "redirect:/cart/cart-list?result=fail";
         }
         return "redirect:/cart/cart-list?result=success";
+                            @RequestParam Integer quantity,
+                            HttpSession session) {
+        // Lấy user từ session
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            // Nếu chưa đăng nhập thì quay lại trang login
+            return "redirect:/authority/signin";
+        }
+
+        // Lấy userId từ user đang đăng nhập
+        Integer userId = loggedInUser.getUser_id();
+
+        // Thêm sản phẩm vào giỏ
+        cartItemService.addToCart(userId, productId, quantity);
+
+        return "redirect:/cart/cart-list";
     }
 
     // Update cart item
@@ -158,5 +183,13 @@ public class CartController {
         }
         return "redirect:/cart/cart-list?result=success";
     }
+    @GetMapping("/count")
+    @ResponseBody
+    public int getCartCount(HttpSession session) {
+        User loggedIn = (User) session.getAttribute("loggedInUser");
+        if (loggedIn == null) return 0;
+        return cartItemService.getCartItemCount(loggedIn.getUser_id());
+    }
+
 
 }

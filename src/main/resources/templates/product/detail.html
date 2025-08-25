@@ -145,7 +145,8 @@
 
             <!-- Action Buttons -->
             <div class="space-y-4">
-                <button th:onclick="'addToCart(\'' + ${product.product_id} + '\')'"
+                <button type="button"
+                        th:onclick="|addToCart(${product.product_id})|"
                         class="w-full bg-primary text-white py-5 rounded-xl font-bold hover:bg-primary-dark transition-colors text-xl">
                     THÊM VÀO GIỎ HÀNG
                 </button>
@@ -375,15 +376,38 @@
 </footer>
 
 <script>
-    function changeMainImage(src, event) {
-        document.getElementById('mainImage').src = src;
-        document.querySelectorAll('.grid-cols-4 img').forEach(img => {
-            img.classList.remove('border-primary', 'opacity-100');
-            img.classList.add('border-neutral-200', 'opacity-70');
-        });
-        event.target.classList.add('border-primary', 'opacity-100');
-        event.target.classList.remove('border-neutral-200', 'opacity-70');
+    function addToCart(productId) {
+        fetch('/cart/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                productId: productId,
+                quantity: 1
+            })
+        })
+            .then(res => {
+                if (res.redirected) {
+                    if (res.url.includes("/authority/signin")) {
+                        // chưa login → bắt đi đăng nhập
+                        window.location.href = res.url;
+                    } else {
+                        // đã login → hiện confirm
+                        if (confirm("✅ Đã thêm sản phẩm vào giỏ hàng!\n\nBạn có muốn xem giỏ hàng không?")) {
+                            window.location.href = res.url; // bấm OK → sang cart-list
+                        }
+                        // bấm Hủy → ở lại trang hiện tại
+                    }
+                } else {
+                    alert("✅ Đã thêm sản phẩm vào giỏ hàng!");
+                }
+            })
+            .catch(err => console.error(err));
     }
+
+
+
+
+
 
     function increaseQuantity() {
         const input = document.getElementById('quantity');
@@ -423,15 +447,7 @@
         element.classList.remove('text-neutral-600', 'border-transparent');
     }
 
-    async function addToCart(productId, userId) {
-        try {
-            const res = await fetch(`/giohang/add?userId=${userId}&productId=${productId}&qty=1`, { method: "POST" });
-            const data = await res.json();
-            document.getElementById("cartCount").innerText = data.totalItems;
-        } catch (e) {
-            console.error("Lỗi thêm giỏ hàng:", e);
-        }
-    }
+
 </script>
 
 </body>
