@@ -68,7 +68,7 @@
             <div class="flex items-center space-x-6">
                 <!-- Cart -->
                 <div class="relative">
-                    <a th:href="@{/cart/cart-list}"
+                    <a th:if="${session.loggedInUser != null and session.loggedInUser.role.name() == 'CUSTOMER'}"
                        class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -89,8 +89,8 @@
                     Đăng nhập
                 </a>
 
-                <!-- Nếu đã đăng nhập -->
-                <div th:if="${session.loggedInUser!=null}" class="relative">
+                <!-- Nếu CUSTOMER đăng nhâp -->
+                <div th:if="${session.loggedInUser != null and session.loggedInUser.role.name() == 'CUSTOMER'}" class="relative">
                     <button id="memberDropdownButton" data-dropdown-toggle="memberDropdown"
                             class="flex items-center gap-2 px-4 py-2 text-neutral-600 hover:text-primary transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,6 +112,39 @@
                         </div>
                         <ul class="py-2 text-sm text-neutral-700">
                             <li><a th:href="@{/customerService/reportHistoryForCustomer}" class="block px-4 py-2 hover:bg-neutral-50">Report Form</a></li>
+                            <li><a th:href="@{/product/list}" class="block px-4 py-2 hover:bg-neutral-50">Product</a></li>
+                            <li><a href="#" class="block px-4 py-2 hover:bg-neutral-50">Orders</a></li>
+                            <li><a href="#" class="block px-4 py-2 hover:bg-neutral-50">Settings</a></li>
+                        </ul>
+                        <div class="py-2 border-t border-neutral-100">
+                            <a th:href="@{/authority/logout}" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">Đăng xuất</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Nếu STAFF đăng nhâp -->
+                <div th:if="${session.loggedInUser != null and session.loggedInUser.role.name() == 'STAFF'}" class="relative">
+                    <button id="staffDropdownButton" data-dropdown-toggle="staffDropdown"
+                            class="flex items-center gap-2 px-4 py-2 text-neutral-600 hover:text-primary transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                        <span th:text="${session.loggedInUser.getUsername().toUpperCase()}">Hội viên</span>
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown -->
+                    <div id="staffDropdown"
+                         class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-64 border border-neutral-200">
+                        <div class="px-4 py-3 text-sm text-neutral-900 border-b border-neutral-100">
+                            <div class="font-medium" th:text="${session.loggedInUser.getUsername().toUpperCase()}">Xin chào</div>
+                            <div class="text-neutral-500" th:text="${session.loggedInUser.getEmail()}">email@example.com</div>
+                        </div>
+                        <ul class="py-2 text-sm text-neutral-700">
+                            <li><a th:href="@{/customerService/reportHistoryForCustomer}" class="block px-4 py-2 hover:bg-neutral-50">Report Form</a></li>
+                            <li><a th:href="@{/product}" class="block px-4 py-2 hover:bg-neutral-50">Product</a></li>
                             <li><a href="#" class="block px-4 py-2 hover:bg-neutral-50">Orders</a></li>
                             <li><a href="#" class="block px-4 py-2 hover:bg-neutral-50">Settings</a></li>
                         </ul>
