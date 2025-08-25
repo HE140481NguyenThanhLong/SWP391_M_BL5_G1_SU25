@@ -20,7 +20,7 @@
     </script>
 </head>
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
-
+<div th:replace="~{component/header::header}"/>
 <!-- Error handling - show error message if profile is null -->
 <div th:if="${profile == null}" class="min-h-screen flex items-center justify-center p-4">
     <div class="bg-white shadow-2xl rounded-2xl p-8 max-w-md w-full border border-red-200">
