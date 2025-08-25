@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.dto.response.UserResponse;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.Role;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.enums.UserStatus;
@@ -31,15 +32,16 @@ public class UserController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", userPage.getTotalPages());
 
-        // Truyền lại filter để giữ nguyên giá trị khi search
+        // filter
         model.addAttribute("username", username);
         model.addAttribute("selectedRole", role);
         model.addAttribute("selectedStatus", status);
         model.addAttribute("roles", Role.values());
         model.addAttribute("statuses", UserStatus.values());
 
-        return "admin/admin-main-screen"; // thymeleaf view
+        return "admin/admin-main-screen";
     }
+
 
     // 📝 Trang chỉnh sửa account
     @GetMapping("/account-edit/{id}")
@@ -55,8 +57,20 @@ public class UserController {
     @PostMapping("/account-edit/{id}")
     public String updateUser(@PathVariable("id") Integer id,
                              @RequestParam("role") Role role,
-                             @RequestParam("status") UserStatus status) {
-        userService.updateUser(id, role, status);
+                             @RequestParam("status") UserStatus status,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            // cập nhật status
+            userService.updateUserStatus(id, status);
+
+            // cập nhật role
+            userService.updateUserRole(id, role);
+
+            redirectAttributes.addFlashAttribute("success", "Cập nhật tài khoản thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Lỗi: " + e.getMessage());
+        }
         return "redirect:/account-list";
     }
+
 }
