@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WinMart - Siêu thị trực tuyến hàng đầu Việt Nam</title>
+    <title>Đánh giá sản phẩm - WinMart</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <script>
@@ -58,8 +58,7 @@
         <div class="flex items-center justify-between py-4">
             <div class="flex items-center gap-8">
                 <h1 class="font-display text-3xl font-bold text-primary">WinMart</h1>
-                <!-- Added onclick event to open category popup -->
-                <button onclick="openCategoryPopup()" class="flex items-center gap-2 px-4 py-2 bg-neutral-100 rounded-lg hover:bg-neutral-200 transition-colors">
+                <button class="flex items-center gap-2 px-4 py-2 bg-neutral-100 rounded-lg hover:bg-neutral-200 transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
@@ -103,716 +102,284 @@
     </div>
 </header>
 
-<!-- Added Category Popup Modal -->
-<div id="categoryPopup" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-    <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[80vh] overflow-y-auto">
-            <div class="p-6 border-b border-neutral-200">
-                <div class="flex items-center justify-between">
-                    <h3 class="font-display text-2xl font-bold text-neutral-800">Danh mục sản phẩm</h3>
-                    <button onclick="closeCategoryPopup()" class="text-neutral-400 hover:text-neutral-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div class="p-6">
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
-                    <div class="group cursor-pointer" onclick="selectCategory('Sữa các loại')">
-                        <div class="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                            <div class="text-4xl mb-4">🥛</div>
-                            <h4 class="font-semibold text-neutral-800 mb-2">Sữa các loại</h4>
-                            <p class="text-sm text-neutral-600">500+ sản phẩm</p>
-                        </div>
-                    </div>
-                    <div class="group cursor-pointer" onclick="selectCategory('Rau - Củ - Trái cây')">
-                        <div class="bg-gradient-to-br from-accent/10 to-accent/5 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                            <div class="text-4xl mb-4">🥬</div>
-                            <h4 class="font-semibold text-neutral-800 mb-2">Rau - Củ - Trái cây</h4>
-                            <p class="text-sm text-neutral-600">800+ sản phẩm</p>
-                        </div>
-                    </div>
-                    <div class="group cursor-pointer" onclick="selectCategory('Thịt - Hải sản')">
-                        <div class="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                            <div class="text-4xl mb-4">🍖</div>
-                            <h4 class="font-semibold text-neutral-800 mb-2">Thịt - Hải sản</h4>
-                            <p class="text-sm text-neutral-600">300+ sản phẩm</p>
-                        </div>
-                    </div>
-                    <div class="group cursor-pointer" onclick="selectCategory('Bánh kẹo')">
-                        <div class="bg-gradient-to-br from-accent/10 to-accent/5 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                            <div class="text-4xl mb-4">🍞</div>
-                            <h4 class="font-semibold text-neutral-800 mb-2">Bánh kẹo</h4>
-                            <p class="text-sm text-neutral-600">400+ sản phẩm</p>
-                        </div>
-                    </div>
-                    <div class="group cursor-pointer" onclick="selectCategory('Chăm sóc cá nhân')">
-                        <div class="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                            <div class="text-4xl mb-4">🧴</div>
-                            <h4 class="font-semibold text-neutral-800 mb-2">Chăm sóc cá nhân</h4>
-                            <p class="text-sm text-neutral-600">600+ sản phẩm</p>
-                        </div>
-                    </div>
-                    <div class="group cursor-pointer" onclick="selectCategory('Đồ gia dụng')">
-                        <div class="bg-gradient-to-br from-accent/10 to-accent/5 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                            <div class="text-4xl mb-4">🏠</div>
-                            <h4 class="font-semibold text-neutral-800 mb-2">Đồ gia dụng</h4>
-                            <p class="text-sm text-neutral-600">700+ sản phẩm</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-neutral-600 mb-8">
+        <a href="index.html" class="hover:text-primary transition-colors">Trang chủ</a>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+        <a href="#" class="hover:text-primary transition-colors">Tài khoản</a>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+        <span class="text-neutral-800 font-medium">Đánh giá sản phẩm</span>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="mb-8">
+        <h2 class="font-display text-4xl font-bold text-neutral-800 mb-4">Đánh giá sản phẩm</h2>
+        <p class="text-xl text-neutral-600">Chia sẻ trải nghiệm của bạn về sản phẩm đã mua</p>
     </div>
-</div>
 
-<!-- Enhanced Product Detail Popup Modal -->
-<div id="productDetailPopup" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-    <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-2xl max-w-6xl w-full max-h-[95vh] overflow-y-auto">
-            <div class="p-6 border-b border-neutral-200">
-                <div class="flex items-center justify-between">
-                    <h3 class="font-display text-2xl font-bold text-neutral-800">Chi tiết sản phẩm</h3>
-                    <button onclick="closeProductDetailPopup()" class="text-neutral-400 hover:text-neutral-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Review Form -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-2xl shadow-sm border border-neutral-200 p-8">
+                <h3 class="font-display text-2xl font-semibold text-neutral-800 mb-6">Viết đánh giá mới</h3>
+
+                <!-- Product Selection -->
+                <div class="mb-8">
+                    <label class="block text-sm font-semibold text-neutral-700 mb-3">Chọn sản phẩm đã mua</label>
+                    <div class="relative">
+                        <select class="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent appearance-none bg-white">
+                            <option value="">-- Chọn sản phẩm --</option>
+                            <option value="1">Lốc 6 hộp sữa đậu nành canxi plus Fami 200ml</option>
+                            <option value="2">DOWNY Nước giặt vượn hoa thơm ngát 2.65kg</option>
+                            <option value="3">Gạo Ngọc Nương ST25 3 Kg Gói</option>
+                            <option value="4">Dầu đậu nành Meizan chai 1L</option>
+                        </select>
+                        <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-neutral-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
-                    </button>
-                </div>
-            </div>
-            <div class="p-6">
-                <!-- Enhanced product detail layout with tabs and better image gallery -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                    <!-- Enhanced Image Gallery -->
-                    <div>
-                        <div class="relative mb-4 group">
-                            <img id="productImage" src="/placeholder.svg?height=500&width=500" alt="Product" class="w-full h-96 object-cover rounded-xl cursor-zoom-in transition-transform duration-300 group-hover:scale-105">
-                            <div class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold" id="productDiscount">-30%</div>
-                            <!-- Zoom overlay -->
-                            <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-10 transition-all duration-300 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-4 gap-2">
-                            <img src="/placeholder.svg?height=100&width=100" alt="Thumbnail" class="w-full h-20 object-cover rounded-lg border-2 border-primary cursor-pointer" onclick="changeMainImage(this.src)">
-                            <img src="/placeholder.svg?height=100&width=100" alt="Thumbnail" class="w-full h-20 object-cover rounded-lg border border-neutral-200 cursor-pointer opacity-70 hover:opacity-100" onclick="changeMainImage(this.src)">
-                            <img src="/placeholder.svg?height=100&width=100" alt="Thumbnail" class="w-full h-20 object-cover rounded-lg border border-neutral-200 cursor-pointer opacity-70 hover:opacity-100" onclick="changeMainImage(this.src)">
-                            <img src="/placeholder.svg?height=100&width=100" alt="Thumbnail" class="w-full h-20 object-cover rounded-lg border border-neutral-200 cursor-pointer opacity-70 hover:opacity-100" onclick="changeMainImage(this.src)">
-                        </div>
                     </div>
+                </div>
 
-                    <!-- Enhanced Product Info -->
-                    <div>
-                        <h4 id="productTitle" class="font-display text-3xl font-bold text-neutral-800 mb-4">Lốc 6 hộp sữa đậu nành canxi plus Fami 200ml</h4>
-
-                        <!-- Rating Section -->
-                        <div class="flex items-center gap-4 mb-4">
-                            <div class="flex items-center gap-1">
-                                <div class="flex text-yellow-400">
-                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                    <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                    <svg class="w-5 h-5 text-neutral-300 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                </div>
-                                <span class="text-sm text-neutral-600">(4.2/5)</span>
-                            </div>
-                            <span class="text-sm text-neutral-500">|</span>
-                            <span class="text-sm text-neutral-600">156 đánh giá</span>
-                            <span class="text-sm text-neutral-500">|</span>
-                            <span class="text-sm text-neutral-600">Đã bán 2.3k</span>
-                        </div>
-
-                        <div class="flex items-center gap-4 mb-6">
-                            <span id="productPrice" class="text-4xl font-bold text-primary">48.400₫</span>
-                            <span id="productOriginalPrice" class="text-xl text-neutral-400 line-through">77.300₫</span>
-                            <span class="bg-red-100 text-red-600 px-2 py-1 rounded text-sm font-semibold">Tiết kiệm 28.900₫</span>
-                        </div>
-
-                        <!-- Product Variants -->
-                        <div class="mb-6">
-                            <h5 class="font-semibold text-neutral-800 mb-3">Chọn loại:</h5>
-                            <div class="flex gap-2">
-                                <button class="px-4 py-2 border-2 border-primary bg-primary/10 text-primary rounded-lg font-medium">Lốc 6 hộp</button>
-                                <button class="px-4 py-2 border border-neutral-200 text-neutral-600 rounded-lg hover:border-primary hover:text-primary">Thùng 24 hộp</button>
-                            </div>
-                        </div>
-
-                        <div class="space-y-4 mb-6">
-                            <div class="flex items-center justify-between py-3 border-b border-neutral-100">
-                                <span class="text-neutral-600">SKU:</span>
-                                <span class="font-semibold">10196198</span>
-                            </div>
-                            <div class="flex items-center justify-between py-3 border-b border-neutral-100">
-                                <span class="text-neutral-600">Tình trạng:</span>
-                                <span class="text-primary font-semibold flex items-center gap-2">
-                                        <div class="w-2 h-2 bg-primary rounded-full"></div>
-                                        Còn hàng
-                                    </span>
-                            </div>
-                            <div class="flex items-center justify-between py-3 border-b border-neutral-100">
-                                <span class="text-neutral-600">Thương hiệu:</span>
-                                <span class="font-semibold">Fami</span>
-                            </div>
-                            <div class="flex items-center justify-between py-3 border-b border-neutral-100">
-                                <span class="text-neutral-600">Vận chuyển:</span>
-                                <span class="text-sm">Miễn phí giao hàng cho đơn từ 300.000đ</span>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-4 mb-6">
-                            <span class="text-neutral-600">Số lượng:</span>
-                            <div class="flex items-center border border-neutral-200 rounded-lg">
-                                <button class="px-4 py-2 hover:bg-neutral-50 text-lg font-semibold" onclick="decreaseQuantity()">-</button>
-                                <input type="number" id="quantity" value="1" min="1" class="w-20 text-center border-0 focus:outline-none text-lg font-semibold">
-                                <button class="px-4 py-2 hover:bg-neutral-50 text-lg font-semibold" onclick="increaseQuantity()">+</button>
-                            </div>
-                            <span class="text-sm text-neutral-500">Còn 247 sản phẩm</span>
-                        </div>
-
-                        <div class="space-y-3">
-                            <button class="w-full bg-primary text-white py-4 rounded-xl font-semibold hover:bg-primary-dark transition-colors text-lg">
-                                THÊM VÀO GIỎ
-                            </button>
-                            <button class="w-full bg-accent text-white py-4 rounded-xl font-semibold hover:bg-accent/90 transition-colors text-lg">
-                                MUA NGAY
-                            </button>
-                            <div class="flex gap-3">
-                                <button class="flex-1 border-2 border-primary text-primary py-3 rounded-xl font-semibold hover:bg-primary hover:text-white transition-colors flex items-center justify-center gap-2">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                    </svg>
-                                    Yêu thích
-                                </button>
-                                <button class="flex-1 border border-neutral-200 text-neutral-600 py-3 rounded-xl font-semibold hover:bg-neutral-50 transition-colors flex items-center justify-center gap-2">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
-                                    </svg>
-                                    Chia sẻ
-                                </button>
-                            </div>
+                <!-- Selected Product Display -->
+                <div id="selectedProduct" class="hidden mb-8 p-4 bg-neutral-50 rounded-xl">
+                    <div class="flex items-center gap-4">
+                        <img src="/placeholder.svg?height=80&width=80" alt="Product" class="w-20 h-20 object-cover rounded-lg">
+                        <div>
+                            <h4 class="font-semibold text-neutral-800">Lốc 6 hộp sữa đậu nành canxi plus Fami 200ml</h4>
+                            <p class="text-primary font-bold">48.400₫</p>
+                            <p class="text-sm text-neutral-600">Đã mua ngày: 15/01/2024</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Added tabbed content section for detailed information -->
-                <div class="border-t border-neutral-200 pt-8">
-                    <!-- Tab Navigation -->
-                    <div class="flex border-b border-neutral-200 mb-6">
-                        <button class="px-6 py-3 font-semibold text-primary border-b-2 border-primary" onclick="switchTab('description', this)">Mô tả sản phẩm</button>
-                        <button class="px-6 py-3 font-semibold text-neutral-600 hover:text-primary" onclick="switchTab('specifications', this)">Thông số kỹ thuật</button>
-                        <button class="px-6 py-3 font-semibold text-neutral-600 hover:text-primary" onclick="switchTab('reviews', this)">Đánh giá (156)</button>
-                        <button class="px-6 py-3 font-semibold text-neutral-600 hover:text-primary" onclick="switchTab('related', this)">Sản phẩm liên quan</button>
-                    </div>
-
-                    <!-- Tab Content -->
-                    <div id="description" class="tab-content">
-                        <div class="prose max-w-none text-neutral-600">
-                            <h5 class="font-display text-xl font-semibold mb-4 text-neutral-800">Về sản phẩm</h5>
-                            <p class="mb-4">Sữa đậu nành Fami Canxi Plus được làm từ đậu nành non tươi ngon, bổ sung canxi giúp xương chắc khỏe. Sản phẩm không chứa cholesterol, ít đường, phù hợp cho mọi lứa tuổi.</p>
-
-                            <h6 class="font-semibold text-neutral-800 mb-3">Đặc điểm nổi bật:</h6>
-                            <ul class="space-y-2 mb-6">
-                                <li class="flex items-start gap-3">
-                                    <svg class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    Bổ sung canxi tự nhiên giúp xương chắc khỏe
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <svg class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    Không chứa cholesterol, tốt cho tim mạch
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <svg class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    Ít đường, phù hợp cho người tiểu đường
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <svg class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    Thương hiệu uy tín Fami với hơn 20 năm kinh nghiệm
-                                </li>
-                            </ul>
-
-                            <div class="bg-neutral-50 rounded-xl p-6">
-                                <h6 class="font-semibold text-neutral-800 mb-3">Hướng dẫn sử dụng:</h6>
-                                <p>Lắc đều trước khi uống. Bảo quản nơi khô ráo, thoáng mát. Sau khi mở nắp nên sử dụng ngay.</p>
-                            </div>
+                <!-- Rating -->
+                <div class="mb-8">
+                    <label class="block text-sm font-semibold text-neutral-700 mb-3">Đánh giá tổng thể</label>
+                    <div class="flex items-center gap-2">
+                        <div class="flex gap-1" id="ratingStars">
+                            <button type="button" class="star-btn text-3xl text-neutral-300 hover:text-yellow-400 transition-colors" data-rating="1">★</button>
+                            <button type="button" class="star-btn text-3xl text-neutral-300 hover:text-yellow-400 transition-colors" data-rating="2">★</button>
+                            <button type="button" class="star-btn text-3xl text-neutral-300 hover:text-yellow-400 transition-colors" data-rating="3">★</button>
+                            <button type="button" class="star-btn text-3xl text-neutral-300 hover:text-yellow-400 transition-colors" data-rating="4">★</button>
+                            <button type="button" class="star-btn text-3xl text-neutral-300 hover:text-yellow-400 transition-colors" data-rating="5">★</button>
                         </div>
-                    </div>
-
-                    <div id="specifications" class="tab-content hidden">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-4">
-                                <h5 class="font-display text-xl font-semibold text-neutral-800">Thông tin sản phẩm</h5>
-                                <div class="space-y-3">
-                                    <div class="flex justify-between py-2 border-b border-neutral-100">
-                                        <span class="text-neutral-600">Thương hiệu:</span>
-                                        <span class="font-medium">Fami</span>
-                                    </div>
-                                    <div class="flex justify-between py-2 border-b border-neutral-100">
-                                        <span class="text-neutral-600">Dung tích:</span>
-                                        <span class="font-medium">200ml x 6 hộp</span>
-                                    </div>
-                                    <div class="flex justify-between py-2 border-b border-neutral-100">
-                                        <span class="text-neutral-600">Xuất xứ:</span>
-                                        <span class="font-medium">Việt Nam</span>
-                                    </div>
-                                    <div class="flex justify-between py-2 border-b border-neutral-100">
-                                        <span class="text-neutral-600">Hạn sử dụng:</span>
-                                        <span class="font-medium">12 tháng</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="space-y-4">
-                                <h5 class="font-display text-xl font-semibold text-neutral-800">Thành phần dinh dưỡng</h5>
-                                <div class="space-y-3">
-                                    <div class="flex justify-between py-2 border-b border-neutral-100">
-                                        <span class="text-neutral-600">Protein:</span>
-                                        <span class="font-medium">3.2g/100ml</span>
-                                    </div>
-                                    <div class="flex justify-between py-2 border-b border-neutral-100">
-                                        <span class="text-neutral-600">Canxi:</span>
-                                        <span class="font-medium">120mg/100ml</span>
-                                    </div>
-                                    <div class="flex justify-between py-2 border-b border-neutral-100">
-                                        <span class="text-neutral-600">Đường:</span>
-                                        <span class="font-medium">4.5g/100ml</span>
-                                    </div>
-                                    <div class="flex justify-between py-2 border-b border-neutral-100">
-                                        <span class="text-neutral-600">Năng lượng:</span>
-                                        <span class="font-medium">45kcal/100ml</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="reviews" class="tab-content hidden">
-                        <div class="space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div class="bg-neutral-50 rounded-xl p-6 text-center">
-                                    <div class="text-4xl font-bold text-primary mb-2">4.2</div>
-                                    <div class="flex justify-center mb-2">
-                                        <div class="flex text-yellow-400">
-                                            <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                            <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                            <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                            <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                            <svg class="w-5 h-5 text-neutral-300 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                        </div>
-                                    </div>
-                                    <div class="text-sm text-neutral-600">156 đánh giá</div>
-                                </div>
-                                <div class="col-span-2 space-y-2">
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-sm">5 sao</span>
-                                        <div class="flex-1 bg-neutral-200 rounded-full h-2">
-                                            <div class="bg-yellow-400 h-2 rounded-full" style="width: 65%"></div>
-                                        </div>
-                                        <span class="text-sm text-neutral-600">65%</span>
-                                    </div>
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-sm">4 sao</span>
-                                        <div class="flex-1 bg-neutral-200 rounded-full h-2">
-                                            <div class="bg-yellow-400 h-2 rounded-full" style="width: 25%"></div>
-                                        </div>
-                                        <span class="text-sm text-neutral-600">25%</span>
-                                    </div>
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-sm">3 sao</span>
-                                        <div class="flex-1 bg-neutral-200 rounded-full h-2">
-                                            <div class="bg-yellow-400 h-2 rounded-full" style="width: 7%"></div>
-                                        </div>
-                                        <span class="text-sm text-neutral-600">7%</span>
-                                    </div>
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-sm">2 sao</span>
-                                        <div class="flex-1 bg-neutral-200 rounded-full h-2">
-                                            <div class="bg-yellow-400 h-2 rounded-full" style="width: 2%"></div>
-                                        </div>
-                                        <span class="text-sm text-neutral-600">2%</span>
-                                    </div>
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-sm">1 sao</span>
-                                        <div class="flex-1 bg-neutral-200 rounded-full h-2">
-                                            <div class="bg-yellow-400 h-2 rounded-full" style="width: 1%"></div>
-                                        </div>
-                                        <span class="text-sm text-neutral-600">1%</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="space-y-4">
-                                <div class="border border-neutral-200 rounded-xl p-4">
-                                    <div class="flex items-start gap-4">
-                                        <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                                            <span class="font-semibold text-primary">N</span>
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="flex items-center gap-2 mb-2">
-                                                <span class="font-semibold">Nguyễn Thị Mai</span>
-                                                <div class="flex text-yellow-400">
-                                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                                </div>
-                                                <span class="text-sm text-neutral-500">2 ngày trước</span>
-                                            </div>
-                                            <p class="text-neutral-600">Sữa đậu nành rất ngon, vị ngọt tự nhiên. Con tôi rất thích uống. Giao hàng nhanh, đóng gói cẩn thận.</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="border border-neutral-200 rounded-xl p-4">
-                                    <div class="flex items-start gap-4">
-                                        <div class="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center">
-                                            <span class="font-semibold text-accent">T</span>
-                                        </div>
-                                        <div class="flex-1">
-                                            <div class="flex items-center gap-2 mb-2">
-                                                <span class="font-semibold">Trần Văn Hùng</span>
-                                                <div class="flex text-yellow-400">
-                                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                                    <svg class="w-4 h-4 text-neutral-300 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
-                                                </div>
-                                                <span class="text-sm text-neutral-500">1 tuần trước</span>
-                                            </div>
-                                            <p class="text-neutral-600">Chất lượng tốt, giá cả hợp lý. Đã mua nhiều lần và sẽ tiếp tục ủng hộ. Khuyến mãi thường xuyên rất hấp dẫn.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="related" class="tab-content hidden">
-                        <h5 class="font-display text-xl font-semibold text-neutral-800 mb-6">Sản phẩm liên quan</h5>
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                            <div class="bg-white border border-neutral-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
-                                <img src="/placeholder.svg?height=150&width=200" alt="Related Product" class="w-full h-32 object-cover">
-                                <div class="p-4">
-                                    <h6 class="font-semibold text-sm mb-2">Sữa tươi Vinamilk 1L</h6>
-                                    <div class="text-primary font-bold">32.500₫</div>
-                                </div>
-                            </div>
-                            <div class="bg-white border border-neutral-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
-                                <img src="/placeholder.svg?height=150&width=200" alt="Related Product" class="w-full h-32 object-cover">
-                                <div class="p-4">
-                                    <h6 class="font-semibold text-sm mb-2">Sữa chua Vinamilk 4 hộp</h6>
-                                    <div class="text-primary font-bold">28.900₫</div>
-                                </div>
-                            </div>
-                            <div class="bg-white border border-neutral-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
-                                <img src="/placeholder.svg?height=150&width=200" alt="Related Product" class="w-full h-32 object-cover">
-                                <div class="p-4">
-                                    <h6 class="font-semibold text-sm mb-2">Sữa đậu nành Vitasoy 6 hộp</h6>
-                                    <div class="text-primary font-bold">45.200₫</div>
-                                </div>
-                            </div>
-                            <div class="bg-white border border-neutral-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
-                                <img src="/placeholder.svg?height=150&width=200" alt="Related Product" class="w-full h-32 object-cover">
-                                <div class="p-4">
-                                    <h6 class="font-semibold text-sm mb-2">Sữa hạt Macca 180ml</h6>
-                                    <div class="text-primary font-bold">15.800₫</div>
-                                </div>
-                            </div>
-                        </div>
+                        <span id="ratingText" class="text-sm text-neutral-600 ml-2">Chọn số sao</span>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Hero Banner -->
-<section class="bg-gradient-to-r from-primary to-primary-light text-white py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-                <h2 class="font-display text-5xl font-bold mb-6 leading-tight">
-                    Thực phẩm tươi ngon<br>
-                    <span class="text-accent-light">Giao hàng tận nhà</span>
-                </h2>
-                <p class="text-xl mb-8 text-green-50 leading-relaxed">
-                    Hơn 10,000 sản phẩm chất lượng cao từ các thương hiệu uy tín.
-                    Giao hàng nhanh trong 2 giờ tại Hà Nội và TP.HCM.
-                </p>
+                <!-- Review Title -->
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-neutral-700 mb-3">Tiêu đề đánh giá</label>
+                    <input type="text" placeholder="Tóm tắt trải nghiệm của bạn..." class="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+
+                <!-- Review Content -->
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-neutral-700 mb-3">Nội dung đánh giá</label>
+                    <textarea rows="6" placeholder="Chia sẻ chi tiết về chất lượng sản phẩm, dịch vụ giao hàng, đóng gói..." class="w-full px-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"></textarea>
+                    <p class="text-sm text-neutral-500 mt-2">Tối thiểu 50 ký tự</p>
+                </div>
+
+                <!-- Image Upload -->
+                <div class="mb-8">
+                    <label class="block text-sm font-semibold text-neutral-700 mb-3">Thêm hình ảnh (tùy chọn)</label>
+                    <div class="border-2 border-dashed border-neutral-300 rounded-xl p-8 text-center hover:border-primary transition-colors">
+                        <svg class="w-12 h-12 text-neutral-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        <p class="text-neutral-600 mb-2">Kéo thả hình ảnh vào đây hoặc</p>
+                        <button type="button" class="text-primary font-semibold hover:text-primary-dark">Chọn file</button>
+                        <p class="text-sm text-neutral-500 mt-2">PNG, JPG tối đa 5MB</p>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
                 <div class="flex gap-4">
-                    <button class="px-8 py-4 bg-white text-primary font-semibold rounded-xl hover:bg-neutral-50 transition-colors">
-                        Mua sắm ngay
+                    <button type="submit" class="flex-1 bg-primary text-white py-4 rounded-xl font-semibold hover:bg-primary-dark transition-colors">
+                        Gửi đánh giá
                     </button>
-                    <button class="px-8 py-4 border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-primary transition-colors">
-                        Tìm hiểu thêm
-                    </button>
-                </div>
-            </div>
-            <div class="relative">
-                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-white/20 rounded-xl p-4 text-center">
-                            <div class="text-3xl font-bold">10K+</div>
-                            <div class="text-sm">Sản phẩm</div>
-                        </div>
-                        <div class="bg-white/20 rounded-xl p-4 text-center">
-                            <div class="text-3xl font-bold">2h</div>
-                            <div class="text-sm">Giao hàng</div>
-                        </div>
-                        <div class="bg-white/20 rounded-xl p-4 text-center">
-                            <div class="text-3xl font-bold">100%</div>
-                            <div class="text-sm">Chất lượng</div>
-                        </div>
-                        <div class="bg-white/20 rounded-xl p-4 text-center">
-                            <div class="text-3xl font-bold">24/7</div>
-                            <div class="text-sm">Hỗ trợ</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Categories -->
-<section class="py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h3 class="font-display text-4xl font-bold text-neutral-800 mb-4">Danh mục sản phẩm</h3>
-            <p class="text-xl text-neutral-600">Khám phá các sản phẩm chất lượng cao</p>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-            <!-- Added onclick events to category cards -->
-            <div class="group cursor-pointer" onclick="selectCategory('Sữa các loại')">
-                <div class="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                    <div class="text-4xl mb-4">🥛</div>
-                    <h4 class="font-semibold text-neutral-800 mb-2">Sữa các loại</h4>
-                    <p class="text-sm text-neutral-600">500+ sản phẩm</p>
-                </div>
-            </div>
-
-            <div class="group cursor-pointer" onclick="selectCategory('Rau - Củ - Trái cây')">
-                <div class="bg-gradient-to-br from-accent/10 to-accent/5 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                    <div class="text-4xl mb-4">🥬</div>
-                    <h4 class="font-semibold text-neutral-800 mb-2">Rau - Củ - Trái cây</h4>
-                    <p class="text-sm text-neutral-600">800+ sản phẩm</p>
-                </div>
-            </div>
-
-            <div class="group cursor-pointer" onclick="selectCategory('Thịt - Hải sản')">
-                <div class="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                    <div class="text-4xl mb-4">🍖</div>
-                    <h4 class="font-semibold text-neutral-800 mb-2">Thịt - Hải sản</h4>
-                    <p class="text-sm text-neutral-600">300+ sản phẩm</p>
-                </div>
-            </div>
-
-            <div class="group cursor-pointer" onclick="selectCategory('Bánh kẹo')">
-                <div class="bg-gradient-to-br from-accent/10 to-accent/5 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                    <div class="text-4xl mb-4">🍞</div>
-                    <h4 class="font-semibold text-neutral-800 mb-2">Bánh kẹo</h4>
-                    <p class="text-sm text-neutral-600">400+ sản phẩm</p>
-                </div>
-            </div>
-
-            <div class="group cursor-pointer" onclick="selectCategory('Chăm sóc cá nhân')">
-                <div class="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                    <div class="text-4xl mb-4">🧴</div>
-                    <h4 class="font-semibold text-neutral-800 mb-2">Chăm sóc cá nhân</h4>
-                    <p class="text-sm text-neutral-600">600+ sản phẩm</p>
-                </div>
-            </div>
-
-            <div class="group cursor-pointer" onclick="selectCategory('Đồ gia dụng')">
-                <div class="bg-gradient-to-br from-accent/10 to-accent/5 rounded-2xl p-6 text-center hover:shadow-lg transition-all duration-300 group-hover:scale-105">
-                    <div class="text-4xl mb-4">🏠</div>
-                    <h4 class="font-semibold text-neutral-800 mb-2">Đồ gia dụng</h4>
-                    <p class="text-sm text-neutral-600">700+ sản phẩm</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Featured Products -->
-<section class="py-16 bg-neutral-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between mb-12">
-            <div>
-                <h3 class="font-display text-4xl font-bold text-neutral-800 mb-4">Sản phẩm nổi bật</h3>
-                <p class="text-xl text-neutral-600">Những sản phẩm được yêu thích nhất</p>
-            </div>
-            <button class="px-6 py-3 border-2 border-primary text-primary font-semibold rounded-xl hover:bg-primary hover:text-white transition-colors">
-                Xem tất cả
-            </button>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <!-- Product 1 -->
-            <!-- Added onclick event to open product detail popup -->
-            <div class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden group cursor-pointer" onclick="openProductDetail('Lốc 6 hộp sữa đậu nành canxi plus Fami 200ml', '48.400₫', '77.300₫', '-30%')">
-                <div class="relative">
-                    <img src="/placeholder.svg?height=200&width=300" alt="Sữa Fami" class="w-full h-48 object-cover">
-                    <div class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">-30%</div>
-                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="bg-white p-2 rounded-full shadow-md hover:bg-neutral-50">
-                            <svg class="w-5 h-5 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h4 class="font-semibold text-neutral-800 mb-2 line-clamp-2">Lốc 6 hộp sữa đậu nành canxi plus Fami 200ml</h4>
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="text-2xl font-bold text-primary">48.400₫</span>
-                        <span class="text-sm text-neutral-400 line-through">77.300₫</span>
-                    </div>
-                    <button class="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primary-dark transition-colors">
-                        Thêm vào giỏ
-                    </button>
-                </div>
-            </div>
-
-            <!-- Product 2 -->
-            <div class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden group cursor-pointer" onclick="openProductDetail('DOWNY Nước giặt vượn hoa thơm ngát 2.65kg', '139.000₫', '195.400₫', '-29%')">
-                <div class="relative">
-                    <img src="/placeholder.svg?height=200&width=300" alt="Nước xả Downy" class="w-full h-48 object-cover">
-                    <div class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">-29%</div>
-                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="bg-white p-2 rounded-full shadow-md hover:bg-neutral-50">
-                            <svg class="w-5 h-5 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h4 class="font-semibold text-neutral-800 mb-2 line-clamp-2">DOWNY Nước giặt vượn hoa thơm ngát 2.65kg</h4>
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="text-2xl font-bold text-primary">139.000₫</span>
-                        <span class="text-sm text-neutral-400 line-through">195.400₫</span>
-                    </div>
-                    <button class="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primary-dark transition-colors">
-                        Thêm vào giỏ
-                    </button>
-                </div>
-            </div>
-
-            <!-- Product 3 -->
-            <div class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden group cursor-pointer" onclick="openProductDetail('Gạo Ngọc Nương ST25 3 Kg Gói', '83.900₫', '115.000₫', '-27%')">
-                <div class="relative">
-                    <img src="/placeholder.svg?height=200&width=300" alt="Gạo Ngọc Nương" class="w-full h-48 object-cover">
-                    <div class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">-27%</div>
-                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="bg-white p-2 rounded-full shadow-md hover:bg-neutral-50">
-                            <svg class="w-5 h-5 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h4 class="font-semibold text-neutral-800 mb-2 line-clamp-2">Gạo Ngọc Nương ST25 3 Kg Gói</h4>
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="text-2xl font-bold text-primary">83.900₫</span>
-                        <span class="text-sm text-neutral-400 line-through">115.000₫</span>
-                    </div>
-                    <button class="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primary-dark transition-colors">
-                        Thêm vào giỏ
-                    </button>
-                </div>
-            </div>
-
-            <!-- Product 4 -->
-            <div class="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden group cursor-pointer" onclick="openProductDetail('Dầu đậu nành Meizan chai 1L', '42.500₫', '55.800₫', '-24%')">
-                <div class="relative">
-                    <img src="/placeholder.svg?height=200&width=300" alt="Dầu ăn Meizan" class="w-full h-48 object-cover">
-                    <div class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">-24%</div>
-                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button class="bg-white p-2 rounded-full shadow-md hover:bg-neutral-50">
-                            <svg class="w-5 h-5 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h4 class="font-semibold text-neutral-800 mb-2 line-clamp-2">Dầu đậu nành Meizan chai 1L</h4>
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="text-2xl font-bold text-primary">42.500₫</span>
-                        <span class="text-sm text-neutral-400 line-through">55.800₫</span>
-                    </div>
-                    <button class="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primary-dark transition-colors">
-                        Thêm vào giỏ
+                    <button type="button" class="px-8 py-4 border border-neutral-200 text-neutral-600 rounded-xl font-semibold hover:bg-neutral-50 transition-colors">
+                        Hủy
                     </button>
                 </div>
             </div>
         </div>
-    </div>
-</section>
 
-<!-- Features -->
-<section class="py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="text-center">
-                <div class="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+        <!-- Sidebar -->
+        <div class="space-y-6">
+            <!-- Review Guidelines -->
+            <div class="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6">
+                <h4 class="font-semibold text-neutral-800 mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                </div>
-                <h4 class="font-display text-2xl font-semibold text-neutral-800 mb-4">Giao hàng siêu tốc</h4>
-                <p class="text-neutral-600 leading-relaxed">Giao hàng trong 2 giờ tại Hà Nội và TP.HCM. Miễn phí giao hàng cho đơn từ 300.000đ.</p>
+                    Hướng dẫn viết đánh giá
+                </h4>
+                <ul class="space-y-3 text-sm text-neutral-600">
+                    <li class="flex items-start gap-2">
+                        <svg class="w-4 h-4 text-primary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Chia sẻ trải nghiệm thực tế về sản phẩm
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <svg class="w-4 h-4 text-primary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Đánh giá chất lượng, đóng gói, giao hàng
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <svg class="w-4 h-4 text-primary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Thêm hình ảnh thực tế của sản phẩm
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <svg class="w-4 h-4 text-primary mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Sử dụng ngôn ngữ lịch sự, tích cực
+                    </li>
+                </ul>
             </div>
 
-            <div class="text-center">
-                <div class="bg-accent/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            <!-- Reward Info -->
+            <div class="bg-gradient-to-br from-accent/10 to-accent/5 rounded-2xl p-6">
+                <h4 class="font-semibold text-neutral-800 mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
                     </svg>
+                    Phần thưởng đánh giá
+                </h4>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-neutral-600">Đánh giá có hình ảnh</span>
+                        <span class="font-semibold text-accent">+50 điểm</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-neutral-600">Đánh giá chi tiết</span>
+                        <span class="font-semibold text-accent">+30 điểm</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-neutral-600">Đánh giá cơ bản</span>
+                        <span class="font-semibold text-accent">+20 điểm</span>
+                    </div>
                 </div>
-                <h4 class="font-display text-2xl font-semibold text-neutral-800 mb-4">Chất lượng đảm bảo</h4>
-                <p class="text-neutral-600 leading-relaxed">100% sản phẩm chính hãng từ các nhà cung cấp uy tín. Đổi trả miễn phí trong 7 ngày.</p>
-            </div>
-
-            <div class="text-center">
-                <div class="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 109.75 9.75A9.75 9.75 0 0012 2.25z"></path>
-                    </svg>
-                </div>
-                <h4 class="font-display text-2xl font-semibold text-neutral-800 mb-4">Hỗ trợ 24/7</h4>
-                <p class="text-neutral-600 leading-relaxed">Đội ngũ chăm sóc khách hàng chuyên nghiệp, sẵn sàng hỗ trợ bạn mọi lúc mọi nơi.</p>
             </div>
         </div>
     </div>
-</section>
+
+    <!-- My Reviews History -->
+    <div class="mt-12">
+        <h3 class="font-display text-2xl font-semibold text-neutral-800 mb-6">Lịch sử đánh giá của tôi</h3>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden">
+            <div class="p-6 border-b border-neutral-200">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <input type="text" placeholder="Tìm kiếm đánh giá..." class="px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <select class="px-4 py-2 border border-neutral-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="">Tất cả đánh giá</option>
+                            <option value="5">5 sao</option>
+                            <option value="4">4 sao</option>
+                            <option value="3">3 sao</option>
+                            <option value="2">2 sao</option>
+                            <option value="1">1 sao</option>
+                        </select>
+                    </div>
+                    <span class="text-sm text-neutral-600">Tổng: 12 đánh giá</span>
+                </div>
+            </div>
+
+            <div class="divide-y divide-neutral-200">
+                <!-- Review Item 1 -->
+                <div class="p-6">
+                    <div class="flex gap-4">
+                        <img src="/placeholder.svg?height=80&width=80" alt="Product" class="w-20 h-20 object-cover rounded-lg flex-shrink-0">
+                        <div class="flex-1">
+                            <div class="flex items-start justify-between mb-2">
+                                <h4 class="font-semibold text-neutral-800">Lốc 6 hộp sữa đậu nành canxi plus Fami 200ml</h4>
+                                <span class="text-sm text-neutral-500">15/01/2024</span>
+                            </div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="flex text-yellow-400">
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                </div>
+                                <span class="text-sm text-neutral-600">Sản phẩm tuyệt vời!</span>
+                            </div>
+                            <p class="text-neutral-600 mb-3">Sữa đậu nành rất ngon, vị ngọt tự nhiên. Con tôi rất thích uống. Giao hàng nhanh, đóng gói cẩn thận. Sẽ mua lại.</p>
+                            <div class="flex items-center gap-4">
+                                <span class="text-sm text-primary bg-primary/10 px-2 py-1 rounded">Đã duyệt</span>
+                                <span class="text-sm text-neutral-500">156 người thấy hữu ích</span>
+                                <button class="text-sm text-primary hover:text-primary-dark">Chỉnh sửa</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Item 2 -->
+                <div class="p-6">
+                    <div class="flex gap-4">
+                        <img src="/placeholder.svg?height=80&width=80" alt="Product" class="w-20 h-20 object-cover rounded-lg flex-shrink-0">
+                        <div class="flex-1">
+                            <div class="flex items-start justify-between mb-2">
+                                <h4 class="font-semibold text-neutral-800">DOWNY Nước giặt vượn hoa thơm ngát 2.65kg</h4>
+                                <span class="text-sm text-neutral-500">10/01/2024</span>
+                            </div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="flex text-yellow-400">
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                    <svg class="w-4 h-4 text-neutral-300 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                                </div>
+                                <span class="text-sm text-neutral-600">Chất lượng tốt</span>
+                            </div>
+                            <p class="text-neutral-600 mb-3">Nước giặt có mùi thơm dễ chịu, giặt sạch tốt. Giá cả hợp lý so với chất lượng.</p>
+                            <div class="flex items-center gap-4">
+                                <span class="text-sm text-yellow-600 bg-yellow-100 px-2 py-1 rounded">Đang duyệt</span>
+                                <button class="text-sm text-primary hover:text-primary-dark">Chỉnh sửa</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="p-6 border-t border-neutral-200">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm text-neutral-600">Hiển thị 1-10 trong 12 đánh giá</span>
+                    <div class="flex gap-2">
+                        <button class="px-3 py-2 border border-neutral-200 rounded-lg text-neutral-400 cursor-not-allowed">Trước</button>
+                        <button class="px-3 py-2 bg-primary text-white rounded-lg">1</button>
+                        <button class="px-3 py-2 border border-neutral-200 rounded-lg hover:bg-neutral-50">2</button>
+                        <button class="px-3 py-2 border border-neutral-200 rounded-lg hover:bg-neutral-50">Sau</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 
 <!-- Footer -->
-<footer class="bg-neutral-800 text-white py-16">
+<footer class="bg-neutral-800 text-white py-16 mt-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
             <div>
                 <h3 class="font-display text-2xl font-bold text-primary mb-6">WinMart</h3>
                 <p class="text-neutral-300 mb-6 leading-relaxed">
                     Công Ty Cổ Phần Dịch Vụ Thương Mại Tổng Hợp WinCommerce
-                </p>
-                <p class="text-sm text-neutral-400 leading-relaxed">
-                    Mã số doanh nghiệp: 0104918404 Đăng ký lần đầu ngày 20 tháng 09 năm 2010, đăng ký thay đổi lần thứ 48, ngày 30 tháng 06 năm 2023
                 </p>
             </div>
 
@@ -821,168 +388,98 @@
                 <ul class="space-y-3 text-neutral-300">
                     <li><a href="#" class="hover:text-primary transition-colors">Giới thiệu về WinMart</a></li>
                     <li><a href="#" class="hover:text-primary transition-colors">Danh sách cửa hàng</a></li>
-                    <li><a href="#" class="hover:text-primary transition-colors">Quản lý chất lượng</a></li>
                     <li><a href="#" class="hover:text-primary transition-colors">Chính sách bảo mật</a></li>
-                    <li><a href="#" class="hover:text-primary transition-colors">Điều khoản và điều kiện giao dịch</a></li>
                 </ul>
             </div>
 
             <div>
                 <h4 class="font-semibold text-lg mb-6">Hỗ trợ khách hàng</h4>
                 <ul class="space-y-3 text-neutral-300">
-                    <li><a href="#" class="hover:text-primary transition-colors">Trung tâm hỗ trợ khách hàng</a></li>
+                    <li><a href="#" class="hover:text-primary transition-colors">Trung tâm hỗ trợ</a></li>
                     <li><a href="#" class="hover:text-primary transition-colors">Chính sách giao hàng</a></li>
-                    <li><a href="#" class="hover:text-primary transition-colors">Chính sách thanh toán</a></li>
                     <li><a href="#" class="hover:text-primary transition-colors">Chính sách đổi trả</a></li>
-                    <li><a href="#" class="hover:text-primary transition-colors">Đánh giá góp ý</a></li>
                 </ul>
             </div>
 
             <div>
-                <h4 class="font-semibold text-lg mb-6">Chăm sóc khách hàng</h4>
+                <h4 class="font-semibold text-lg mb-6">Liên hệ</h4>
                 <div class="space-y-4 text-neutral-300">
-                    <p>Mua Online: 0247 1066866</p>
+                    <p>Hotline: 0247 1066866</p>
                     <p>Email: cskh@winmart.masangroup.com</p>
-                    <div class="pt-4">
-                        <p class="mb-4">Kết nối với chúng tôi</p>
-                        <div class="flex gap-4">
-                            <a href="#" class="bg-blue-600 p-3 rounded-lg hover:bg-blue-700 transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                                </svg>
-                            </a>
-                            <a href="#" class="bg-red-600 p-3 rounded-lg hover:bg-red-700 transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                                </svg>
-                            </a>
-                            <a href="#" class="bg-blue-500 p-3 rounded-lg hover:bg-blue-600 transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.347-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001 12.017.001z"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
 
         <div class="border-t border-neutral-700 pt-8">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-neutral-400 text-sm">© 2024 WinMart. Tất cả quyền được bảo lưu.</p>
-                <div class="flex items-center gap-6">
-                    <div class="bg-blue-600 px-4 py-2 rounded-lg">
-                        <span class="text-sm font-semibold">ĐÃ THÔNG BÁO</span>
-                        <br>
-                        <span class="text-xs">BỘ CÔNG THƯƠNG</span>
-                    </div>
-                </div>
-            </div>
+            <p class="text-neutral-400 text-sm text-center">© 2024 WinMart. Tất cả quyền được bảo lưu.</p>
         </div>
     </div>
 </footer>
 
-<!-- Added JavaScript functions for popup functionality -->
 <script>
-    // Category Popup Functions
-    function openCategoryPopup() {
-        document.getElementById('categoryPopup').classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-    }
+    // Rating Stars Functionality
+    const starButtons = document.querySelectorAll('.star-btn');
+    const ratingText = document.getElementById('ratingText');
+    let currentRating = 0;
 
-    function closeCategoryPopup() {
-        document.getElementById('categoryPopup').classList.add('hidden');
-        document.body.style.overflow = 'auto';
-    }
+    const ratingLabels = {
+        1: 'Rất không hài lòng',
+        2: 'Không hài lòng',
+        3: 'Bình thường',
+        4: 'Hài lòng',
+        5: 'Rất hài lòng'
+    };
 
-    function selectCategory(categoryName) {
-        alert('Đã chọn danh mục: ' + categoryName);
-        closeCategoryPopup();
-    }
-
-    // Product Detail Popup Functions
-    function openProductDetail(title, price, originalPrice, discount) {
-        document.getElementById('productTitle').textContent = title;
-        document.getElementById('productPrice').textContent = price;
-        document.getElementById('productOriginalPrice').textContent = originalPrice;
-        document.getElementById('productDiscount').textContent = discount;
-        document.getElementById('productDetailPopup').classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeProductDetailPopup() {
-        document.getElementById('productDetailPopup').classList.add('hidden');
-        document.body.style.overflow = 'auto';
-    }
-
-    // Tab switching function
-    function switchTab(tabName, element) {
-        // Hide all tab contents
-        const tabContents = document.querySelectorAll('.tab-content');
-        tabContents.forEach(content => content.classList.add('hidden'));
-
-        // Remove active styles from all tabs
-        const tabButtons = element.parentElement.querySelectorAll('button');
-        tabButtons.forEach(button => {
-            button.classList.remove('text-primary', 'border-b-2', 'border-primary');
-            button.classList.add('text-neutral-600');
+    starButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            currentRating = parseInt(this.dataset.rating);
+            updateStars();
+            ratingText.textContent = ratingLabels[currentRating];
         });
 
-        // Show selected tab content
-        document.getElementById(tabName).classList.remove('hidden');
-
-        // Add active styles to selected tab
-        element.classList.remove('text-neutral-600');
-        element.classList.add('text-primary', 'border-b-2', 'border-primary');
-    }
-
-    // Image gallery function
-    function changeMainImage(src) {
-        document.getElementById('productImage').src = src;
-
-        // Update thumbnail borders
-        const thumbnails = document.querySelectorAll('#productDetailPopup img[onclick]');
-        thumbnails.forEach(thumb => {
-            thumb.classList.remove('border-2', 'border-primary', 'opacity-100');
-            thumb.classList.add('border', 'border-neutral-200', 'opacity-70');
+        button.addEventListener('mouseenter', function() {
+            const hoverRating = parseInt(this.dataset.rating);
+            highlightStars(hoverRating);
         });
-
-        // Highlight selected thumbnail
-        event.target.classList.remove('border', 'border-neutral-200', 'opacity-70');
-        event.target.classList.add('border-2', 'border-primary', 'opacity-100');
-    }
-
-    // Quantity Functions
-    function increaseQuantity() {
-        const quantityInput = document.getElementById('quantity');
-        quantityInput.value = parseInt(quantityInput.value) + 1;
-    }
-
-    function decreaseQuantity() {
-        const quantityInput = document.getElementById('quantity');
-        if (parseInt(quantityInput.value) > 1) {
-            quantityInput.value = parseInt(quantityInput.value) - 1;
-        }
-    }
-
-    // Close popups when clicking outside
-    document.getElementById('categoryPopup').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeCategoryPopup();
-        }
     });
 
-    document.getElementById('productDetailPopup').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeProductDetailPopup();
-        }
+    document.getElementById('ratingStars').addEventListener('mouseleave', function() {
+        updateStars();
     });
 
-    // Close popups with Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeCategoryPopup();
-            closeProductDetailPopup();
+    function updateStars() {
+        starButtons.forEach((button, index) => {
+            if (index < currentRating) {
+                button.classList.remove('text-neutral-300');
+                button.classList.add('text-yellow-400');
+            } else {
+                button.classList.remove('text-yellow-400');
+                button.classList.add('text-neutral-300');
+            }
+        });
+    }
+
+    function highlightStars(rating) {
+        starButtons.forEach((button, index) => {
+            if (index < rating) {
+                button.classList.remove('text-neutral-300');
+                button.classList.add('text-yellow-400');
+            } else {
+                button.classList.remove('text-yellow-400');
+                button.classList.add('text-neutral-300');
+            }
+        });
+    }
+
+    // Product Selection
+    const productSelect = document.querySelector('select');
+    const selectedProduct = document.getElementById('selectedProduct');
+
+    productSelect.addEventListener('change', function() {
+        if (this.value) {
+            selectedProduct.classList.remove('hidden');
+        } else {
+            selectedProduct.classList.add('hidden');
         }
     });
 </script>

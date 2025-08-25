@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vertical Header (Flowbite + Tailwind)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+
+<div th:replace="~{component/header :: header}" ></div>
+
+<section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
+    <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+        <div class="mx-auto max-w-5xl">
+            <div class="gap-4 sm:flex sm:items-center sm:justify-between">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Đơn hàng của tôi</h2>
+
+                <div class="mt-6 gap-4 space-y-4 sm:mt-0 sm:flex sm:items-center sm:justify-end sm:space-y-0">
+                    <div>
+                        <label for="order-type" class="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white">Select order type</label>
+                        <form th:action="@{/order/order-list}" method="get" id="orderFilterForm">
+                            <input type="hidden" name="pageNo" th:value="${pageNum}">
+                            <input type="hidden" name="pageSize" th:value="${pageSize}">
+                            <input type="hidden" name="orderBy" th:value="${orderBy}">
+                            <input type="hidden" name="isDesc" th:value="${isDesc}">
+
+                            <select id="order-type"
+                                    name="status"
+                                    class="block w-full min-w-[8rem] rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                                    onchange="this.form.submit()">
+                                <option >All orders</option>
+                                <option th:each="item : ${allStatus}"
+                                        th:value="${item.name()}"
+                                        th:text="${item}">
+                                </option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 flow-root sm:mt-8">
+                <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                    <div th:each="item : ${orders.content}" class="flex flex-wrap items-center gap-y-4 py-6">
+                        <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+                            <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Order ID:</dt>
+                            <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
+                                <a th:href="@{|/order/order-list/${item.order_id}|}" class="hover:underline"
+                                   th:text="${'#ORD' + item.order_id}">#ORD123</a>
+                            </dd>
+                        </dl>
+
+                        <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+                            <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Date:</dt>
+                            <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white" th:text="${#temporals.format(item.createdAt, 'dd/MM/yyyy HH:mm')}">20.12.2023</dd>
+                        </dl>
+
+                        <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+                            <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Price:</dt>
+                            <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white" th:text="${#numbers.formatDecimal(item.total, 1, 'COMMA', 2, 'POINT')} + ' VND'">$4,756</dd>
+                        </dl>
+
+                        <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+                            <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Status:</dt>
+                            <dd th:text="${item.status}"
+                                class="me-2 mt-1.5 inline-flex items-center rounded px-2.5 py-0.5 text-xs font-medium">
+                                <!-- fallback nếu Thymeleaf chưa render -->
+                                PENDING
+                            </dd>
+                        </dl>
+
+
+                        <div class="w-full grid sm:grid-cols-2 lg:flex lg:w-64 lg:items-center lg:justify-end gap-4">
+                            <button type="button" class="w-full rounded-lg border border-red-700 px-3 py-2 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900 lg:w-auto">Cancel order</button>
+                            <a th:href="@{|/order/order-list/${item.order_id}|}"
+                               class="w-full inline-flex justify-center rounded-lg  border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 lg:w-auto">
+                                View details</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!--paging-->
+            <nav class="mt-6 flex items-center justify-center sm:mt-8" aria-label="Page navigation">
+                <ul class="flex h-8 items-center -space-x-px text-sm">
+                    <!-- Previous -->
+                    <li th:if="${!orders.first}">
+                        <a th:href="@{/order/order-list(pageNo=${currentPage - 1}, pageSize=${orders.size}, orderBy=${orderBy}, isDesc=${isDesc})}"
+                           class="ms-0 flex h-8 items-center justify-center rounded-s-lg border border-e-0 border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <span class="sr-only">Previous</span>
+                            <svg class="h-4 w-4 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7"/>
+                            </svg>
+                        </a>
+                    </li>
+
+                    <!-- Page numbers -->
+                    <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}">
+                        <a th:href="@{/order/order-list(pageNo=${pageNum}, pageSize=${orders.size}, orderBy=${orderBy}, isDesc=${isDesc})}"
+                           th:text="${pageNum + 1}"
+                           th:classappend="${pageNum} == ${currentPage} ?
+                   'z-10 flex h-8 items-center justify-center border border-primary-300 bg-primary-50 px-3 leading-tight text-primary-600' :
+                   'flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 hover:dark:bg-gray-700 hover:dark:text-white'">
+                        </a>
+                    </li>
+
+                    <!-- Next -->
+                    <li th:if="${!orders.last}">
+                        <a th:href="@{/order/order-list(pageNo=${currentPage + 1}, pageSize=${orders.size}, orderBy=${orderBy}, isDesc=${isDesc})}"
+                           class="flex h-8 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <span class="sr-only">Next</span>
+                            <svg class="h-4 w-4 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+
+
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+
+</body>
+</html>
