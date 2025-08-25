@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<div th:replace="~{component/header::header}"/>
+<section class="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center px-4">
+    <div class="w-full max-w-2xl bg-white rounded-lg shadow-md p-8 dark:bg-gray-800">
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Submit a Report</h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Let us know what issue you're facing</p>
+        </div>
+
+        <form th:action="@{/customerService/reportForm}" method="POST" th:object="${ReportFormRequest}" enctype="multipart/form-data" class="space-y-6">
+            <!-- Title -->
+            <div>
+                <label for="title" class="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Title</label>
+                <input type="text" id="title" name="title" required
+                       th:field="*{title}"
+                       class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+            </div>
+
+            <!-- Description -->
+            <div>
+                <label for="description" class="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Description</label>
+                <textarea id="description" name="description" rows="4" required placeholder="Detailed explanation of the issue"
+                          th:field="*{description}"
+                          class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+            </div>
+
+            <!-- Issue Type (Dropdown) -->
+            <div>
+                <label for="issueType" class="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Issue Type</label>
+                <select id="issueType" name="issueType"
+                        th:field="*{issues}"
+                        class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <option value="" disabled selected>Select issue type</option>
+                    <option
+                       th:each="type: ${issueTypes}"
+                       th:value="${type}"
+                       th:text="${type.name().replace('_', ' ')}">Bug</option>
+
+
+                </select>
+            </div>
+
+            <!-- Image Upload -->
+            <div>
+                <label for="screenshot" class="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Upload Screenshot (optional)</label>
+                <input type="url" id="screenshot" name="imgUrl" accept="image/*"
+                       th:field="*{imgUrl}"
+                       class="block w-full text-sm text-gray-900 bg-gray-50 rounded-md border border-gray-300 cursor-pointer focus:outline-none dark:text-gray-300 dark:bg-gray-700 dark:border-gray-600" />
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button type="submit"
+                        class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                    Submit Report
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+</body>
+</html>

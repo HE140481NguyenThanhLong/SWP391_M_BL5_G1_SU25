@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<section class="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+    <div class="w-full max-w-2xl bg-white rounded-lg shadow-md p-8 dark:bg-gray-800">
+        <div class="text-center mb-6">
+            <img class="mx-auto h-12 w-12" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="Flowbite logo" />
+            <h1 class="mt-4 text-2xl font-bold text-gray-900 dark:text-white">Tạo tài khoản của bạn </h1>
+        </div>
+
+        <form class="grid grid-cols-1 md:grid-cols-2 gap-4" th:action="@{/authority/signup}" th:object="${SignUprequest}" method="POST">
+            <div th:if="${error}" class="mt-1 text-sm text-red-600 dark:text-red-400 hidden" id="text-error">
+                <p th:text="${error}"></p>
+            </div>
+            <!-- First Name -->
+            <div>
+                <label for="firstName" class="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Họ</label>
+                <input type="text" id="firstName" name="firstName" required placeholder="Nguyễn" th:field="*{firstname}"
+                       class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+            </div>
+
+            <!-- Last Name -->
+            <div>
+                <label for="lastName" class="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Tên</label>
+                <input type="text" id="lastName" name="lastName" required placeholder="Long" th:field="*{lastname}"
+                       class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+            </div>
+
+            <!-- Username -->
+            <div>
+                <label for="username" class="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Tên tài khoản</label>
+                <input type="text" id="username" name="username" required placeholder="longnt" th:field="*{username}"
+                       class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+            </div>
+
+            <!-- Phone Number -->
+            <div>
+                <label for="phone" class="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Số điện thoại</label>
+                <input type="tel" id="phone" name="phone" required placeholder="+84" th:field="*{phoneNumber}"
+                       class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+            </div>
+
+            <!-- Email (full width on smaller screens) -->
+            <div class="md:col-span-2">
+                <label for="email" class="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Địa chỉ email</label>
+                <input type="email" id="email" name="email" required placeholder="you@example.com" th:field="*{email}"
+                       class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+            </div>
+
+            <!-- Password (full width on smaller screens) -->
+            <div class="md:col-span-2">
+                <label for="password" class="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Mật Khẩu</label>
+                <input type="password" id="password" name="password" required placeholder="••••••••" th:field="*{password}"
+                       class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+            </div>
+
+            <!-- Submit Button (spans two columns) -->
+            <div class="md:col-span-2">
+                <button type="submit"
+                        class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                    Đăng ký
+                </button>
+            </div>
+        </form>
+
+        <p class="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+            Đã có tài khoản ? <a th:href="@{/authority/signin}" class="text-blue-600 hover:underline dark:text-blue-400">Đăng nhập</a>
+        </p>
+    </div>
+</section>
+
+</body>
+</html>

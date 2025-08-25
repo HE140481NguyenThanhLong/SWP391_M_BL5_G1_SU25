@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<section class="min-h-screen bg-gray-100 dark:bg-gray-900 py-10 px-4">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
+        <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Staff Report Review</h2>
+
+
+        <div id="staff-report-accordion" data-accordion="collapse" class="space-y-4">
+
+
+            <div th:each="report, iterStat :${allReports}" class="border border-gray-200 dark:border-gray-700 rounded-md">
+
+                <h2>
+                    <button type="button"
+                            class="flex items-center justify-between w-full p-4 font-medium text-left text-gray-900 bg-gray-100 rounded-t-md hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+                            th:attr="data-accordion-target='#staff-report-body-' + ${iterStat.index}, aria-controls='staff-report-body-' + ${iterStat.index}" aria-expanded="false" >
+                        <span th:text="${report.title}">#1001 - Login button doesn't respond on mobile</span>
+                        <svg data-accordion-icon class="w-4 h-4 rotate-0 shrink-0" fill="none" stroke="currentColor"
+                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                </h2>
+
+                <div th:id="'staff-report-body-' + ${iterStat.index}"   class="hidden" aria-labelledby="staff-report-heading-1">
+                    <div   class="p-4 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300 space-y-4">
+
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Title</label>
+                            <p th:text="${report.title}" class="font-semibold text-gray-900 dark:text-white">Login button doesn't respond on mobile</p>
+                        </div>
+
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Description</label>
+                            <p th:text="${report.description}" >When trying to log in from a mobile device, the button does not trigger any action. Tested on multiple browsers.</p>
+                        </div>
+
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Image</label>
+                            <img th:src="${report.imgUrl}" alt="Screenshot"
+                                 class="mt-2 rounded-md border w-full max-w-md" />
+                        </div>
+
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Issue Type</label>
+                            <p th:text="${report.issueType}" >Bug</p>
+                        </div>
+
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Status</label>
+                            <span th:text="${report.status}" class="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">
+                                Pending
+                            </span>
+                        </div>
+
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Created At</label>
+                            <p th:text="${report.createdAt}">2025-08-18 10:32 AM</p>
+                        </div>
+
+                        <div class="text-right pt-4">
+                            <a  th:href="@{/customerService/{id}/respondFormForStaff(id=${report.report_id})}"
+                                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                Respond
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</section>
+
+
+<script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>
+
+</body>
+</html>

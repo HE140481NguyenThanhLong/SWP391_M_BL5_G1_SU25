@@ -26,7 +26,7 @@ public interface ProductCartRepository extends JpaRepository<Product, Long> {
 
 
     // Lấy top 10 sản phẩm bán chạy
-    List<Product> findTop10ByOrderBySalesCountDesc();
+//    List<Product> findTop10BySales_count();
 
     // Hoặc dạng pageable
     @Query("SELECT p FROM Product p ORDER BY p.soldCount DESC")
