@@ -1,11 +1,8 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.OrderScreen.service;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Cart.repository.CartItemRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Cart.service.CartItemService;
@@ -37,7 +34,7 @@ public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final OrderDetailRepository orderDetailRepository;
     private final PaymentRepository paymentRepository;
-    private final UserRepository userRepository;
+    private final UserRepos userRepository;
     private final ProvinceRepository provinceRepository;
     private final WardRepository wardRepository;
     private final ProductRepository productRepository;
@@ -123,12 +120,12 @@ public class OrderServiceImpl implements OrderService{
                         .orElseThrow(() -> new RuntimeException("Product not found"));
 
                 // Kiểm tra tồn kho
-                if (product.getStock() < cartItem.getQuantity()) {
+                if (product.getQuantity() < cartItem.getQuantity()) {
                     throw new RuntimeException("Not enough stock for product: " + product.getName());
                 }
 
                 // Trừ tồn kho
-                product.setStock(product.getStock() - cartItem.getQuantity());
+                product.setQuantity(product.getQuantity() - cartItem.getQuantity());
                 productRepository.save(product);
 
                 // Tính giá cho sản phẩm

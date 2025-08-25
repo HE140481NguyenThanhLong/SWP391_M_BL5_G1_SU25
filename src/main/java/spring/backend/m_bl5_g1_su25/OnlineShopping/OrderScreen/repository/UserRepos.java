@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepos extends JpaRepository<User, Long> {
 }
