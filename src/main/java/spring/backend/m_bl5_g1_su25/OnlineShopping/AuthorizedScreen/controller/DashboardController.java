@@ -26,7 +26,7 @@ public class DashboardController {
             return switch (role) {
                 case "ROLE_ADMIN" -> "redirect:/admin/dashboard";
                 case "ROLE_STAFF" -> "redirect:/staff/dashboard";
-                case "ROLE_CUSTOMER" -> "redirect:/customer/dashboard";
+                case "ROLE_CUSTOMER" -> "redirect:/guest";
                 default -> "redirect:/guest";
             };
         }
@@ -38,8 +38,4 @@ public class DashboardController {
         return "admin/admin-dashboard";
     }
 
-    @GetMapping("/customer/dashboard")
-    public String customerDashboard() {
-        return "customer/customer-dashboard";
-    }
 }

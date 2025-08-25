@@ -15,7 +15,7 @@
          peer-hover:ml-72 peer-focus-within:ml-72 bg-transparent"
 >
     <!-- Favorite section with soft accent blob -->
-    <section th:if="${session.loggedInUser!=null}" class="relative py-6 px-4 rounded-xl mb-8 overflow-hidden">
+    <section th:if="${#authentication!=null}" class="relative py-6 px-4 rounded-xl mb-8 overflow-hidden">
         <!-- Accent blob background -->
         <div aria-hidden="true"
              class="pointer-events-none absolute inset-0 z-0 opacity-70 [background:radial-gradient(40rem_40rem_at_10%_0%,rgba(99,102,241,0.08),transparent_70%),radial-gradient(32rem_32rem_at_90%_50%,rgba(16,185,129,0.07),transparent_70%)]">
