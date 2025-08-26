@@ -115,14 +115,18 @@ public class CustomerServiceController {
                                        @RequestParam(defaultValue = "0") int page,
                                        @RequestParam(defaultValue = "10") int size) {
         List<ReportFormDefault> allReports = reportService.findAllReports(page,size);
+        if (page < 0) {
+            page = 0;
+        }
+
         if (size <= 0) {
             size = 10;
         }
-        boolean hasNextPage = allReports.size() == size;
+
         model.addAttribute("allReports", allReports);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", size);
-        model.addAttribute("hasNextPage", hasNextPage);
+        model.addAttribute("hasNextPage", allReports.size() == size);
         return "/customerService/reportViewForStaff";
     }
 

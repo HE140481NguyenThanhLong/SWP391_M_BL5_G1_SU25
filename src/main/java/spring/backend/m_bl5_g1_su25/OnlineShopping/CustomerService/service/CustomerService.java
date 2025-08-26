@@ -111,7 +111,11 @@ public class CustomerService {
     }
     public List<ReportFormDefault> findAllReports(int page,int size){
         int offset = page*size;
-        return reportRepo.findAllWithOffsetLimit(page,offset)
+        if (size <= 0) {
+
+            throw new IllegalArgumentException("Page size must be greater than zero.");
+        }
+        return reportRepo.findAllWithOffsetLimit(size,offset)
                 .stream()
                 .map(customerServiceMapper::toReportFormDefault)
                 .collect(Collectors.toList());

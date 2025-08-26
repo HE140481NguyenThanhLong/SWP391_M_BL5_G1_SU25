@@ -1,31 +1,54 @@
-spring:
-  application:
-    name: M_BL5_G1_SU25
-
-  datasource:
-    url: jdbc:sqlserver://localhost:1433;database=SWP391_BL5_SU255;trustServerCertificate=true
-    username: sa
-    password: 123
-
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-
-  thymeleaf:
-    cache: false
-    prefix: classpath:/templates/
-    suffix: .html
-
-  security:
-    user:
-      name: admin
-      password: admin
-      roles: ADMIN
+#spring:
+#  application:
+#    name: M_BL5_G1_SU25
+#
+#  datasource:
+#    url: jdbc:sqlserver://localhost:1433;database=SWP391_BL5_SU255;trustServerCertificate=true
+#    username: sa
+#    password: sa
+#
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#
+#  thymeleaf:
+#    cache: false
+#    prefix: classpath:/templates/
+#    suffix: .html
+#
+#  security:
+#    user:
+#      name: admin
+#      password: admin
+#      roles: ADMIN
+#
+#server:
+#  port: 8080
 
 server:
   port: 8080
+  servlet:
+    context-path: /rms
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+  datasource:
+    url: "jdbc:sqlserver://localhost:1433;database=SWP391_BL5_SU25;trustServerCertificate=true"
+    #    url: "jdbc:sqlserver://localhost:1433;database=testDB;trustServerCertificate=true"
+    username: sa
+    password: sa
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+    logging:
+      level:
+        org.hibernate.type.descriptor.sql.BasicBinder: TRACE
