@@ -3,9 +3,9 @@ spring:
     name: M_BL5_G1_SU25
 
   datasource:
-    url: jdbc:sqlserver://localhost:1433;database=SWP391_BL5_SU255;trustServerCertificate=true
-    username: sa
-    password: 123
+    url: jdbc:mysql://localhost:3306/smartshop?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: 123456
 
 
   jpa:
