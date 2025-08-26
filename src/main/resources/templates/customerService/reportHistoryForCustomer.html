@@ -7,17 +7,16 @@
 </head>
 <body>
 <div th:replace="~{component/header::header}"/>
-<section  class="min-h-screen bg-gray-100 dark:bg-gray-900 py-10 px-4">
-    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
-<!--        <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Report Submission History</h2>-->
-
+<section class="min-h-screen bg-gray-100 py-10 px-4">
+    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
+        <!-- Accordion -->
         <div id="accordion-report-history" data-accordion="collapse" class="space-y-4">
             <!-- Report Item -->
-            <div th:each="form, iterStat : ${reportForm}" class="border border-gray-200 dark:border-gray-700 rounded-md">
+            <div th:each="form, iterStat : ${reportForm}" class="border border-gray-200 rounded-md">
                 <h2>
                     <button type="button"
-                            class="flex items-center justify-between w-full p-4 font-medium text-left text-gray-900 rounded-t-md bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
-                            th:attr="data-accordion-target='#report-body-' + ${iterStat.index}, aria-controls='report-body-' + ${iterStat.index}" aria-expanded="false" >
+                            class="flex items-center justify-between w-full p-4 font-medium text-left text-gray-900 rounded-t-md bg-gray-100 hover:bg-gray-200"
+                            th:attr="data-accordion-target='#report-body-' + ${iterStat.index}, aria-controls='report-body-' + ${iterStat.index}" aria-expanded="false">
                         <span th:text="${form.title}" class="text-sm font-semibold">#1001 - Login bug issue</span>
                         <svg data-accordion-icon class="w-4 h-4 rotate-0 shrink-0" fill="none" stroke="currentColor"
                              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -26,49 +25,52 @@
                         </svg>
                     </button>
                 </h2>
-                <div th:id="'report-body-' + ${iterStat.index}"   class="hidden" aria-labelledby="report-heading-1">
-                    <div class="p-4 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300 space-y-3">
+                <div th:id="'report-body-' + ${iterStat.index}" class="hidden" aria-labelledby="report-heading-1">
+                    <div class="p-4 border-t border-gray-200 text-sm text-gray-700 space-y-3">
                         <div>
                             <strong>Description:</strong>
-                            <p th:text="${form.description}" >The login button doesn't work on mobile view.</p>
+                            <p th:text="${form.description}">The login button doesn't work on mobile view.</p>
                         </div>
                         <div>
                             <strong>Image:</strong><br />
                             <img th:src="${form.imgUrl}" alt="Report screenshot" class="rounded border w-64 mt-1" />
                         </div>
-                        <div th:text="${form.issueType}" ><strong>Issue Type:</strong> Bug</div>
+                        <div th:text="${form.issueType}">
+                            <strong>Issue Type:</strong> Bug
+                        </div>
                         <div>
                             <strong>Status:</strong>
                             <span th:text="${form.status}"
-                                  th:classappend="${form.status == 'RESOLVED' ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100'}"
-                                  class="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ">Pending</span>
+                                  th:classappend="${form.status == 'RESOLVED' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}"
+                                  class="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full">Pending</span>
                         </div>
-                        <div th:text="${#temporals.format(form.createdAt,'dd-MM-yyyy HH:mm')}"><strong>Created At:</strong> 2025-08-18 14:45</div>
+                        <div th:text="${#temporals.format(form.createdAt,'dd-MM-yyyy HH:mm')}">
+                            <strong>Created At:</strong> 2025-08-18 14:45
+                        </div>
                         <div>
                             <strong>Resolved At:</strong>
-                            <span th:if="${form.resolveAt != null}" th:text="${#temporals.format(form.resolveAt, 'ydd-MM-yyyy HH:mm')}"></span>
+                            <span th:if="${form.resolveAt != null}" th:text="${#temporals.format(form.resolveAt, 'dd-MM-yyyy HH:mm')}"></span>
                             <span th:if="${form.resolveAt==null}">------</span>
                         </div>
-                        <div th:if="${form.staffResponse != null and !form.staffResponse.isEmpty()}" class="pt-3 mt-3 border-t border-gray-300 dark:border-gray-600">
-                            <strong class="text-blue-500 dark:text-blue-400">Staff Response:</strong>
+                        <div th:if="${form.staffResponse != null and !form.staffResponse.isEmpty()}" class="pt-3 mt-3 border-t border-gray-300">
+                            <strong class="text-blue-500">Staff Response:</strong>
                             <p class="mt-1" th:text="${form.staffResponse}"></p>
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </div>
+
+        <!-- Send Report button -->
         <div>
             <button type="button"
-                    class="mt-12 text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
-            <a th:href="@{/customerService/reportForm}" >Send Report</a>
+                    class="mt-12 text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
+                <a th:href="@{/customerService/reportForm}">Send Report</a>
             </button>
         </div>
     </div>
-
-
 </section>
+
 
 <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 </body>
