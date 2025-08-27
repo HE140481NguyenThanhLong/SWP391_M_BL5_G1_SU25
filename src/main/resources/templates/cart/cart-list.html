@@ -5,7 +5,7 @@
     <title>Title</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Vertical Header (Flowbite + Tailwind)</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
@@ -19,7 +19,7 @@
         <div class="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
             <!-- LEFT CONTENT -->
             <div class="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-3xl">
-                <div class="space-y-6" th:each="item : ${cartItems.content}">
+                <div class="space-y-6" th:each="item : ${cartItems}">
                     <!--list-->
                     <div class="mb-5 rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:p-6">
                         <div class="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
@@ -81,7 +81,42 @@
                     </div>
                 </div>
                 <!-- Pagination + Related Products + Summary ... keep same but with dark:* removed -->
+                <div class="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full">
+                    <div class="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700  sm:p-6">
+                        <p class="text-xl font-semibold text-gray-900 ">Chi tiết đơn hàng</p>
+
+                        <div class="space-y-4">
+                            <div class="space-y-2">
+                                <dl class="flex items-center justify-between gap-4">
+                                    <dt class="text-base font-normal text-gray-900 ">Giá gốc</dt>
+                                    <dd class="text-base font-medium text-gray-900 " th:text="${#numbers.formatDecimal(originalPrice, 1, 'COMMA', 1, 'POINT')}">$7,592.00</dd>
+                                </dl>
+
+                                <dl class="flex items-center justify-between gap-4">
+                                    <dt class="text-base font-normal text-gray-900 ">Giảm giá</dt>
+                                    <dd class="text-base font-medium text-green-900" th:text="${#numbers.formatDecimal(savings, 1, 'COMMA', 1, 'POINT')}">-$299.00</dd>
+                                </dl>
+
+                                <dl class="flex items-center justify-between gap-4">
+                                    <dt class="text-base font-normal text-gray-900 ">Thuế 8%</dt>
+                                    <dd class="text-base font-medium text-gray-900 " th:text="${#numbers.formatDecimal(tax, 1, 'COMMA', 1, 'POINT')}">$799</dd>
+                                </dl>
+                            </div>
+
+                            <dl class="flex items-center justify-between gap-4 border-2 border-gray-200 pt-2 ">
+                                <dt class="text-base font-bold text-gray-900 ">Thành tiền</dt>
+                                <dd class="text-base font-bold text-gray-900 " th:text="${#numbers.formatDecimal(total, 1, 'COMMA', 1, 'POINT')}">$8,191.00</dd>
+                            </dl>
+                        </div>
+
+                        <a th:href="@{/checkout}"
+                           class="flex w-full items-center justify-center rounded-lg border border-blue-600 bg-blue-600 px-5 py-2.5 text-sm font-medium text-black hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 dark:border-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            Tiến hành đặt hàng
+                        </a>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 </section>
