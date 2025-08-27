@@ -20,9 +20,12 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
         WHERE (:status IS NULL OR o.status = :status)
           AND (:startDate IS NULL OR o.createdAt >= :startDate)
           AND (:endDate IS NULL OR o.createdAt <= :endDate)
+          AND (o.paymentMethod.user.user_id = :userId)
     """)
-    Page<Order> findOrdersByFilters(OrderStatus status,
-                                    LocalDateTime startDate,
-                                    LocalDateTime endDate,
-                                    Pageable pageable);
+    Page<Order> findOrdersByFilters(
+            Integer userId,
+            OrderStatus status,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            Pageable pageable);
 }

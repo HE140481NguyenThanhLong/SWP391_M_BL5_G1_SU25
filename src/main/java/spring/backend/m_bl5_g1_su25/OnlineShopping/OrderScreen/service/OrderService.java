@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrderService {
-    public Page<Order> filterOrders(OrderStatus status,
+    public Page<Order> filterOrders(Integer userId,
+                                    OrderStatus status,
                                     LocalDateTime startDate,
                                     LocalDateTime endDate,
                                     Pageable pageable);
