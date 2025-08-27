@@ -14,7 +14,7 @@ public class Ward {
     @Column( length = 20)
     private String ward_code; // Ví dụ: "00001" cho Phường Phúc Xá
 
-    @Column
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String name; // Ví dụ: "Phường Phúc Xá"
 
     // Nhiều xã/phường thuộc về một huyện

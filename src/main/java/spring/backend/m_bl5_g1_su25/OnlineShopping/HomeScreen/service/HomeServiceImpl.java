@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.dto.response.ProductResponse;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.HomeScreen.mapper.HomeMapper;
@@ -52,10 +53,22 @@ public class HomeServiceImpl implements HomeService {
     public Optional<ProductResponse> findFirstByOrderByCreatedDateDesc() {
         return homeRepo.findFirstByOrderByCreatedAtDesc().map(homeMapper::toProductResponse);
     }
-
     @Override
-    public Page<ProductResponse> findAllProduct(Pageable page) {
-        return homeRepo.findAll(page).map(homeMapper::toProductResponse);
+    public Page<ProductResponse> findAllProduct(int page, int size, String sort) {
+
+        String[] sortParams = sort.split(",");
+        String sortField = sortParams[0];
+        String sortDirection = sortParams[1];
+
+
+        Sort sortOrder = Sort.by(Sort.Direction.fromString(sortDirection), sortField);
+
+
+        Pageable pageableWithSort = PageRequest.of(page, size, sortOrder);
+
+
+        return homeRepo.findAll(pageableWithSort)
+                .map(homeMapper::toProductResponse);
     }
     @Override
     public Page<ProductResponse> getRecentProducts(Pageable page) {

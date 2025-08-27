@@ -19,7 +19,7 @@ public class Province {
     @Column( length = 20)
     private String province_code; // Ví dụ: "01" cho Hà Nội, dùng mã của GSO
 
-    @Column
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String name; // Ví dụ: "Thành phố Hà Nội"
 
     // Một tỉnh có nhiều huyện

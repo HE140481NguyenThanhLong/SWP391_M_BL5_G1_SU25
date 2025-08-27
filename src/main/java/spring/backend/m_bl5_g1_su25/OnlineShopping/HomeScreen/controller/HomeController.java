@@ -38,25 +38,28 @@ public class HomeController {
     public String getAll(Model model,
                          @RequestParam(defaultValue = "0") int page,
                          @RequestParam(defaultValue = "10") int size,
-                           HttpSession session ) {
+                           HttpSession session,
+                         @RequestParam(name = "sort", required = false, defaultValue = "createdAt,desc") String sort) {
 
 
 
         ProductResponse latest = homeService
                 .findFirstByOrderByCreatedDateDesc()
                 .orElse(null);
+        model.addAttribute("latestProduct", latest);
         List<ProductResponse> product5 = homeService.getFiveProductsHottest();
-
+        model.addAttribute("product5", product5);
         Pageable pageable = PageRequest.of(page, size);
-        Page<ProductResponse> products = homeService.findAllProduct(pageable);
+        Page<ProductResponse> products = homeService.findAllProduct(page, size, sort);
         model.addAttribute("products", products);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", products.getTotalPages());
         model.addAttribute("totalItems", products.getTotalElements());
         model.addAttribute("pageSize", size);
         model.addAttribute("content", products.getContent());
-        model.addAttribute("latestProduct", latest);
-        model.addAttribute("product5", product5);
+        model.addAttribute("currentSort", sort);
+
+
 
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         if (loggedInUser != null) {
@@ -67,93 +70,19 @@ public class HomeController {
         return "homeScreen/Home";
     }
 
-    @GetMapping("/getRecent")
-    public String getRecent(Model model,
-                            @RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "10") int size
-                           ) {
 
-
-
-        Pageable pageable = PageRequest.of(page, size);
-        Page<ProductResponse> recentProducts = homeService.getRecentProducts(pageable);
-        model.addAttribute("products", recentProducts);
-        return "homeScreen/Home";
-    }
-
-    @GetMapping("/getLastest")
-    public String getLastest(Model model,
-                             @RequestParam(defaultValue = "0") int page,
-                             @RequestParam(defaultValue = "10") int size
-                            ) {
-
-
-
-        Pageable pageable = PageRequest.of(page, size);
-        Page<ProductResponse> lastestProducts = homeService.getLatestProducts(pageable);
-        model.addAttribute("products", lastestProducts);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", lastestProducts.getTotalPages());
-        model.addAttribute("totalItems", lastestProducts.getTotalElements());
-        model.addAttribute("pageSize", size);
-        model.addAttribute("content", lastestProducts.getContent());
-
-
-
-        return "homeScreen/Home";
-    }
-
-    @GetMapping("/byCategories/{categories}")
-    public String getAllByCategories(Model model, @PathVariable String categories,
-                                     @RequestParam(defaultValue = "0")int page,
-                                     @RequestParam(defaultValue = "10")int size){
-            Pageable pageable = PageRequest.of(page, size);
-            Page<ProductResponse> byCategory = homeService.getProductsByCategory(pageable,categories);
-            model.addAttribute("products", byCategory);
-
-            return "homeScreen/Home";
-    }
-    @GetMapping ("/byPriceDesc")
-    public String getProductsByPriceDesc(Model model,
-                                         @RequestParam(defaultValue = "0")int page,
-                                         @RequestParam(defaultValue = "10")int size){
-            Pageable pageable = PageRequest.of(page, size);
-            Page<ProductResponse> productsByPriceDesc = homeService.getProductsByPriceDesc(pageable);
-            model.addAttribute("products", productsByPriceDesc);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", productsByPriceDesc.getTotalPages());
-        model.addAttribute("totalItems", productsByPriceDesc.getTotalElements());
-        model.addAttribute("pageSize", size);
-        model.addAttribute("content", productsByPriceDesc.getContent());
-            return "homeScreen/Home";
-    }
-
-    @GetMapping ("/byPriceAsc")
-    public String getProductsByPriceAsc(Model model,
-                                         @RequestParam(defaultValue = "0")int page,
-                                         @RequestParam(defaultValue = "10")int size){
-        Pageable pageable = PageRequest.of(page, size);
-        Page<ProductResponse> productsByPriceDesc = homeService.getProductsByPriceAsc(pageable);
-        model.addAttribute("products", productsByPriceDesc);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", productsByPriceDesc.getTotalPages());
-        model.addAttribute("totalItems", productsByPriceDesc.getTotalElements());
-        model.addAttribute("pageSize", size);
-        model.addAttribute("content", productsByPriceDesc.getContent());
-        return "homeScreen/Home";
-    }
     @GetMapping("/filter")
     public String filterProduct(@RequestParam(name="keyword",required = false) String keyword,
     Model model,
     @RequestParam(defaultValue = "0")int page,
-    @RequestParam(defaultValue = "10")int size){
+    @RequestParam(defaultValue = "10")int size, @RequestParam(name = "sort", required = false, defaultValue = "createdAt,desc") String sort){
     Pageable pageable = PageRequest.of(page, size);
     Page<ProductResponse> products=Page.empty();
     if (StringUtils.hasText(keyword) ) {
         products= homeService.getProductsByName(pageable,keyword);
 
     }else{
-        products= homeService.findAllProduct(pageable);
+        products= homeService.findAllProduct(page,size,sort);
     }
         model.addAttribute("products", products);
         model.addAttribute("currentPage", page);

@@ -7,20 +7,17 @@
 </head>
 <body>
 <div th:replace="~{component/header::header}"/>
-<section class="min-h-screen bg-gray-100 dark:bg-gray-900 py-10 px-4">
-    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
-        <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Staff Report Review</h2>
-
+<section class="min-h-screen bg-gray-100 py-10 px-4">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-bold mb-6 text-gray-900">Staff Report Review</h2>
 
         <div id="staff-report-accordion" data-accordion="collapse" class="space-y-4">
-
-
-            <div th:each="report, iterStat :${allReports}" class="border border-gray-200 dark:border-gray-700 rounded-md">
-
+            <div th:each="report, iterStat :${allReports}"
+                 class="border border-gray-300 rounded-md bg-white">
                 <h2>
                     <button type="button"
-                            class="flex items-center justify-between w-full p-4 font-medium text-left text-gray-900 bg-gray-100 rounded-t-md hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
-                            th:attr="data-accordion-target='#staff-report-body-' + ${iterStat.index}, aria-controls='staff-report-body-' + ${iterStat.index}" aria-expanded="false" >
+                            class="flex items-center justify-between w-full p-4 font-medium text-left text-gray-900 bg-gray-50 rounded-t-md hover:bg-gray-100"
+                            th:attr="data-accordion-target='#staff-report-body-' + ${iterStat.index}, aria-controls='staff-report-body-' + ${iterStat.index}" aria-expanded="false">
                         <span th:text="${report.title}">#1001 - Login button doesn't respond on mobile</span>
                         <svg data-accordion-icon class="w-4 h-4 rotate-0 shrink-0" fill="none" stroke="currentColor"
                              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -29,121 +26,107 @@
                     </button>
                 </h2>
 
-                <div th:id="'staff-report-body-' + ${iterStat.index}"   class="hidden" aria-labelledby="staff-report-heading-1">
-                    <div   class="p-4 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-300 space-y-4">
-
-
+                <div th:id="'staff-report-body-' + ${iterStat.index}" class="hidden">
+                    <div class="p-4 border-t border-gray-200 text-sm text-gray-700 space-y-4 bg-white">
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Title</label>
-                            <p th:text="${report.title}" class="font-semibold text-gray-900 dark:text-white">Login button doesn't respond on mobile</p>
+                            <label class="block text-sm font-medium text-gray-600">Title</label>
+                            <p th:text="${report.title}" class="font-semibold text-gray-900">Login button doesn't respond on mobile</p>
                         </div>
 
-
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Description</label>
-                            <p th:text="${report.description}" >When trying to log in from a mobile device, the button does not trigger any action. Tested on multiple browsers.</p>
+                            <label class="block text-sm font-medium text-gray-600">Description</label>
+                            <p th:text="${report.description}">When trying to log in from a mobile device, the button does not trigger any action. Tested on multiple browsers.</p>
                         </div>
 
-
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Image</label>
+                            <label class="block text-sm font-medium text-gray-600">Image</label>
                             <img th:src="${report.imgUrl}" alt="Screenshot"
                                  class="mt-2 rounded-md border w-full max-w-md" />
                         </div>
 
-
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Issue Type</label>
-                            <p th:text="${report.issueType}" >Bug</p>
+                            <label class="block text-sm font-medium text-gray-600">Issue Type</label>
+                            <p th:text="${report.issueType}">Bug</p>
                         </div>
 
-
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Status</label>
-                            <span th:text="${report.status}" class="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">
+                            <label class="block text-sm font-medium text-gray-600">Status</label>
+                            <span th:text="${report.status}"
+                                  class="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full bg-yellow-100 text-yellow-800">
                                 Pending
                             </span>
                         </div>
 
-
                         <div>
-                            <label class="block text-sm font-medium text-gray-600 dark:text-gray-400">Created At</label>
+                            <label class="block text-sm font-medium text-gray-600">Created At</label>
                             <p th:text="${report.createdAt}">2025-08-18 10:32 AM</p>
                         </div>
 
-                        
                         <div th:if="${report.status.name() != 'RESOLVED'}" class="text-right pt-4">
                             <a th:href="@{/customerService/{id}/respondFormForStaff(id=${report.report_id})}"
-                               class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                               class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
                                 Respond
                             </a>
                         </div>
-
                     </div>
-
                 </div>
             </div>
-
-
         </div>
     </div>
 
+    <!-- Pagination -->
     <div class="flex justify-center mt-8 p-6">
         <nav aria-label="Page navigation example">
             <ul class="flex items-center -space-x-px h-10 text-base">
                 <!-- Previous Button -->
                 <li>
-                    <!-- Active Previous Link (shown only if not on the first page) -->
                     <a th:if="${currentPage > 0}"
                        th:href="@{/customerService/reportViewForStaff(page=${currentPage - 1}, size=${pageSize})}"
-                       class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                       class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
                         <span class="sr-only">Previous</span>
-                        <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <svg class="w-3 h-3 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
                         </svg>
                     </a>
-                    <!-- Disabled Previous Placeholder (shown on the first page) -->
                     <span th:if="${currentPage == 0}"
-                          class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-400 bg-gray-100 border border-e-0 border-gray-300 rounded-s-lg cursor-not-allowed dark:bg-gray-700 dark:border-gray-700 dark:text-gray-500">
-                    <span class="sr-only">Previous</span>
-                    <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-                    </svg>
-                </span>
+                          class="flex items-center justify-center px-4 h-10 leading-tight text-gray-400 bg-gray-100 border border-e-0 border-gray-300 rounded-s-lg cursor-not-allowed">
+                        <span class="sr-only">Previous</span>
+                        <svg class="w-3 h-3 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                        </svg>
+                    </span>
                 </li>
 
-                <!-- Page Number -->
-                <!-- This shows the current page number. You can expand this with a th:each loop for more page numbers -->
+                <!-- Current Page -->
                 <li>
-                    <a href="#" aria-current="page" class="z-10 flex items-center justify-center px-4 h-10 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
+                    <a href="#" aria-current="page" class="z-10 flex items-center justify-center px-4 h-10 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700">
                         <span th:text="${currentPage + 1}">1</span>
                     </a>
                 </li>
 
                 <!-- Next Button -->
                 <li>
-                    <!-- Active Next Link (shown only if there is a next page) -->
                     <a th:if="${hasNextPage}"
                        th:href="@{/customerService/reportViewForStaff(page=${currentPage + 1}, size=${pageSize})}"
-                       class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                       class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
                         <span class="sr-only">Next</span>
-                        <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <svg class="w-3 h-3 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                         </svg>
                     </a>
-                    <!-- Disabled Next Placeholder (shown if on the last page) -->
                     <span th:if="${!hasNextPage}"
-                          class="flex items-center justify-center px-4 h-10 leading-tight text-gray-400 bg-gray-100 border border-gray-300 rounded-e-lg cursor-not-allowed dark:bg-gray-700 dark:border-gray-700 dark:text-gray-500">
-                     <span class="sr-only">Next</span>
-                    <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                    </svg>
-                </span>
+                          class="flex items-center justify-center px-4 h-10 leading-tight text-gray-400 bg-gray-100 border border-gray-300 rounded-e-lg cursor-not-allowed">
+                        <span class="sr-only">Next</span>
+                        <svg class="w-3 h-3 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                        </svg>
+                    </span>
                 </li>
             </ul>
         </nav>
     </div>
 </section>
+
 
 
 <script src="https://unpkg.com/flowbite@latest/dist/flowbite.min.js"></script>

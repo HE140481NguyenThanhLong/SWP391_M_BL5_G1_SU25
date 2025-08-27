@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Shop - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="font-sans bg-neutral-50 text-neutral-800">
 <div th:replace="~{component/header :: header}"></div>
@@ -37,6 +38,10 @@
         }
     }
 }</script>
+
+<!-- Toast Notification Container -->
+<div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col space-y-3"></div>
+
 <!-- Main Content Wrapper -->
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Breadcrumb -->
@@ -69,16 +74,14 @@
             </a>
 
             <!-- Import Button -->
-            <form action="/api/products/import" method="post" enctype="multipart/form-data" class="flex items-center space-x-2">
+            <div class="flex items-center space-x-2">
                 <label for="fileInput"
                        class="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
                     📥 Nhập Excel
                 </label>
-                <input id="fileInput" type="file" name="file" accept=".xlsx,.xls" class="hidden"
-                       onchange="this.form.submit()">
-            </form>
+                <input id="fileInput" type="file" name="file" accept=".xlsx,.xls" class="hidden">
+            </div>
         </div>
-
     </div>
 
     <!-- Overview Stats -->
@@ -215,35 +218,241 @@
         </span>
     </div>
 </main>
-<script>
-    async function uploadExcel() {
-        const fileInput = document.getElementById("fileInput");
-        if (!fileInput.files.length) {
-            alert("⚠️ Vui lòng chọn file Excel!");
-            return;
+
+<style>
+    /* Toast notification styles */
+    .toast {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        max-width: 350px;
+        animation: slideIn 0.3s ease-out, fadeOut 0.5s ease-in 4.5s forwards;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .toast-success {
+        background-color: #10B981;
+        color: white;
+    }
+
+    .toast-error {
+        background-color: #EF4444;
+        color: white;
+    }
+
+    .toast-warning {
+        background-color: #F59E0B;
+        color: white;
+    }
+
+    .toast-info {
+        background-color: #3B82F6;
+        color: white;
+    }
+
+    .toast-icon {
+        margin-right: 0.75rem;
+        font-size: 1.25rem;
+    }
+
+    .toast-content {
+        flex: 1;
+    }
+
+    .toast-title {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+
+    .toast-message {
+        font-size: 0.875rem;
+        opacity: 0.9;
+    }
+
+    .toast-close {
+        background: none;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        margin-left: 0.75rem;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+
+    .toast-close:hover {
+        opacity: 1;
+    }
+
+    .toast-progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 4px;
+        background-color: rgba(255, 255, 255, 0.4);
+        width: 100%;
+        animation: progress 5s linear forwards;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
         }
-
-        const formData = new FormData();
-        formData.append("file", fileInput.files[0]);
-
-        try {
-            const response = await fetch("/api/products/import", {
-                method: "POST",
-                body: formData
-            });
-
-            if (!response.ok) {
-                throw new Error(await response.text());
-            }
-
-            const result = await response.text();
-            alert("✅ Import thành công: " + result);
-        } catch (error) {
-            alert("❌ Lỗi khi import file: " + error.message);
+        to {
+            transform: translateX(0);
+            opacity: 1;
         }
     }
-</script>
 
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(100%);
+            display: none;
+        }
+    }
+
+    @keyframes progress {
+        from {
+            width: 100%;
+        }
+        to {
+            width: 0%;
+        }
+    }
+
+    /* Loading spinner */
+    .spinner {
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top: 2px solid white;
+        width: 16px;
+        height: 16px;
+        animation: spin 1s linear infinite;
+        margin-right: 8px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+<script>
+    // Toast notification system
+    function showToast(type, title, message, duration = 5000) {
+        const toastContainer = document.getElementById('toast-container');
+
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+
+        let icon = '';
+        switch(type) {
+            case 'success':
+                icon = '<i class="fas fa-check-circle"></i>';
+                break;
+            case 'error':
+                icon = '<i class="fas fa-exclamation-circle"></i>';
+                break;
+            case 'warning':
+                icon = '<i class="fas fa-exclamation-triangle"></i>';
+                break;
+            case 'info':
+                icon = '<i class="fas fa-info-circle"></i>';
+                break;
+            case 'loading':
+                icon = '<div class="spinner"></div>';
+                break;
+        }
+
+        toast.innerHTML = `
+            <div class="toast-icon">${icon}</div>
+            <div class="toast-content">
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+            </div>
+            <button class="toast-close" onclick="this.parentElement.remove()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="toast-progress"></div>
+        `;
+
+        toastContainer.appendChild(toast);
+
+        // Auto remove after duration
+        if (duration > 0) {
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.remove();
+                }
+            }, duration);
+        }
+
+        return toast;
+    }
+
+    // Handle file import with notifications
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+        if (!this.files.length) return;
+
+        const file = this.files[0];
+        const fileName = file.name;
+        const fileSize = (file.size / 1024 / 1024).toFixed(2); // MB
+
+        // Show loading toast
+        const loadingToast = showToast('loading', 'Đang xử lý', `Đang tải lên file: ${fileName} (${fileSize} MB)`, 0);
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        fetch("/api/products/import", {
+            method: "POST",
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text) });
+                }
+                return response.text();
+            })
+            .then(result => {
+                // Remove loading toast
+                loadingToast.remove();
+
+                // Show success toast
+                showToast('success', 'Thành công', `Import thành công: ${result}`);
+
+                // Reload page after 2 seconds to see updated data
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            })
+            .catch(error => {
+                // Remove loading toast
+                loadingToast.remove();
+
+                // Show error toast
+                let errorMsg = error.message;
+                if (errorMsg.length > 100) {
+                    errorMsg = errorMsg.substring(0, 100) + '...';
+                }
+                showToast('error', 'Lỗi', `Import thất bại: ${errorMsg}`);
+
+                console.error('Import error:', error);
+            })
+            .finally(() => {
+                // Reset file input
+                document.getElementById('fileInput').value = '';
+            });
+    });
+</script>
 
 </body>
 </html>

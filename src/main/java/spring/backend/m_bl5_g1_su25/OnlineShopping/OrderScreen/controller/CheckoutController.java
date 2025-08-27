@@ -46,7 +46,7 @@ public class CheckoutController {
 
 
     @Transactional
-    @PostMapping("create")
+    @PostMapping("/create")
     public String createOrder(@ModelAttribute OrderRequest request,
                               HttpSession session) {
 

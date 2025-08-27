@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.dto.request.ReportFormRequest;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.dto.response.ReportFormDefault;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.dto.response.ReportFormResponseForStaff;
@@ -21,9 +22,15 @@ import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Customer;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.entity.Staff;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.UserScreen.repository.StaffRepository;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -57,10 +64,17 @@ public class CustomerService {
         newReport.setTitle(request.getTitle());
         newReport.setIssueType(request.getIssues());
         newReport.setDescription(request.getDescription());
-        newReport.setImgUrl(request.getImgUrl());
         newReport.setCustomer(customer);
         newReport.setStatus(ReportStatus.IN_PROGRESS);
         newReport.setCreatedAt(LocalDateTime.now());
+
+        MultipartFile imageFile = request.getImage();
+        if (imageFile != null && !imageFile.isEmpty()) {
+
+            String savedFileName = saveImageToFileSystem(imageFile);
+
+            newReport.setImgUrl("/uploads/" + savedFileName);
+        }
 
         Staff assignedStaff = findAvailableStaff();
         newReport.setStaff(assignedStaff);
@@ -72,6 +86,31 @@ public class CustomerService {
             reportRepo.save(newReport);
     }
 
+    private String saveImageToFileSystem(MultipartFile imageFile) {
+
+        Path uploadDirectory = Paths.get("src/main/resources/static/uploads");
+
+
+        String uniqueFileName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+
+        try {
+
+            if (!Files.exists(uploadDirectory)) {
+                Files.createDirectories(uploadDirectory);
+            }
+
+
+            Path filePath = uploadDirectory.resolve(uniqueFileName);
+
+
+            Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            return uniqueFileName;
+        } catch (IOException e) {
+
+            throw new RuntimeException("Failed to store image file.", e);
+        }
+    }
 
     private Staff findAvailableStaff() {
         List<Staff> availableStaff = staffRepo.findAll();

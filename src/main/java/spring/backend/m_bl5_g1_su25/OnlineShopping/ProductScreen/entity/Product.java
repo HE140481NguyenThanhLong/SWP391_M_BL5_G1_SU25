@@ -27,22 +27,22 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer product_id;
 
-    @Column(columnDefinition = "NVARCHAR(300)")
+    @Column(nullable = false, length = 255,columnDefinition = "NVARCHAR(255)")
     String name;
 
-    @Column(columnDefinition = "NVARCHAR(300)")
+    @Column(nullable = false, length = 255,columnDefinition = "NVARCHAR(255)")
     String description;
 
-    @Column(columnDefinition = "NVARCHAR(300)")
+    @Column(length = 255,columnDefinition = "NVARCHAR(255)")
     String instruc;
 
-    @Column(columnDefinition = "NVARCHAR(300)")
+    @Column(length = 255,columnDefinition = "NVARCHAR(255)")
     String feature;
 
-    @Column(columnDefinition = "NVARCHAR(300)")
+    @Column(length = 255,columnDefinition = "NVARCHAR(255)")
     String expiry;
 
-    @Column(columnDefinition = "NVARCHAR(300)")
+    @Column(length = 255,columnDefinition = "NVARCHAR(255)")
     String origin;
 
     @Column(nullable = false, precision = 18, scale = 2)
@@ -60,7 +60,7 @@ public class Product {
 
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "NVARCHAR(300)")
+    @Column(nullable = false, length = 10)
     Status status = Status.IN_STOCK;
 
     @Column(columnDefinition = "NVARCHAR(255)")
@@ -85,17 +85,17 @@ public class Product {
     @Column(nullable = false, precision = 18, scale = 2)
     BigDecimal importPrice;
 
-    @Column(precision = 18, scale = 2)
+    @Column(nullable = false, precision = 18, scale = 2)
     BigDecimal salePrice;
 
-    @Column(columnDefinition = "NVARCHAR(300)")
+    @Column(length = 255,columnDefinition = "NVARCHAR(255)")
     String brand;
 
     double rating;
 
     int discount;
 
-    @Column(columnDefinition = "NVARCHAR(300)")
+    @Column(length = 50)
     String sku;
 
     int reviewCount;
