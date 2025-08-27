@@ -225,41 +225,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="space-y-6">
-                        <h3 class="font-display text-2xl font-semibold text-neutral-800">Thành phần dinh dưỡng</h3>
-                        <div class="space-y-4">
-                            <div class="flex justify-between py-4 border-b border-neutral-100">
-                                <span class="text-neutral-600 text-lg">Protein:</span>
-                                <span class="font-semibold text-lg">3.2g/100ml</span>
-                            </div>
-                            <div class="flex justify-between py-4 border-b border-neutral-100">
-                                <span class="text-neutral-600 text-lg">Canxi:</span>
-                                <span class="font-semibold text-lg">120mg/100ml</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
-            <div id="reviews" class="tab-content hidden" role="tabpanel" aria-labelledby="reviews">
-                <div class="space-y-8">
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <div class="bg-neutral-50 rounded-2xl p-8 text-center">
-                            <div class="text-5xl font-bold text-primary mb-4" th:text="${product.rating}"></div>
-                            <div class="flex justify-center mb-4">
-                                <div class="flex text-yellow-400" th:with="rating=${product.rating}">
-                                    <svg th:each="i : ${#numbers.sequence(1, 5)}" th:class="${i <= rating} ? 'w-6 h-6 fill-current' : 'w-6 h-6 text-neutral-300 fill-current'" viewBox="0 0 20 20">
-                                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="text-lg text-neutral-600" th:text="${product.reviewCount} + ' đánh giá'"></div>
-                        </div>
-
-                    </div>
-                    <!-- Thêm danh sách đánh giá nếu có (có thể động hóa từ cơ sở dữ liệu) -->
-                    </div>
-            </div>
             <div id="related" class="tab-content hidden">
                 <h3 class="font-display text-2xl font-semibold text-neutral-800 mb-8">
                     Sản phẩm liên quan

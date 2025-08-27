@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Shop - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <script>
     tailwind.config = {
@@ -39,8 +40,9 @@
     }
 </script>
 <body class="font-sans bg-neutral-50 text-neutral-800">
-<div th:replace="~{component/header :: header}"></div>
+<!-- Mock header for demonstration -->
 
+<div th:replace="~{component/header :: header}"></div>
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Breadcrumb -->
     <nav class="text-sm text-gray-600 mb-4" aria-label="Breadcrumb">
@@ -56,9 +58,9 @@
     <div class="bg-white rounded-lg shadow-md p-6">
         <h2 class="text-3xl font-bold text-gray-800 mb-4">Chỉnh sửa sản phẩm</h2>
 
-        <form id="myForm" th:action="@{/product/update/{id}(id=${product.product_id})}"
+        <form id="productForm" th:action="@{/product/update/{id}(id=${product.product_id})}"
               method="post" class="grid grid-cols-1 md:grid-cols-2 gap-6"
-              enctype="multipart/form-data">
+              enctype="multipart/form-data" novalidate>
 
             <!-- Cột trái -->
             <div>
@@ -75,36 +77,79 @@
                     <input type="file" id="imageInput" name="image"
                            class="block w-full border rounded px-3 py-2"
                            accept="image/*" onchange="previewImage(event)">
+                    <div id="imageError" class="text-red-500 text-sm mt-1 hidden">
+                        <i class="fas fa-exclamation-circle mr-1"></i>
+                        <span>Vui lòng chọn ảnh hợp lệ</span>
+                    </div>
                 </div>
 
                 <!-- Giá -->
                 <div class="grid grid-cols-2 gap-4">
+                    <!-- Giá nhập -->
                     <div>
-                        <label class="block text-gray-700 font-semibold mb-1">Giá nhập (VND)</label>
-                        <input type="number" th:value="${product.salePrice}" name="salePrice"
-                               class="w-full border rounded px-3 py-2" required>
+                        <label class="block text-gray-700 font-semibold mb-1">Giá nhập </label>
+                        <input type="text" th:value="${#numbers.formatDecimal(product.importPrice, 0, 'POINT', 0, 'COMMA')}"
+                               name="importPrice" id="importPrice"
+                               class="w-full border rounded px-3 py-2"
+                               min="1" readonly oninput="formatCurrency(this); calculateSalePrice()">
+                        <div id="importPriceError" class="text-red-500 text-sm mt-1 hidden">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            <span>Giá nhập phải lớn hơn 0</span>
+                        </div>
                     </div>
+
+                    <!-- Giá bán -->
                     <div>
-                        <label class="block text-gray-700 font-semibold mb-1">Giá bán (VND)</label>
-                        <input type="number" th:value="${product.price}" name="price"
-                               class="w-full border rounded px-3 py-2" required>
+                        <label class="block text-gray-700 font-semibold mb-1">Giá bán </label>
+                        <input type="text" th:value="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')}"
+                               name="price" id="price"
+                               class="w-full border rounded px-3 py-2"
+                               min="1" required oninput="formatCurrency(this); calculateSalePrice()">
+                        <div id="priceError" class="text-red-500 text-sm mt-1 hidden">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            <span>Giá bán phải lớn hơn giá nhập</span>
+                        </div>
+                    </div>
+
+                    <!-- Giảm giá -->
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-1">Giảm Giá %</label>
+                        <input type="number" th:value="${product.discount}" name="discount" id="discount"
+                               class="w-full border rounded px-3 py-2"
+                               min="0" max="100" required oninput="calculateSalePrice()">
+                        <div id="discountError" class="text-red-500 text-sm mt-1 hidden">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            <span>Giảm giá phải từ 0 đến 100%</span>
+                        </div>
+                    </div>
+
+                    <!-- Giá sau giảm -->
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-1">Giá sau giảm </label>
+                        <input type="text" th:value="${#numbers.formatDecimal(product.salePrice, 0, 'COMMA', 0, 'POINT')} + ' ₫'"
+                               class="w-full border rounded px-3 py-2 bg-neutral-100" readonly>
                     </div>
                 </div>
+
             </div>
 
             <!-- Cột phải -->
             <div>
                 <!-- Thông tin chung -->
                 <div class="mb-3">
-                    <label class="block text-gray-700 font-semibold mb-1">Tên sản phẩm</label>
-                    <input type="text" th:value="${product.name}" name="name"
+                    <label class="block text-gray-700 font-semibold mb-1">Tên sản phẩm <span class="text-red-500">*</span></label>
+                    <input type="text" th:value="${product.name}" name="name" id="name"
                            class="w-full border rounded px-3 py-2" required>
+                    <div id="nameError" class="text-red-500 text-sm mt-1 hidden">
+                        <i class="fas fa-exclamation-circle mr-1"></i>
+                        <span>Tên sản phẩm không được để trống</span>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4 mb-3">
                     <div>
                         <label class="block text-gray-700 font-semibold mb-1">Mã sản phẩm</label>
-                        <input type="text" th:value="${product.product_id}" name="product_id"
+                        <input type="text" th:value="${product.sku}" name="sku"
                                class="w-full border rounded px-3 py-2 bg-neutral-100" readonly>
                     </div>
                     <div>
@@ -118,17 +163,26 @@
                     <div>
                         <label class="block text-gray-700 font-semibold mb-1">Thương hiệu</label>
                         <input type="text" th:value="${product.brand}" name="brand"
-                               class="w-full border rounded px-3 py-2">
+                               class="w-full border rounded px-3 py-2" readonly>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-1">Xuất Xứ</label>
+                        <input type="text" th:value="${product.origin}" name="origin"
+                               class="w-full border rounded px-3 py-2" readonly>
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <label class="block text-gray-700 font-semibold mb-1">Trạng thái</label>
-                    <select name="status"
-                            class="w-full border rounded px-3 py-2">
-                        <option th:selected="${product.status == 'IN_STOCK'}" value="IN_STOCK">Hoạt động</option>
+                    <label class="block text-gray-700 font-semibold mb-1">Trạng thái <span class="text-red-500">*</span></label>
+                    <select name="status" id="status"
+                            class="w-full border rounded px-3 py-2" required>
+                        <option th:selected="${product.status == 'IN_STOCK'}" value="IN_STOCK">Còn Hàng</option>
                         <option th:selected="${product.status == 'OUT_STOCK'}" value="OUT_STOCK">Hết hàng</option>
                     </select>
+                    <div id="statusError" class="text-red-500 text-sm mt-1 hidden">
+                        <i class="fas fa-exclamation-circle mr-1"></i>
+                        <span>Vui lòng chọn trạng thái</span>
+                    </div>
                 </div>
 
                 <!-- Thông tin kho -->
@@ -145,11 +199,11 @@
                             <label class="block text-neutral-700 font-medium mb-2">Tồn kho</label>
                             <input type="number" th:value="${product.quantity}" name="quantity"
                                    class="w-full border border-neutral-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
-                                   required>
+                                   readonly>
                         </div>
                         <div>
                             <label class="block text-neutral-700 font-medium mb-2">Đã bán</label>
-                            <input type="text" th:value="${product.sales_count}" name="sales_count"
+                            <input type="text" th:value="${product.soldCount}" name="soldCount"
                                    class="w-full border border-neutral-300 rounded-xl px-4 py-3 bg-neutral-100 text-neutral-500"
                                    readonly>
                         </div>
@@ -157,23 +211,37 @@
                 </div>
 
                 <!-- Mô tả -->
-                <div class="bg-neutral-50 rounded-2xl p-6">
+                <div class="mb-3">
+                    <label class="block text-neutral-700 font-medium mb-2">Hướng dẫn sử dụng</label>
+                    <input type="text" th:value="${product.instruc}" name="instruc"
+                           class="w-full border border-neutral-300 rounded-xl px-4 py-3" required>
+                </div>
+                <div class="mb-3">
+                    <label class="block text-neutral-700 font-medium mb-2">Phân Loại</label>
+                    <input type="text" th:value="${product.feature}" name="feature"
+                           class="w-full border border-neutral-300 rounded-xl px-4 py-3" required>
+                </div>
+                <div class="bg-neutral-50 rounded-2xl p-6 mb-4">
                     <h3 class="font-semibold text-neutral-800 mb-4 flex items-center gap-2">
                         <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
-                        Mô tả sản phẩm
+                        Mô tả sản phẩm <span class="text-red-500">*</span>
                     </h3>
-                    <textarea rows="6" name="description"
+                    <textarea rows="6" name="description" id="description"
                               class="w-full border border-neutral-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-                              th:text="${product.description}"></textarea>
+                              th:text="${product.description}" required></textarea>
+                    <div id="descriptionError" class="text-red-500 text-sm mt-1 hidden">
+                        <i class="fas fa-exclamation-circle mr-1"></i>
+                        <span>Mô tả sản phẩm không được để trống</span>
+                    </div>
                 </div>
 
                 <!-- Nút -->
                 <div class="mt-4 flex gap-2">
                     <button type="button" class="bg-gray-300 px-4 py-2 rounded"
-                            onclick="document.getElementById('myForm').reset()">
+                            onclick="resetForm()">
                         Hoàn tác
                     </button>
                     <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
@@ -186,6 +254,7 @@
 </main>
 
 <script>
+    // Hiển thị ảnh preview
     function previewImage(event) {
         const file = event.target.files[0];
         if (file) {
@@ -196,6 +265,120 @@
             reader.readAsDataURL(file);
         }
     }
+
+    // Định dạng tiền tệ Việt Nam
+    function formatCurrency(input) {
+        // Lấy giá trị hiện tại và loại bỏ ký tự không phải số
+        let value = input.value.replace(/\D/g, '');
+
+        if (value.length > 0) {
+            // Định dạng mặc định theo vi-VN (1.234.567)
+            value = parseInt(value, 10).toLocaleString('vi-VN');
+            // Thay dấu . thành ,
+            value = value.replace(/\./g, ',');
+        }
+
+        // Gán giá trị đã định dạng vào ô input
+        input.value = value;
+    }
+
+    // Tính toán giá sau giảm
+    function calculateSalePrice() {
+        const price = parseFloat(document.getElementById('price').value.replace(/\D/g, '')) || 0;
+        const discount = parseFloat(document.getElementById('discount').value) || 0;
+
+        if (price > 0 && discount >= 0 && discount <= 100) {
+            const salePrice = price * (1 - discount / 100);
+            document.getElementById('salePrice').value = salePrice.toLocaleString('vi-VN');
+        } else {
+            document.getElementById('salePrice').value = '';
+        }
+    }
+
+    // Kiểm tra validation
+    function validateForm(event) {
+        event.preventDefault();
+
+        let isValid = true;
+
+        // Reset error messages
+        document.querySelectorAll('[id$="Error"]').forEach(el => {
+            el.classList.add('hidden');
+        });
+
+        // Validate tên sản phẩm
+        const name = document.getElementById('name').value.trim();
+        if (!name) {
+            document.getElementById('nameError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // Validate giá nhập
+        const importPrice = parseFloat(document.getElementById('importPrice').value.replace(/\D/g, '')) || 0;
+        if (importPrice <= 0) {
+            document.getElementById('importPriceError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // Validate giá bán
+        const price = parseFloat(document.getElementById('price').value.replace(/\D/g, '')) || 0;
+        if (price <= importPrice) {
+            document.getElementById('priceError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // Validate giảm giá
+        const discount = parseFloat(document.getElementById('discount').value) || 0;
+        if (discount < 0 || discount > 100) {
+            document.getElementById('discountError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // Validate trạng thái
+        const status = document.getElementById('status').value;
+        if (!status) {
+            document.getElementById('statusError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // Validate mô tả
+        const description = document.getElementById('description').value.trim();
+        if (!description) {
+            document.getElementById('descriptionError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        if (isValid) {
+            // Chuyển đổi giá trị về dạng số thô trước khi submit
+            document.getElementById('importPrice').value = importPrice;
+            document.getElementById('price').value = price;
+
+
+            // Submit form
+            document.getElementById('productForm').submit();
+        }
+    }
+
+    // Reset form
+    function resetForm() {
+        document.getElementById('productForm').reset();
+        document.querySelectorAll('[id$="Error"]').forEach(el => {
+            el.classList.add('hidden');
+        });
+
+        // Khôi phục giá trị ban đầu cho các trường tiền tệ
+        calculateSalePrice();
+    }
+
+    // Gắn sự kiện submit form
+    document.getElementById('productForm').addEventListener('submit', validateForm);
+
+    // Tính toán giá sau giảm khi trang được tải
+    document.addEventListener('DOMContentLoaded', function() {
+        calculateSalePrice();
+    });
+
 </script>
+
 </body>
 </html>
