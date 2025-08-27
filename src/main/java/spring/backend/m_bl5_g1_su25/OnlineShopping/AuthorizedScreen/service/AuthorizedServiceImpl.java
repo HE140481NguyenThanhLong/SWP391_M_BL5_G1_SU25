@@ -34,7 +34,7 @@ PasswordResetTokenRepository passwordResetTokenRepository;
 @Override
     public Customer signUp(SignUpRequest request) {
         User user = modelMapper.map(request, User.class);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPassword(request.getPassword());
         user.setCreatedAt(LocalDateTime.now());
         User savedUser = authorizedRepo.save(user);
         Customer customer = modelMapper.map(savedUser, Customer.class);
@@ -48,7 +48,7 @@ PasswordResetTokenRepository passwordResetTokenRepository;
     public User login(String username, String password) {
         User user = findUserByUsername(username);
         // Use PasswordEncoder to check password
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+        if (user != null && password.equals(user.getPassword()) ) {
             return user;
         }
         return null;
