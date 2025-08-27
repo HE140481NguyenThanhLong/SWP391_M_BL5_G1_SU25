@@ -47,7 +47,6 @@ PasswordResetTokenRepository passwordResetTokenRepository;
     @Override
     public User login(String username, String password) {
         User user = findUserByUsername(username);
-        // Use PasswordEncoder to check password
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             return user;
         }

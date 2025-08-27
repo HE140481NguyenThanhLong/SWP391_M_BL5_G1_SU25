@@ -53,22 +53,26 @@ public class AuthorizedController {
     }
 
     @PostMapping("/authority/signin")
-    public String doLogin(@ModelAttribute SignInRequest SignInrequest, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String doLogin(@ModelAttribute SignInRequest SignInrequest, HttpSession session, RedirectAttributes redirectAttributes, Model model) {
         try {
             if (SignInrequest.getUsername() == null || SignInrequest.getUsername().trim().isEmpty()) {
-                redirectAttributes.addFlashAttribute("error", "Tên đăng nhập không được để trống");
-                return "redirect:/authority/signin";
+                model.addAttribute("error", "Tên đăng nhập không được để trống");
+                model.addAttribute("SignInRequest", SignInrequest);
+                return "/authority/signin";
             }
 
             if (SignInrequest.getPassword() == null || SignInrequest.getPassword().trim().isEmpty()) {
-                redirectAttributes.addFlashAttribute("error", "Mật khẩu không được để trống");
-                return "redirect:/authority/signin";
+                model.addAttribute("error", "Mật khẩu không được để trống");
+                model.addAttribute("SignInRequest", SignInrequest);
+                return "/authority/signin";
             }
+
             User user = authorizedService.login(SignInrequest.getUsername().trim(), SignInrequest.getPassword());
             if (user != null) {
                 if(user.getStatus() == UserStatus.INACTIVE){
-                    redirectAttributes.addFlashAttribute("error", "Tài khoản không được phép hoạt động");
-                    return "redirect:/authority/signin";
+                    model.addAttribute("error", "Tài khoản không được phép hoạt động");
+                    model.addAttribute("SignInRequest", SignInrequest);
+                    return "/authority/signin";
                 }
                 session.setAttribute("loggedInUser", user);
                 if(user.getRole() == Role.STAFF){
@@ -76,12 +80,14 @@ public class AuthorizedController {
                 }
                 return "redirect:/guest";
             } else {
-                redirectAttributes.addFlashAttribute("error", "Tài khoản hoặc mật khẩu không đúng");
-                return "redirect:/authority/signin";
+                model.addAttribute("error", "Tài khoản hoặc mật khẩu không đúng");
+                model.addAttribute("SignInRequest", SignInrequest);
+                return "/authority/signin";
             }
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi trong quá trình đăng nhập. Vui lòng thử lại.");
-            return "redirect:/authority/signin";
+            model.addAttribute("error", "Đã xảy ra lỗi trong quá trình đăng nhập. Vui lòng thử lại.");
+            model.addAttribute("SignInRequest", SignInrequest);
+            return "/authority/signin";
         }
     }
 
