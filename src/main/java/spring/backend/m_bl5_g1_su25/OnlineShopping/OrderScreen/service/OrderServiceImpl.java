@@ -42,11 +42,12 @@ public class OrderServiceImpl implements OrderService{
 
 
     @Override
-    public Page<Order> filterOrders(OrderStatus status,
+    public Page<Order> filterOrders(Integer userId,
+                                    OrderStatus status,
                                     LocalDateTime startDate,
                                     LocalDateTime endDate,
                                     Pageable pageable) {
-        return orderRepository.findOrdersByFilters(status, startDate, endDate, pageable);
+        return orderRepository.findOrdersByFilters(userId, status, startDate, endDate, pageable);
     }
 
     @Override
