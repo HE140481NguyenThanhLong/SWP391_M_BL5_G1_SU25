@@ -5,21 +5,21 @@
     <title>Title</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
+    <title>Vertical Header (Flowbite + Tailwind)</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
 
 <div th:replace="~{component/header :: header}" ></div>
 
-<section class="bg-white py-8 antialiased md:py-16" style="margin-left: 20vw; padding-top: 0px;">
+<section class="bg-white py-8 antialiased md:py-16" style="padding-top: 0px;">
     <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
         <h2 class="mt-3 text-xl font-semibold text-gray-900 sm:text-2xl">Giỏ hàng</h2>
 
         <div class="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
             <!-- LEFT CONTENT -->
             <div class="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-3xl">
-                <div class="space-y-6" th:each="item : ${cartItems}">
+                <div class="space-y-6" th:each="item : ${cartItems.content}">
                     <!--list-->
                     <div class="mb-5 rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:p-6">
                         <div class="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
@@ -81,42 +81,179 @@
                     </div>
                 </div>
                 <!-- Pagination + Related Products + Summary ... keep same but with dark:* removed -->
-                <div class="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full">
-                    <div class="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700  sm:p-6">
-                        <p class="text-xl font-semibold text-gray-900 ">Chi tiết đơn hàng</p>
+                <!--paging-->
+                <nav class="mt-6 flex items-center justify-center sm:mt-8" aria-label="Page navigation">
+                    <ul class="flex h-8 items-center -space-x-px text-sm">
+                        <!-- Previous -->
+                        <li th:if="${!cartItems.first}">
+                            <a th:href="@{/cart/cart-list(pageNo=${currentPage - 1}, pageSize=${cartItems.size}, orderBy=${orderBy}, isDesc=${isDesc})}"
+                               class="ms-0 flex h-8 items-center justify-center rounded-s-lg border border-e-0 border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                <span class="sr-only">Previous</span>
+                                <svg class="h-4 w-4 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7"/>
+                                </svg>
+                            </a>
+                        </li>
 
-                        <div class="space-y-4">
-                            <div class="space-y-2">
-                                <dl class="flex items-center justify-between gap-4">
-                                    <dt class="text-base font-normal text-gray-900 ">Giá gốc</dt>
-                                    <dd class="text-base font-medium text-gray-900 " th:text="${#numbers.formatDecimal(originalPrice, 1, 'COMMA', 1, 'POINT')}">$7,592.00</dd>
-                                </dl>
+                        <!-- Page numbers -->
+                        <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}">
+                            <a th:href="@{/cart/cart-list(pageNo=${pageNum}, pageSize=${cartItems.size}, orderBy=${orderBy}, isDesc=${isDesc})}"
+                               th:text="${pageNum + 1}"
+                               th:classappend="${pageNum} == ${currentPage} ?
+                   'z-10 flex h-8 items-center justify-center border border-primary-300 bg-primary-50 px-3 leading-tight text-primary-600' :
+                   'flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 hover:dark:bg-gray-700 hover:dark:text-white'">
+                            </a>
+                        </li>
 
-                                <dl class="flex items-center justify-between gap-4">
-                                    <dt class="text-base font-normal text-gray-900 ">Giảm giá</dt>
-                                    <dd class="text-base font-medium text-green-900" th:text="${#numbers.formatDecimal(savings, 1, 'COMMA', 1, 'POINT')}">-$299.00</dd>
-                                </dl>
+                        <!-- Next -->
+                        <li th:if="${!cartItems.last}">
+                            <a th:href="@{/cart/cart-list(pageNo=${currentPage + 1}, pageSize=${cartItems.size}, orderBy=${orderBy}, isDesc=${isDesc})}"
+                               class="flex h-8 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                <span class="sr-only">Next</span>
+                                <svg class="h-4 w-4 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
 
-                                <dl class="flex items-center justify-between gap-4">
-                                    <dt class="text-base font-normal text-gray-900 ">Thuế 8%</dt>
-                                    <dd class="text-base font-medium text-gray-900 " th:text="${#numbers.formatDecimal(tax, 1, 'COMMA', 1, 'POINT')}">$799</dd>
-                                </dl>
+
+                <div class="hidden xl:mt-8 xl:block">
+                    <h3 class="text-2xl font-semibold text-gray-900 dark:text-white">Sản phẩm cùng danh mục</h3>
+                    <div class="mt-6 grid grid-cols-3 gap-4 sm:mt-8">
+                        <div  th:each="item : ${products}" class="space-y-6 overflow-hidden rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                            <a href="#" class="overflow-hidden rounded">
+                                <img th:src="${item.imageUrl}" class="mx-auto h-44 w-44 dark:hidden" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg" alt="imac image" />
+                                <img th:src="${item.imageUrl}" class="mx-auto hidden h-44 w-44 dark:block" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg" alt="imac image" />
+                            </a>
+                            <div>
+                                <a th:href="@{/cart/product/{id}(id=${item.product_id})}"  class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white" th:text="${item.name}">iMac 27”</a>
+                                <p class="mt-2 text-base font-normal text-gray-500 dark:text-gray-400" th:text="${item.description}">This generation has some improvements, including a longer continuous battery life.</p>
                             </div>
+                            <div>
+                                <p class="text-lg font-bold text-gray-900 dark:text-white">
+                                    <span class="line-through" th:text="${#numbers.formatDecimal(item.price + 12345, 1, 'COMMA', 1, 'POINT')}"> $399,99 </span>
+                                </p>
+                                <p class="text-lg font-bold leading-tight text-red-600 dark:text-red-500" th:text="${#numbers.formatDecimal(item.price, 1, 'COMMA', 1, 'POINT')}">$299</p>
+                            </div>
+                            <div class="mt-6 flex items-center gap-2.5">
+                                <button data-tooltip-target="favourites-tooltip-1" type="button" class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
+                                    <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6C6.5 1 1 8 5.8 13l6.2 7 6.2-7C23 8 17.5 1 12 6Z"></path>
+                                    </svg>
+                                </button>
+                                <div id="favourites-tooltip-1" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700">
+                                    Add to favourites
+                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                </div>
+                                <form th:action="@{/cart/add}" method="post">
+                                    <input type="hidden" name="productId" th:value="${item.product_id}"/>
+                                    <input type="hidden" name="quantity" value="1"/>
+                                    <button type="submit" class="inline-flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium  text-dark hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                                        Thêm vào giỏ hàng
+                                    </button>
+                                </form>
 
-                            <dl class="flex items-center justify-between gap-4 border-2 border-gray-200 pt-2 ">
-                                <dt class="text-base font-bold text-gray-900 ">Thành tiền</dt>
-                                <dd class="text-base font-bold text-gray-900 " th:text="${#numbers.formatDecimal(total, 1, 'COMMA', 1, 'POINT')}">$8,191.00</dd>
-                            </dl>
+                            </div>
                         </div>
-
-                        <a th:href="@{/checkout}"
-                           class="flex w-full items-center justify-center rounded-lg border border-blue-600 bg-blue-600 px-5 py-2.5 text-sm font-medium text-black hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 dark:border-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            Tiến hành đặt hàng
-                        </a>
                     </div>
+
+
+                    <!--paging-->
+                    <nav class="mt-6 flex items-center justify-center sm:mt-8" aria-label="Page navigation">
+                        <ul class="flex h-8 items-center -space-x-px text-sm">
+                            <!-- Previous -->
+                            <li th:if="${!cartItems.first}">
+                                <a th:href="@{/cart(pageNo=${currentPage - 1}, pageSize=${cartItems.size}, orderBy=${orderBy}, isDesc=${isDesc})}"
+                                   class="ms-0 flex h-8 items-center justify-center rounded-s-lg border border-e-0 border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                    <span class="sr-only">Previous</span>
+                                    <svg class="h-4 w-4 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7"/>
+                                    </svg>
+                                </a>
+                            </li>
+
+                            <!-- Page numbers -->
+                            <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}">
+                                <a th:href="@{/cart(pageNo=${pageNum}, pageSize=${cartItems.size}, orderBy=${orderBy}, isDesc=${isDesc})}"
+                                   th:text="${pageNum + 1}"
+                                   th:classappend="${pageNum} == ${currentPage} ?
+                   'z-10 flex h-8 items-center justify-center border border-primary-300 bg-primary-50 px-3 leading-tight text-primary-600' :
+                   'flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 hover:dark:bg-gray-700 hover:dark:text-white'">
+                                </a>
+                            </li>
+
+                            <!-- Next -->
+                            <li th:if="${!cartItems.last}">
+                                <a th:href="@{/cart(pageNo=${currentPage + 1}, pageSize=${cartItems.size}, orderBy=${orderBy}, isDesc=${isDesc})}"
+                                   class="flex h-8 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                    <span class="sr-only">Next</span>
+                                    <svg class="h-4 w-4 rtl:rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+                                    </svg>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+
                 </div>
             </div>
 
+            <div class="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full">
+                <div class="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6">
+                    <p class="text-xl font-semibold text-gray-900 dark:text-white">Chi tiết đơn hàng</p>
+
+                    <div class="space-y-4">
+                        <div class="space-y-2">
+                            <dl class="flex items-center justify-between gap-4">
+                                <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Giá gốc</dt>
+                                <dd class="text-base font-medium text-gray-900 dark:text-white" th:text="${#numbers.formatDecimal(originalPrice, 1, 'COMMA', 1, 'POINT')}">$7,592.00</dd>
+                            </dl>
+
+                            <dl class="flex items-center justify-between gap-4">
+                                <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Giảm giá</dt>
+                                <dd class="text-base font-medium text-green-600" th:text="${#numbers.formatDecimal(savings, 1, 'COMMA', 1, 'POINT')}">-$299.00</dd>
+                            </dl>
+
+                            <dl class="flex items-center justify-between gap-4">
+                                <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Thuế 8%</dt>
+                                <dd class="text-base font-medium text-gray-900 dark:text-white" th:text="${#numbers.formatDecimal(tax, 1, 'COMMA', 1, 'POINT')}">$799</dd>
+                            </dl>
+                        </div>
+
+                        <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
+                            <dt class="text-base font-bold text-gray-900 dark:text-white">Thành tiền</dt>
+                            <dd class="text-base font-bold text-gray-900 dark:text-white" th:text="${#numbers.formatDecimal(total, 1, 'COMMA', 1, 'POINT')}">$8,191.00</dd>
+                        </dl>
+                    </div>
+
+                    <a href="/checkout"
+                       class="flex w-full items-center justify-center rounded-lg border border-blue-600 bg-blue-600 px-5 py-2.5 text-sm font-medium text-black hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 dark:border-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        Tiến hành đặt hàng
+                    </a>
+
+                    <div class="flex items-center justify-center gap-2">
+                        <span class="text-sm font-normal text-gray-500 dark:text-gray-400"> hoặc </span>
+                        <a href="#" title="" class="inline-flex items-center gap-2 text-sm font-medium text-primary-700 underline hover:no-underline dark:text-primary-500">
+                            Tiếp tục mua sắm
+                            <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6">
+                    <form class="space-y-4">
+                        <div>
+                            <label for="voucher" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Do you have a voucher or gift card? </label>
+                            <input type="text" id="voucher" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="" required />
+                        </div>
+                        <button type="submit" class="flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Apply Code</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </section>
