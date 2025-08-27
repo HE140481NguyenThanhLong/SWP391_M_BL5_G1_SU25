@@ -46,7 +46,7 @@ public class AuthorizedController {
         return "/authority/signin";
     }
 
-    @GetMapping("/authority/logout")
+    @PostMapping("/authority/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/authority/signin?logout";
