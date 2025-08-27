@@ -85,6 +85,37 @@
                             </div>
                             <select id="ward" name="ward" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500"></select>
                         </div>
+                        <script>
+                            async function loadProvinces() {
+                                const res = await fetch("http://localhost:8080/api/address/provinces");
+                                const provinces = await res.json();
+                                const select = document.getElementById("province");
+                                select.innerHTML = '<option value="">--Chọn Tỉnh/Thành phố--</option>';
+                                provinces.forEach(p => {
+                                    select.innerHTML += `<option value="${p.province_code}">${p.name}</option>`;
+                                });
+                            }
+
+                            async function loadWards(provinceCode) {
+                                if (!provinceCode) {
+                                    document.getElementById("ward").innerHTML = '<option value="">--Chọn Xã/Phường--</option>';
+                                    return;
+                                }
+                                const res = await fetch(`http://localhost:8080/api/address/wards/${provinceCode}`);
+                                const wards = await res.json();
+                                const select = document.getElementById("ward");
+                                select.innerHTML = '<option value="">--Chọn Xã/Phường--</option>';
+                                wards.forEach(w => {
+                                    select.innerHTML += `<option value="${w.ward_code}">${w.name}</option>`;
+                                });
+                            }
+
+                            document.getElementById("province").addEventListener("change", (e) => {
+                                loadWards(e.target.value);
+                            });
+
+                            loadProvinces();
+                        </script>
 
                         <div>
                             <div class="mb-2 flex items-center gap-2">
