@@ -87,7 +87,7 @@
                 <div class="grid grid-cols-2 gap-4">
                     <!-- Giá nhập -->
                     <div>
-                        <label class="block text-gray-700 font-semibold mb-1">Giá nhập (VND)</label>
+                        <label class="block text-gray-700 font-semibold mb-1">Giá nhập </label>
                         <input type="text" th:value="${#numbers.formatDecimal(product.importPrice, 0, 'POINT', 0, 'COMMA')}"
                                name="importPrice" id="importPrice"
                                class="w-full border rounded px-3 py-2"
@@ -100,7 +100,7 @@
 
                     <!-- Giá bán -->
                     <div>
-                        <label class="block text-gray-700 font-semibold mb-1">Giá bán (VND)</label>
+                        <label class="block text-gray-700 font-semibold mb-1">Giá bán </label>
                         <input type="text" th:value="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')}"
                                name="price" id="price"
                                class="w-full border rounded px-3 py-2"
@@ -125,9 +125,8 @@
 
                     <!-- Giá sau giảm -->
                     <div>
-                        <label class="block text-gray-700 font-semibold mb-1">Giá sau giảm (VND)</label>
-                        <input type="text" th:value="${#numbers.formatDecimal(product.salePrice, 0, 'POINT', 0, 'COMMA')}"
-                               name="salePrice" id="salePrice"
+                        <label class="block text-gray-700 font-semibold mb-1">Giá sau giảm </label>
+                        <input type="text" th:value="${#numbers.formatDecimal(product.salePrice, 0, 'COMMA', 0, 'POINT')} + ' ₫'"
                                class="w-full border rounded px-3 py-2 bg-neutral-100" readonly>
                     </div>
                 </div>
@@ -353,6 +352,7 @@
             // Chuyển đổi giá trị về dạng số thô trước khi submit
             document.getElementById('importPrice').value = importPrice;
             document.getElementById('price').value = price;
+
 
             // Submit form
             document.getElementById('productForm').submit();
