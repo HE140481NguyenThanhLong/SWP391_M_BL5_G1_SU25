@@ -204,5 +204,36 @@
         toastr.error("Đặt hàng thất bại, vui lòng thử lại sau!");
     }
 </script>
+<script>
+    async function loadProvinces() {
+        const res = await fetch("http://localhost:8080/api/address/provinces");
+        const provinces = await res.json();
+        const select = document.getElementById("province");
+        select.innerHTML = '<option value="">--Chọn Tỉnh/Thành phố--</option>';
+        provinces.forEach(p => {
+            select.innerHTML += `<option value="${p.province_code}">${p.name}</option>`;
+        });
+    }
+
+    async function loadWards(provinceCode) {
+        if (!provinceCode) {
+            document.getElementById("ward").innerHTML = '<option value="">--Chọn Xã/Phường--</option>';
+            return;
+        }
+        const res = await fetch(`http://localhost:8080/api/address/wards/${provinceCode}`);
+        const wards = await res.json();
+        const select = document.getElementById("ward");
+        select.innerHTML = '<option value="">--Chọn Xã/Phường--</option>';
+        wards.forEach(w => {
+            select.innerHTML += `<option value="${w.ward_code}">${w.name}</option>`;
+        });
+    }
+
+    document.getElementById("province").addEventListener("change", (e) => {
+        loadWards(e.target.value);
+    });
+
+    loadProvinces();
+</script>
 </body>
 </html>
