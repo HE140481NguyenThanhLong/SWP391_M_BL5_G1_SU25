@@ -27,22 +27,22 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer product_id;
 
-    @Column(nullable = false, length = 255)
+    @Column(columnDefinition = "NVARCHAR(300)")
     String name;
 
-    @Column(nullable = false, length = 255)
+    @Column(columnDefinition = "NVARCHAR(300)")
     String description;
 
-    @Column(length = 300)
+    @Column(columnDefinition = "NVARCHAR(300)")
     String instruc;
 
-    @Column(length = 300)
+    @Column(columnDefinition = "NVARCHAR(300)")
     String feature;
 
-    @Column(length = 300)
+    @Column(columnDefinition = "NVARCHAR(300)")
     String expiry;
 
-    @Column(length = 300)
+    @Column(columnDefinition = "NVARCHAR(300)")
     String origin;
 
     @Column(nullable = false, precision = 18, scale = 2)
@@ -60,7 +60,7 @@ public class Product {
 
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 10)
+    @Column(columnDefinition = "NVARCHAR(300)")
     Status status = Status.IN_STOCK;
 
     @Column(columnDefinition = "NVARCHAR(255)")
@@ -85,17 +85,17 @@ public class Product {
     @Column(nullable = false, precision = 18, scale = 2)
     BigDecimal importPrice;
 
-    @Column(nullable = false, precision = 18, scale = 2)
+    @Column(precision = 18, scale = 2)
     BigDecimal salePrice;
 
-    @Column(length = 255)
+    @Column(columnDefinition = "NVARCHAR(300)")
     String brand;
 
     double rating;
 
     int discount;
 
-    @Column(length = 50)
+    @Column(columnDefinition = "NVARCHAR(300)")
     String sku;
 
     int reviewCount;

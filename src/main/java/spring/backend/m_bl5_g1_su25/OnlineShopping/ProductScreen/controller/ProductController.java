@@ -1,5 +1,6 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -61,6 +62,7 @@ public class ProductController {
         model.addAttribute("stats", productService.getStats());
         model.addAttribute("categories", productService.getAllCategories());
 
+
         return "product/products_manage";
     }
 
@@ -68,6 +70,8 @@ public class ProductController {
     public String detailProduct(@PathVariable Integer id, Model model) {
         Product product = productService.getProductById(id);
         model.addAttribute("product", product);
+        List<Supplier> suppliers = supplierService.getAllSuppliers();
+        model.addAttribute("suppliers", suppliers);
         return "product/Edit_detail";
     }
     @PostMapping("/update/{id}")
@@ -79,49 +83,58 @@ public class ProductController {
         try {
             Product existingProduct = productService.getProductById(id);
             if (existingProduct != null) {
-                // Cập nhật các trường từ form
                 existingProduct.setName(product.getName());
                 existingProduct.setDescription(product.getDescription());
-                existingProduct.setSalePrice(product.getSalePrice());
                 existingProduct.setPrice(product.getPrice());
+                existingProduct.setImportPrice(product.getImportPrice());
+                existingProduct.setDiscount(product.getDiscount());
+                existingProduct.setQuantity(product.getQuantity());
+                existingProduct.setStatus(product.getStatus());
+                existingProduct.setInstruc(product.getInstruc());
+                existingProduct.setFeature(product.getFeature());
 
-                // PHẦN XỬ LÝ UPLOAD ẢNH (CỐT LÕI)
+
+                // tính salePrice
+                BigDecimal discountAmount = product.getPrice()
+                        .multiply(BigDecimal.valueOf(product.getDiscount()))
+                        .divide(BigDecimal.valueOf(100));
+                existingProduct.setSalePrice(product.getPrice().subtract(discountAmount));
+
+                // upload ảnh nếu có
                 if (image != null && !image.isEmpty()) {
-                    // 1. Tạo thư mục uploads trong thư mục tạm của hệ thống
                     String tmpDir = System.getProperty("java.io.tmpdir");
                     String uploadDir = tmpDir + "/ecom-uploads/";
 
-                    // 2. Đảm bảo thư mục tồn tại
                     Path uploadPath = Paths.get(uploadDir);
                     if (!Files.exists(uploadPath)) {
                         Files.createDirectories(uploadPath);
                     }
 
-                    // 3. Tạo tên file duy nhất
                     String fileName = "img_" + System.currentTimeMillis() +
-                            image.getOriginalFilename().substring(
-                                    image.getOriginalFilename().lastIndexOf("."));
+                            image.getOriginalFilename().substring(image.getOriginalFilename().lastIndexOf("."));
 
-                    // 4. Lưu file
                     Path filePath = uploadPath.resolve(fileName);
                     image.transferTo(filePath);
 
-                    // 5. Lưu đường dẫn tương đối
                     existingProduct.setImageUrl("/temp-uploads/" + fileName);
                 }
 
+                // ❌ KHÔNG động vào supplier nữa
                 productService.saveProduct(existingProduct);
                 return "redirect:/product/detail/" + id;
             } else {
                 model.addAttribute("error", "Sản phẩm không tồn tại");
                 return "error";
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             model.addAttribute("error", "Lỗi khi cập nhật: " + e.getMessage());
             return "error";
         }
-
     }
+
+
+
+
     @GetMapping("/list")
     public String productList(
             @RequestParam(required = false) String priceRange,
