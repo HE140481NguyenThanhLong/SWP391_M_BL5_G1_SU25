@@ -5,14 +5,13 @@
     <title>Title</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
+    <title>Vertical Header (Flowbite + Tailwind)</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
 
 <div th:replace="~{component/header :: header}" ></div>
 
-<section class="bg-white py-8 antialiased md:py-16" style="margin-left: 20vw; padding-top: 0px;">
 <section class="bg-white py-8 antialiased md:py-16" style="padding-top: 0px;">
     <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
         <h2 class="mt-3 text-xl font-semibold text-gray-900 sm:text-2xl">Giỏ hàng</h2>
@@ -20,7 +19,7 @@
         <div class="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
             <!-- LEFT CONTENT -->
             <div class="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-3xl">
-                <div class="space-y-6" th:each="item : ${cartItems}">
+                <div class="space-y-6" th:each="item : ${cartItems.content}">
                     <!--list-->
                     <div class="mb-5 rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:p-6">
                         <div class="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
@@ -81,10 +80,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Pagination + Related Products + Summary ... keep same but with dark:* removed -->
-                <div class="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full">
-                    <div class="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700  sm:p-6">
-                        <p class="text-xl font-semibold text-gray-900 ">Chi tiết đơn hàng</p>
                 <!-- Pagination + Related Products + Summary ... keep same but with dark:* removed -->
                 <!--paging-->
                 <nav class="mt-6 flex items-center justify-center sm:mt-8" aria-label="Page navigation">
@@ -209,38 +204,56 @@
                 <div class="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6">
                     <p class="text-xl font-semibold text-gray-900 dark:text-white">Chi tiết đơn hàng</p>
 
-                        <div class="space-y-4">
-                            <div class="space-y-2">
-                                <dl class="flex items-center justify-between gap-4">
-                                    <dt class="text-base font-normal text-gray-900 ">Giá gốc</dt>
-                                    <dd class="text-base font-medium text-gray-900 " th:text="${#numbers.formatDecimal(originalPrice, 1, 'COMMA', 1, 'POINT')}">$7,592.00</dd>
-                                </dl>
+                    <div class="space-y-4">
+                        <div class="space-y-2">
+                            <dl class="flex items-center justify-between gap-4">
+                                <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Giá gốc</dt>
+                                <dd class="text-base font-medium text-gray-900 dark:text-white" th:text="${#numbers.formatDecimal(originalPrice, 1, 'COMMA', 1, 'POINT')}">$7,592.00</dd>
+                            </dl>
 
-                                <dl class="flex items-center justify-between gap-4">
-                                    <dt class="text-base font-normal text-gray-900 ">Giảm giá</dt>
-                                    <dd class="text-base font-medium text-green-900" th:text="${#numbers.formatDecimal(savings, 1, 'COMMA', 1, 'POINT')}">-$299.00</dd>
-                                </dl>
+                            <dl class="flex items-center justify-between gap-4">
+                                <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Giảm giá</dt>
+                                <dd class="text-base font-medium text-green-600" th:text="${#numbers.formatDecimal(savings, 1, 'COMMA', 1, 'POINT')}">-$299.00</dd>
+                            </dl>
 
-                                <dl class="flex items-center justify-between gap-4">
-                                    <dt class="text-base font-normal text-gray-900 ">Thuế 8%</dt>
-                                    <dd class="text-base font-medium text-gray-900 " th:text="${#numbers.formatDecimal(tax, 1, 'COMMA', 1, 'POINT')}">$799</dd>
-                                </dl>
-                            </div>
-
-                            <dl class="flex items-center justify-between gap-4 border-2 border-gray-200 pt-2 ">
-                                <dt class="text-base font-bold text-gray-900 ">Thành tiền</dt>
-                                <dd class="text-base font-bold text-gray-900 " th:text="${#numbers.formatDecimal(total, 1, 'COMMA', 1, 'POINT')}">$8,191.00</dd>
+                            <dl class="flex items-center justify-between gap-4">
+                                <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Thuế 8%</dt>
+                                <dd class="text-base font-medium text-gray-900 dark:text-white" th:text="${#numbers.formatDecimal(tax, 1, 'COMMA', 1, 'POINT')}">$799</dd>
                             </dl>
                         </div>
 
-                        <a th:href="@{/checkout}"
-                           class="flex w-full items-center justify-center rounded-lg border border-blue-600 bg-blue-600 px-5 py-2.5 text-sm font-medium text-black hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 dark:border-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            Tiến hành đặt hàng
+                        <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
+                            <dt class="text-base font-bold text-gray-900 dark:text-white">Thành tiền</dt>
+                            <dd class="text-base font-bold text-gray-900 dark:text-white" th:text="${#numbers.formatDecimal(total, 1, 'COMMA', 1, 'POINT')}">$8,191.00</dd>
+                        </dl>
+                    </div>
+
+                    <a href="/checkout"
+                       class="flex w-full items-center justify-center rounded-lg border border-blue-600 bg-blue-600 px-5 py-2.5 text-sm font-medium text-black hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 dark:border-blue-500 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        Tiến hành đặt hàng
+                    </a>
+
+                    <div class="flex items-center justify-center gap-2">
+                        <span class="text-sm font-normal text-gray-500 dark:text-gray-400"> hoặc </span>
+                        <a href="#" title="" class="inline-flex items-center gap-2 text-sm font-medium text-primary-700 underline hover:no-underline dark:text-primary-500">
+                            Tiếp tục mua sắm
+                            <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4" />
+                            </svg>
                         </a>
                     </div>
                 </div>
-            </div>
 
+                <div class="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6">
+                    <form class="space-y-4">
+                        <div>
+                            <label for="voucher" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Do you have a voucher or gift card? </label>
+                            <input type="text" id="voucher" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="" required />
+                        </div>
+                        <button type="submit" class="flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Apply Code</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </section>
