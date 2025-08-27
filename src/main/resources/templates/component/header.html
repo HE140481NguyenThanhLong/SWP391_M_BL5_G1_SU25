@@ -46,7 +46,8 @@
     <div class="flex items-center justify-between py-4">
       <!-- Logo -->
       <div class="flex items-center gap-8">
-        <a th:href="@{/guest}" class="font-display text-3xl font-bold text-primary">FlowShop</a>
+        <a th:href="${session.loggedInUser != null and session.loggedInUser.role.name() == 'STAFF'} ? @{/staff/staff-dashboard} : @{/guest}"
+           class="font-display text-3xl font-bold text-primary">FlowShop</a>
       </div>
 
       <!-- Search -->
