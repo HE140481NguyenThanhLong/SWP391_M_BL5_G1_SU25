@@ -35,16 +35,16 @@ public class OrderHistoryController {
 
     @GetMapping("/order-list")
     public String home(@RequestParam(required = false) String status,
-                    @RequestParam(required = false)
-                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-                    @RequestParam(required = false)
-                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
-                    @RequestParam(defaultValue = "0") int pageNo,
-                    @RequestParam(defaultValue = "5") int pageSize,
-                    @RequestParam(defaultValue = "createdAt") String orderBy,
-                    @RequestParam(defaultValue = "true") boolean isDesc,
-                   Model model,
-                   HttpSession session) {
+                       @RequestParam(required = false)
+                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                       @RequestParam(required = false)
+                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+                       @RequestParam(defaultValue = "0") int pageNo,
+                       @RequestParam(defaultValue = "5") int pageSize,
+                       @RequestParam(defaultValue = "createdAt") String orderBy,
+                       @RequestParam(defaultValue = "true") boolean isDesc,
+                       Model model,
+                       HttpSession session) {
 
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         if (loggedInUser == null) return "redirect:/authority/signin";
@@ -55,19 +55,19 @@ public class OrderHistoryController {
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
 
         // Lấy giỏ hàng theo user có phân trang
-            Page<Order> orders = orderService.filterOrders(status == null || status.equals("all") ? null : OrderStatus.valueOf(status), startDate, endDate, pageable);
+        Page<Order> orders = orderService.filterOrders(userId, status == null || status.equals("all") ? null : OrderStatus.valueOf(status), startDate, endDate, pageable);
 
-            model.addAttribute("orders", orders);
-            model.addAttribute("currentPage", pageNo);
-            model.addAttribute("totalPages", orders.getTotalPages());
-            model.addAttribute("orderBy", orderBy);
-            model.addAttribute("isDesc", isDesc);
+        model.addAttribute("orders", orders);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", orders.getTotalPages());
+        model.addAttribute("orderBy", orderBy);
+        model.addAttribute("isDesc", isDesc);
 
 
-            model.addAttribute("status", status);
-            model.addAttribute("startDate", startDate);
-            model.addAttribute("endDate", endDate);
-            model.addAttribute("allStatus", OrderStatus.values());
+        model.addAttribute("status", status);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("allStatus", OrderStatus.values());
         return "order/order-list";
     }
 
