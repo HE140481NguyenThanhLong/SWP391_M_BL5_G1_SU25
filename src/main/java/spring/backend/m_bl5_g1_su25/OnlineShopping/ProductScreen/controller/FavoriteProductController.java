@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.repository.FavoriteRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.service.FavoriteService;
@@ -32,6 +35,35 @@ public class FavoriteProductController {
         }
         return "/favoriteScreen/favorite";
 
+    }
+    @PostMapping("/add/{productId}")
+    public String addFavorite(@PathVariable Integer productId, HttpSession session, RedirectAttributes redirectAttributes) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+        try {
+            favoriteService.addFavoriteProduct(loggedInUser.getUsername(), productId);
+            redirectAttributes.addFlashAttribute("successMessage", "Product added to your favorites!");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return "redirect:/product/detailproduct/" + productId;
+    }
+    @PostMapping("/delete/{productId}")
+    public String deleteFavorite(@PathVariable Integer productId, HttpSession session, RedirectAttributes redirectAttributes) {
+
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        try {
+            favoriteService.deleteFavoriteProduct(loggedInUser.getUsername(), productId);
+            redirectAttributes.addFlashAttribute("successMessage", "Product removed from your favorites!");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
+        }
+
+
+        return "redirect:/favoriteScreen/favorite";
     }
 
 }

@@ -7,31 +7,43 @@
 </head>
 <body>
 <div th:replace="~{component/header::header}"/>
-<section class="min-h-screen bg-gray-50 dark:bg-gray-900 py-10 px-4">
+<section class="min-h-screen py-10 px-4">
     <div class="max-w-6xl mx-auto">
         <div class="mb-6 flex items-center justify-between">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Your Favorite Items</h2>
-
+            <h2 class="text-2xl font-bold text-gray-900">Your Favorite Items</h2>
         </div>
 
         <!-- Grid of Favorite Items -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Favorite Item Card -->
-            <div th:each="fproducts :${favoriteProducts}" class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex flex-col h-full">
-                <img th:src="${fproducts.imageUrl}" src="https://via.placeholder.com/600x300" alt="Favorite item"
-                     class="w-full h-40 object-cover rounded-md mb-4" />
+            
+            <div th:each="fproducts :${favoriteProducts}"
+                 class="relative group bg-white border-2 border-gray-500 rounded-lg shadow p-4 flex flex-col h-full">
 
-                <h3 th:text="${fproducts.name}" class="text-lg font-semibold text-gray-900 dark:text-white mb-1">Product Name</h3>
-                <span th:text="${fproducts.price}" class="text-indigo-600 dark:text-indigo-400 font-medium text-sm mb-2">$99.99</span>
-                <p th:text="${fproducts.description}" class="text-sm text-gray-700 dark:text-gray-300">
+
+                <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                               bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-md">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                    </svg>
+
+                </button>
+
+                <img th:src="${fproducts.imageUrl}" src="https://via.placeholder.com/600x300"
+                     alt="Favorite item" class="w-full h-40 object-cover rounded-md mb-4" />
+
+                <h3 th:text="${fproducts.name}"
+                    class="text-lg font-semibold text-gray-900 mb-1">Product Name</h3>
+                <span th:text="${fproducts.price}"
+                      class="text-indigo-600 font-medium text-sm mb-2">$99.99</span>
+                <p th:text="${fproducts.description}"
+                   class="text-sm text-gray-700">
                     This is a short description of the favorite product. It highlights key features and value.
                 </p>
             </div>
-
-
         </div>
     </div>
 </section>
+
 
 <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 </body>

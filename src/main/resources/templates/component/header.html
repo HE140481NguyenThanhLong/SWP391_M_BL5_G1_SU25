@@ -46,7 +46,9 @@
     <div class="flex items-center justify-between py-4">
       <!-- Logo -->
       <div class="flex items-center gap-8">
-        <a th:href="@{/guest}" class="font-display text-3xl font-bold text-primary">FlowShop</a>
+        <a th:if="${session.loggedInUser == null}" class="font-display text-3xl font-bold text-primary">FlowShop</a>
+        <a th:if="${session.loggedInUser != null and session.loggedInUser.role.name()=='CUSTOMER'}" th:href="@{/guest}" class="font-display text-3xl font-bold text-primary">FlowShop</a>
+        <a th:if="${session.loggedInUser != null and session.loggedInUser.role.name()=='STAFF'}" th:href="@{/staff/staff-dashboard}" class="font-display text-3xl font-bold text-primary">FlowShop</a>
       </div>
 
       <!-- Search -->
@@ -114,7 +116,6 @@
             </div>
             <ul class="py-2 text-sm text-neutral-700">
               <li><a th:href="@{/customerService/reportHistoryForCustomer}" class="block px-4 py-2 hover:bg-neutral-50">Report Form</a></li>
-              <li><a th:href="@{/product/list}" class="block px-4 py-2 hover:bg-neutral-50">Product</a></li>
               <li><a th:href="@{/order/order-list}" class="block px-4 py-2 hover:bg-neutral-50">Orders</a></li>
               <li><a th:href="@{/profile/view}" class="block px-4 py-2 hover:bg-neutral-50">Settings</a></li>
             </ul>

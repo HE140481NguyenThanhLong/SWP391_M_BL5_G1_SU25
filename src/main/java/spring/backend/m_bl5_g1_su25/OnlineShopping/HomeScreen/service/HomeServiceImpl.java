@@ -4,12 +4,15 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.dto.response.ProductResponse;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.HomeScreen.mapper.HomeMapper;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.HomeScreen.repository.HomeRepo;
+import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,11 +34,18 @@ public class HomeServiceImpl implements HomeService {
 
     @Override
     public List<ProductResponse> getFiveProductsHottest() {
-            List<ProductResponse> product = homeRepo.findTop5ByOrderBySoldCountDesc()
-                    .stream()
-                    .map(homeMapper::toProductResponse)
-                    .collect(Collectors.toList());
-        return product;
+        // FIX: Call the method that actually has your @Query annotation.
+        List<Product> products = homeRepo.findTop5ByOrderBySoldCountDesc(PageRequest.of(0, 5));
+
+        // Safety Check
+        if (products == null) {
+            return new ArrayList<>();
+        }
+
+        // Map the results to your response DTO
+        return products.stream()
+                .map(homeMapper::toProductResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -74,27 +84,5 @@ public class HomeServiceImpl implements HomeService {
                 .map(homeMapper::toProductResponse);
     }
 
-//    @Override
-//    public Page<ProductResponse> getAllByCategoryNameOrderByPriceDesc(Pageable pageable, String categories, Double price) {
-//        return productRepo.findAllByCategoryNameOrderByPriceDesc(pageable,categories,price).
-//                map(productMapper::toProductResponse);
-//    }
-//
-//    @Override
-//    public Page<ProductResponse> getAllByCategoryNameOrderByPriceAsc(Pageable pageable, String categories, Double price) {
-//        return productRepo.findAllByCategoryNameOrderByPriceAsc(pageable,categories,price).
-//                map(productMapper::toProductResponse);
-//    }
-//
-//    @Override
-//    public Page<ProductResponse> getAllByOrderByCreatedAtDescAndCategories(Pageable pageable, String categories) {
-//        return productRepo.findAllByOrderByCreatedAtDescAndCategories(pageable,categories)
-//                .map(productMapper::toProductResponse);
-//    }
-//
-//    @Override
-//    public Page<ProductResponse> getAllByOrderByCreatedAtAscAndCategories(Pageable pageable, String categories) {
-//        return productRepo.findAllByOrderByCreatedAtAscAndCategories(pageable,categories)
-//                .map(productMapper::toProductResponse);
-//    }
+
 }

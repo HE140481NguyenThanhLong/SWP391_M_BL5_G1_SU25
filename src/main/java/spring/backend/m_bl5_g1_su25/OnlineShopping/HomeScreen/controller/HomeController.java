@@ -40,8 +40,12 @@ public class HomeController {
                          @RequestParam(defaultValue = "10") int size,
                            HttpSession session ) {
 
-        // Add user info to model for header display
 
+
+        ProductResponse latest = homeService
+                .findFirstByOrderByCreatedDateDesc()
+                .orElse(null);
+        List<ProductResponse> product5 = homeService.getFiveProductsHottest();
 
         Pageable pageable = PageRequest.of(page, size);
         Page<ProductResponse> products = homeService.findAllProduct(pageable);
@@ -51,6 +55,8 @@ public class HomeController {
         model.addAttribute("totalItems", products.getTotalElements());
         model.addAttribute("pageSize", size);
         model.addAttribute("content", products.getContent());
+        model.addAttribute("latestProduct", latest);
+        model.addAttribute("product5", product5);
 
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         if (loggedInUser != null) {
@@ -121,14 +127,7 @@ public class HomeController {
         model.addAttribute("content", productsByPriceDesc.getContent());
             return "homeScreen/Home";
     }
-    @GetMapping("/lastestProduct")
-    public String getLastestProduct(Model model){
-        ProductResponse latest = homeService
-                .findFirstByOrderByCreatedDateDesc()
-                .orElse(null);
-        model.addAttribute("latestProduct", latest);
-        return "homeScreen/Home";
-    }
+
     @GetMapping ("/byPriceAsc")
     public String getProductsByPriceAsc(Model model,
                                          @RequestParam(defaultValue = "0")int page,
@@ -167,11 +166,5 @@ public class HomeController {
     }
 
 
-    @GetMapping("/top5")
-    public String getTop5(Model model){
-        List<ProductResponse> product5 = homeService.getFiveProductsHottest();
-        model.addAttribute("product5", product5);
-        return "HomeScreen/Top-Seller";
 
-    }
 }
