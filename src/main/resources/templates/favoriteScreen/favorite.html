@@ -15,18 +15,20 @@
 
         <!-- Grid of Favorite Items -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            
+
+
+
             <div th:each="fproducts :${favoriteProducts}"
                  class="relative group bg-white border-2 border-gray-500 rounded-lg shadow p-4 flex flex-col h-full">
 
-
-                <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                <form th:method="post" th:action="@{/favoriteScreen/delete/{id}(id=${fproducts.product_id})}">
+                    <button type="submit" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300
                                bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-md">
-                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
-                    </svg>
-
-                </button>
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                        </svg>
+                    </button>
+                </form>
 
                 <img th:src="${fproducts.imageUrl}" src="https://via.placeholder.com/600x300"
                      alt="Favorite item" class="w-full h-40 object-cover rounded-md mb-4" />

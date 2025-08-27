@@ -60,6 +60,7 @@ public class FavoriteProductController {
             redirectAttributes.addFlashAttribute("successMessage", "Product removed from your favorites!");
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
+            e.printStackTrace();
         }
 
 

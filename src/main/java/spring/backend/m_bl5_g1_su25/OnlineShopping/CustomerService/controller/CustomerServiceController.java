@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.dto.request.ReportFormRequest;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.CustomerService.dto.response.ReportFormDefault;
@@ -81,6 +82,7 @@ public class CustomerServiceController {
 
     @PostMapping("/reportForm")
     public String handleSubmitReport(@Valid @ModelAttribute("ReportFormRequest") ReportFormRequest ReportFormRequest,
+                                     @RequestParam(value = "image", required = false) MultipartFile image,
                                      BindingResult bindingResult,
                                      HttpSession session,
                                      RedirectAttributes redirectAttributes,

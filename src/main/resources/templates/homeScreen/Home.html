@@ -136,9 +136,9 @@
                             <p th:text="${product.description}" class="text-sm text-gray-600 line-clamp-2">Noise-cancelling, 30h battery, ultra-soft cushions.</p>
 
                             <!-- Add to cart -->
-                            <form th:action="@{/cart/add}" method="post" class="mt-4">
-                                <input type="hidden" name="productId" value="123" />
-                                <input type="hidden" name="quantity" value="1" />
+                            <form th:action="@{/cart/add}" th:method="post" class="mt-4">
+                                <input type="hidden" name="productId" th:value="${product.product_id}" />
+                                <input type="hidden" name="quantity" value="1" min="1" th:max="${product.quantity}" />
                                 <button type="submit"
                                         class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
