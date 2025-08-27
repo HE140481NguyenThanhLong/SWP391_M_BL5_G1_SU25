@@ -29,8 +29,8 @@ public class ProductService {
         if (search != null && search.trim().isEmpty()) search = null;
         if (category != null && category.trim().isEmpty()) category = null;
 
-        Sort sort = Sort.by(sortField);
-        sort = "asc".equalsIgnoreCase(sortDir) ? sort.ascending() : sort.descending();
+        // ép luôn sortField = "product_id" và sortDir = "desc"
+        Sort sort = Sort.by("product_id").descending();
 
         Pageable pageable = PageRequest.of(page - 1, size, sort);
         return productRepository.searchProducts(search, category, pageable);

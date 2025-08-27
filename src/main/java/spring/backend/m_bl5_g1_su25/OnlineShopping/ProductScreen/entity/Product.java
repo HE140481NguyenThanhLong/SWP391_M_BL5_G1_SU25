@@ -58,9 +58,6 @@ public class Product {
     @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
     Integer minQuantity;
 
-    @Column()
-    Integer sales_count = 0;
-
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)

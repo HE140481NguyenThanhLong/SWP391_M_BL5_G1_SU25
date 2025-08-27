@@ -62,11 +62,11 @@ public class PaymentController {
         model.addAttribute("cardNumbers", cardNumbers);
 
 
-// Tính toán giá trị giỏ hàng
+// Tính toán giá trị của giỏ hàng
         BigDecimal total = BigDecimal.valueOf(order.getTotal());
         BigDecimal savings = BigDecimal.ZERO; // chỗ này có thể sau này tính mã giảm giá
         BigDecimal storePickup = BigDecimal.ZERO; // phí lấy tại cửa hàng (nếu có)
-        BigDecimal originalPrice = total.divide(new BigDecimal("1.08"), 2, RoundingMode.HALF_UP); // thuế 8%
+        BigDecimal originalPrice = total.divide(new BigDecimal("1.08"), 2, RoundingMode.HALF_UP); // thuế
 
         model.addAttribute("originalPrice", originalPrice);
         model.addAttribute("savings", savings);

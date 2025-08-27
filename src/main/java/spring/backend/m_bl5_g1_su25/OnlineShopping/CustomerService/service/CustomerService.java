@@ -62,12 +62,6 @@ public class CustomerService {
         newReport.setStatus(ReportStatus.IN_PROGRESS);
         newReport.setCreatedAt(LocalDateTime.now());
 
-//        if (request.getProductId() != null) {
-//            Product product = productRepo.findById(request.getProductId())
-//                    .orElse(null);
-//            newReport.setProduct(product);
-//        }
-
         Staff assignedStaff = findAvailableStaff();
         newReport.setStaff(assignedStaff);
 
@@ -78,9 +72,7 @@ public class CustomerService {
             reportRepo.save(newReport);
     }
 
-    /**
-     * Logic to find a staff member for assignment.
-     */
+
     private Staff findAvailableStaff() {
         List<Staff> availableStaff = staffRepo.findAll();
         if (availableStaff.isEmpty()) {
@@ -90,13 +82,6 @@ public class CustomerService {
         int randomIndex = ThreadLocalRandom.current().nextInt(availableStaff.size());
         return availableStaff.get(randomIndex);
     }
-//    public List<ReportFormResponseForCustomer> findReportByCustomer(String customerName) {
-//        List<ReportFormResponseForCustomer> reportForms = reportRepo.findAllByUsername(customerName)
-//                .stream()
-//                .map(customerServiceMapper::toReportFormForCustomer)
-//                .collect(Collectors.toList());
-//        return reportForms;
-//    }
     public List<ReportFormResponseForCustomer> findReportByCustomer(String customerName) {
         List<ReportForm> reportForms = reportRepo.findAllByUsername(customerName);
 
@@ -124,8 +109,13 @@ public class CustomerService {
     public ReportForm findReportByReportId(Integer reportID) {
         return  reportRepo.findByReportId(reportID);
     }
-    public List<ReportFormDefault> findAllReports(){
-        return reportRepo.findAll()
+    public List<ReportFormDefault> findAllReports(int page,int size){
+        int offset = page*size;
+        if (size <= 0) {
+
+            throw new IllegalArgumentException("Page size must be greater than zero.");
+        }
+        return reportRepo.findAllWithOffsetLimit(size,offset)
                 .stream()
                 .map(customerServiceMapper::toReportFormDefault)
                 .collect(Collectors.toList());

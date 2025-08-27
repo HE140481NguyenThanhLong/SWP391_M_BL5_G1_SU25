@@ -40,7 +40,7 @@ public class TransactionController {
         Transaction transaction = transactionService.getById(id)
                 .orElseThrow(() -> new RuntimeException("Transaction not found"));
         model.addAttribute("transaction", transaction);
-        return "transaction-detail"; // tên file view (VD: transaction-detail.html hoặc .jsp)
+        return "transaction-detail"; // tên file view (VD: transaction-detail.html, .jsp)
     }
 
     @GetMapping

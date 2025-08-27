@@ -1,8 +1,10 @@
 package spring.backend.m_bl5_g1_su25.OnlineShopping.HomeScreen.repository;
 
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.ProductScreen.entity.Product;
 
@@ -23,7 +25,9 @@ public interface HomeRepo extends JpaRepository<Product, Long> {
 //    Page<Product> findAllByOrderByCreatedAtDescAndCategories(Pageable pageable, String categories);
 //    Page<Product> findAllByOrderByCreatedAtAscAndCategories(Pageable pageable, String categories);
     Page<Product> findByNameContainingIgnoreCase(Pageable pageable,String keyword);
-    List<Product> findTop5ByOrderBySoldCountDesc();
+
+    @Query("SELECT p FROM Product p ORDER BY p.soldCount DESC ")
+    List<Product> findTop5ByOrderBySoldCountDesc(Pageable pageable);
 
 
     Optional<Product> findFirstByOrderByCreatedAtDesc();

@@ -36,7 +36,7 @@ public class CartController {
         Product product = productCartRepository.findById(productId).orElse(null);
 
         if (product == null) {
-            // Nếu không tìm thấy -> trả về trang lỗi 4 0 4
+            // Nếu không tìm thấy -> trả về trang lỗi 404
             return "error/404";
         }
 
@@ -157,6 +157,13 @@ public class CartController {
             return "redirect:/cart/cart-list?result=fail";
         }
         return "redirect:/cart/cart-list?result=success";
+    }
+    @GetMapping("/count")
+    @ResponseBody
+    public int getCartCount(HttpSession session) {
+        User loggedIn = (User) session.getAttribute("loggedInUser");
+        if (loggedIn == null) return 0;
+        return cartItemService.getCartItemCount(loggedIn.getUser_id());
     }
 
 }
