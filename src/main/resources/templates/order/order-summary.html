@@ -12,7 +12,7 @@
 
 <div th:replace="~{component/header :: header}" ></div>
 
-<section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
+<section class="bg-white py-8 antialiased  md:py-16">
     <form action="#" class="mx-auto max-w-screen-xl px-4 2xl:px-0">
         <div class="mx-auto max-w-3xl">
             <a href="/order/order-list">
@@ -21,20 +21,20 @@
                 </button>
             </a>
 
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Chi tiết đơn hàng</h2>
+            <h2 class="text-xl font-semibold text-gray-900 sm:text-2xl">Chi tiết đơn hàng</h2>
 
-            <div class="mt-6 border-b border-t border-gray-200 py-8 dark:border-gray-700 sm:mt-8">
+            <div class="mt-6 border-b border-t border-gray-200 py-8  sm:mt-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Cột 1 -->
                     <div>
-                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Thông tin người nhận</h4>
+                        <h4 class="text-lg font-semibold text-gray-900 ">Thông tin người nhận</h4>
                         <dl>
                             <dd th:text="${'Người nhận: ' + order.shippingInformation.getRecipientName()}"
-                                class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                                class="mt-1 text-base font-normal text-gray-500 ">
                                 Bonnie Green
                             </dd>
                             <dd th:text="${'SĐT người nhận: ' + order.shippingInformation.getPhoneNumber()}"
-                                class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                                class="mt-1 text-base font-normal text-gray-500 ">
                                 +1 234 567 890
                             </dd>
                             <dd th:text="${'Địa chỉ nhận: '
@@ -42,7 +42,7 @@
                                 + order.shippingInformation.wardName + ', '
                                 + order.shippingInformation.districtName + ', '
                                 + order.shippingInformation.provinceName}"
-                                class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                                class="mt-1 text-base font-normal text-gray-500 ">
                                 San Francisco, California, United States
                             </dd>
                         </dl>
@@ -50,18 +50,18 @@
 
                     <!-- Cột 2 -->
                     <div>
-                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Phương thức thanh toán</h4>
+                        <h4 class="text-lg font-semibold text-gray-900 ">Phương thức thanh toán</h4>
                         <dl>
                             <dd th:text="${order.paymentMethod.paymentType}"
-                                class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                                class="mt-1 text-base font-normal text-gray-500 ">
                                 VNPAY
                             </dd>
                         </dl>
 
-                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mt-4">Mã giao dịch (nếu có)</h4>
+                        <h4 class="text-lg font-semibold text-gray-900  mt-4">Mã giao dịch (nếu có)</h4>
                         <dl>
                             <dd th:text="${order.paymentMethod.payment_id}"
-                                class="mt-1 text-base font-normal text-gray-500 dark:text-gray-400">
+                                class="mt-1 text-base font-normal text-gray-500 ">
                                 TXN123456
                             </dd>
                         </dl>
@@ -71,7 +71,7 @@
                         <dl>
                             <!-- Nếu trans != null -->
                             <dd th:if="${trans != null and order.paymentMethod.paymentType != T(spring.backend.m_bl5_g1_su25.OnlineShopping.PaymentScreen.enums.PaymentType).CASH_ON_DELIVERY}"
-                                class="mt-1 text-base font-normal text-green-600 dark:text-green-400">
+                                class="mt-1 text-base font-normal text-green-600 ">
                                 Thành công
                             </dd>
 
@@ -90,23 +90,23 @@
 
 
             <div class="mt-6 sm:mt-8">
-                <div class="relative overflow-x-auto border-b border-gray-200 dark:border-gray-800">
-                    <table class="w-full text-left font-medium text-gray-900 dark:text-white md:table-fixed">
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
+                <div class="relative overflow-x-auto border-b border-gray-200 ">
+                    <table class="w-full text-left font-medium text-gray-900  md:table-fixed">
+                        <tbody class="divide-y divide-gray-200 ">
                         <tr th:each="item : ${order.orderDetails}">
                             <td class="whitespace-nowrap py-4 md:w-[384px]">
                                 <div class="flex items-center gap-4">
                                     <a href="#" class="flex items-center aspect-square w-10 h-10 shrink-0">
-                                        <img th:src="${item.product.imageUrl}" class="h-auto w-full max-h-full dark:hidden" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg" alt="imac image" />
-                                        <img th:src="${item.product.imageUrl}" class="hidden h-auto w-full max-h-full dark:block" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg" alt="imac image" />
+                                        <img th:src="${item.product.imageUrl}" class="h-auto w-full max-h-full " src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg" alt="imac image" />
+                                        <img th:src="${item.product.imageUrl}" class="hidden h-auto w-full max-h-full " src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg" alt="imac image" />
                                     </a>
                                     <a th:href="@{/cart/product/{id}(id=${item.product.product_id})}" th:text="${item.product.name}" class="hover:underline">Apple iMac 27”</a>
                                 </div>
                             </td>
 
-                            <td th:text=" 'x' + ${item.quantity}" class="p-4 text-base font-normal text-gray-900 dark:text-white">x1</td>
+                            <td th:text=" 'x' + ${item.quantity}" class="p-4 text-base font-normal text-gray-900 ">x1</td>
 
-                            <td th:text="${#numbers.formatDecimal(item.quantity * item.product.price, 1, 'COMMA', 1, 'POINT')}" class="p-4 text-right text-base font-bold text-gray-900 dark:text-white">$1,499</td>
+                            <td th:text="${#numbers.formatDecimal(item.quantity * item.product.price, 1, 'COMMA', 1, 'POINT')}" class="p-4 text-right text-base font-bold text-gray-900 ">$1,499</td>
                         </tr>
 
                         </tbody>
@@ -114,29 +114,29 @@
                 </div>
 
                 <div class="mt-4 space-y-6">
-                    <h4 class="text-xl font-semibold text-gray-900 dark:text-white">Tổng đơn</h4>
+                    <h4 class="text-xl font-semibold text-gray-900 ">Tổng đơn</h4>
 
                     <div class="space-y-4">
                         <div class="space-y-2">
                             <dl class="flex items-center justify-between gap-4">
-                                <dt class="text-gray-500 dark:text-gray-400">Giá gốc</dt>
-                                <dd class="text-base font-medium text-gray-900 dark:text-white" th:text="${#numbers.formatDecimal(originalPrice, 1, 'COMMA', 1, 'POINT')}">$6,592.00</dd>
+                                <dt class="text-gray-500 ">Giá gốc</dt>
+                                <dd class="text-base font-medium text-gray-900 " th:text="${#numbers.formatDecimal(originalPrice, 1, 'COMMA', 1, 'POINT')}">$6,592.00</dd>
                             </dl>
 
                             <dl class="flex items-center justify-between gap-4">
-                                <dt class="text-gray-500 dark:text-gray-400">Tiết kiệm</dt>
+                                <dt class="text-gray-500 ">Tiết kiệm</dt>
                                 <dd class="text-base font-medium text-green-500" th:text="${#numbers.formatDecimal(savings, 1, 'COMMA', 1, 'POINT')}">-$299.00</dd>
                             </dl>
 
                             <dl class="flex items-center justify-between gap-4">
-                                <dt class="text-gray-500 dark:text-gray-400">Thuế</dt>
-                                <dd class="text-base font-medium text-gray-900 dark:text-white" th:text="${#numbers.formatDecimal(tax, 1, 'COMMA', 1, 'POINT')}">$99</dd>
+                                <dt class="text-gray-500 ">Thuế</dt>
+                                <dd class="text-base font-medium text-gray-900 " th:text="${#numbers.formatDecimal(tax, 1, 'COMMA', 1, 'POINT')}">$99</dd>
                             </dl>
                         </div>
 
-                        <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
-                            <dt class="text-lg font-bold text-gray-900 dark:text-white">Tổng cộng</dt>
-                            <dd class="text-lg font-bold text-gray-900 dark:text-white" th:text="${#numbers.formatDecimal(total, 1, 'COMMA', 1, 'POINT')}">$7,191.00</dd>
+                        <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 ">
+                            <dt class="text-lg font-bold text-gray-900 ">Tổng cộng</dt>
+                            <dd class="text-lg font-bold text-gray-900 " th:text="${#numbers.formatDecimal(total, 1, 'COMMA', 1, 'POINT')}">$7,191.00</dd>
                         </dl>
                     </div>
 
@@ -159,11 +159,11 @@
 <div id="billingInformationModal" tabindex="-1" aria-hidden="true" class="antialiased fixed left-0 right-0 top-0 z-50 hidden h-[calc(100%-1rem)] max-h-auto w-full max-h-full items-center justify-center overflow-y-auto overflow-x-hidden antialiased md:inset-0">
     <div class="relative max-h-auto w-full max-h-full max-w-lg p-4">
         <!-- Modal content -->
-        <div class="relative rounded-lg bg-white shadow dark:bg-gray-800">
+        <div class="relative rounded-lg bg-white shadow ">
             <!-- Modal header -->
-            <div class="flex items-center justify-between rounded-t border-b border-gray-200 p-4 dark:border-gray-700 md:p-5">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Billing Information</h3>
-                <button type="button" class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="billingInformationModal">
+            <div class="flex items-center justify-between rounded-t border-b border-gray-200 p-4  md:p-5">
+                <h3 class="text-lg font-semibold text-gray-900 ">Billing Information</h3>
+                <button type="button" class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 " data-modal-toggle="billingInformationModal">
                     <svg class="h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                     </svg>
@@ -175,49 +175,49 @@
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 mb-5">
                     <div class="flex items-center gap-4 sm:col-span-2">
                         <div class="flex items-center">
-                            <input id="company_address_billing_modal" data-collapse-toggle="company-info-container-modal" aria-expanded="false" type="checkbox" value="" name="address-type-modal" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" />
-                            <label for="company_address_billing_modal" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"> Order as a company </label>
+                            <input id="company_address_billing_modal" data-collapse-toggle="company-info-container-modal" aria-expanded="false" type="checkbox" value="" name="address-type-modal" class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 " />
+                            <label for="company_address_billing_modal" class="ms-2 text-sm font-medium text-gray-900 "> Order as a company </label>
                         </div>
                     </div>
 
                     <div class="grid hidden grid-cols-2 gap-4 sm:col-span-2" id="company-info-container-modal">
                         <div>
-                            <label for="company_name" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Company name </label>
-                            <input type="text" id="company_name" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="Flowbite LLC" />
+                            <label for="company_name" class="mb-2 block text-sm font-medium text-gray-900 "> Company name </label>
+                            <input type="text" id="company_name" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500  " placeholder="Flowbite LLC" />
                         </div>
 
                         <div>
-                            <label for="vat_number" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> VAT number </label>
-                            <input type="text" id="vat_number" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="DE42313253" />
+                            <label for="vat_number" class="mb-2 block text-sm font-medium text-gray-900 "> VAT number </label>
+                            <input type="text" id="vat_number" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 " placeholder="DE42313253" />
                         </div>
                     </div>
 
                     <div class="sm:col-span-2">
                         <div class="mb-2 flex items-center gap-1">
-                            <label for="saved-address-modal" class="block text-sm font-medium text-gray-900 dark:text-white"> Saved Address </label>
-                            <svg data-tooltip-target="saved-address-modal-desc-2" data-tooltip-trigger="hover" class="h-4 w-4 text-gray-400 hover:text-gray-900 dark:text-gray-500 dark:hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <label for="saved-address-modal" class="block text-sm font-medium text-gray-900 "> Saved Address </label>
+                            <svg data-tooltip-target="saved-address-modal-desc-2" data-tooltip-trigger="hover" class="h-4 w-4 text-gray-400 hover:text-gray-900 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                                 <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm9.408-5.5a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2h-.01ZM10 10a1 1 0 1 0 0 2h1v3h-1a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-1v-4a1 1 0 0 0-1-1h-2Z" clip-rule="evenodd" />
                             </svg>
                         </div>
-                        <select id="saved-address-modal" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500">
+                        <select id="saved-address-modal" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 ">
                             <option selected>Choose one of your saved address</option>
                             <option value="address-1">San Francisco, California, United States, 3454, Scott Street</option>
                             <option value="address-2">New York, United States, Broadway 10012</option>
                         </select>
-                        <div id="saved-address-modal-desc-2" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700">
+                        <div id="saved-address-modal-desc-2" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 ">
                             Choose one of your saved addresses
                             <div class="tooltip-arrow" data-popper-arrow></div>
                         </div>
                     </div>
 
                     <div>
-                        <label for="first_name_billing_modal" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> First Name* </label>
-                        <input type="text" id="first_name_billing_modal" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="Enter your first name" required />
+                        <label for="first_name_billing_modal" class="mb-2 block text-sm font-medium text-gray-900 "> First Name* </label>
+                        <input type="text" id="first_name_billing_modal" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 " placeholder="Enter your first name" required />
                     </div>
 
                     <div>
-                        <label for="last_name_billing_modal" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Last Name* </label>
-                        <input type="text" id="last_name_billing_modal" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="Enter your last name" required />
+                        <label for="last_name_billing_modal" class="mb-2 block text-sm font-medium text-gray-900 "> Last Name* </label>
+                        <input type="text" id="last_name_billing_modal" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600  " placeholder="Enter your last name" required />
                     </div>
 
                     <div class="sm:col-span-2">

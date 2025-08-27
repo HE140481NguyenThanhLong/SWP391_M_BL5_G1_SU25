@@ -115,9 +115,9 @@
               <div class="text-neutral-500" th:text="${session.loggedInUser.getEmail()}">email@example.com</div>
             </div>
             <ul class="py-2 text-sm text-neutral-700">
-              <li><a th:href="@{/customerService/reportHistoryForCustomer}" class="block px-4 py-2 hover:bg-neutral-50">Report Form</a></li>
-              <li><a th:href="@{/order/order-list}" class="block px-4 py-2 hover:bg-neutral-50">Orders</a></li>
-              <li><a th:href="@{/profile/view}" class="block px-4 py-2 hover:bg-neutral-50">Settings</a></li>
+              <li><a th:href="@{/customerService/reportHistoryForCustomer}" class="block px-4 py-2 hover:bg-neutral-50">Report Issue</a></li>
+              <li><a th:href="@{/order/order-list}" class="block px-4 py-2 hover:bg-neutral-50">Đơn hàng</a></li>
+              <li><a th:href="@{/profile/view}" class="block px-4 py-2 hover:bg-neutral-50">Trang cá nhân </a></li>
             </ul>
             <div class="py-2 border-t border-neutral-100">
               <a th:href="@{/authority/logout}" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">Đăng xuất</a>
@@ -146,14 +146,14 @@
               <div class="text-neutral-500" th:text="${session.loggedInUser.getEmail()}">email@example.com</div>
             </div>
             <ul class="py-2 text-sm text-neutral-700">
-              <li><a th:href="@{/staff/sales-statistics}" class="block px-4 py-2 hover:bg-neutral-50">Dash-Board</a></li>
-              <li><a th:href="@{/staff/inventory-detail}" class="block px-4 py-2 hover:bg-neutral-50">Stock</a></li>
-              <li><a th:href="@{/customerService/reportViewForStaff}" class="block px-4 py-2 hover:bg-neutral-50">View Report</a></li>
-              <li><a th:href="@{/product}" class="block px-4 py-2 hover:bg-neutral-50">Product</a></li>
-              <li><a th:href="@{/product/import}" class="block px-4 py-2 hover:bg-neutral-50">Add product</a></li>
-              <li><a th:href="@{/suppliers}" class="block px-4 py-2 hover:bg-neutral-50">Supplier</a></li>
-              <li><a th:href="@{/staff/orders}" class="block px-4 py-2 hover:bg-neutral-50">Orders</a></li>
-              <li><a href="#" class="block px-4 py-2 hover:bg-neutral-50">Settings</a></li>
+              <li><a th:href="@{/staff/sales-statistics}" class="block px-4 py-2 hover:bg-neutral-50">Bảng điều khiển </a></li>
+              <li><a th:href="@{/staff/inventory-detail}" class="block px-4 py-2 hover:bg-neutral-50">Số lượng hàng </a></li>
+              <li><a th:href="@{/customerService/reportViewForStaff}" class="block px-4 py-2 hover:bg-neutral-50">Xem feedback</a></li>
+              <li><a th:href="@{/product}" class="block px-4 py-2 hover:bg-neutral-50">Sản phẩm</a></li>
+              <li><a th:href="@{/product/import}" class="block px-4 py-2 hover:bg-neutral-50">Thêm sản phẩm </a></li>
+              <li><a th:href="@{/suppliers}" class="block px-4 py-2 hover:bg-neutral-50">Nhà cung cấp</a></li>
+              <li><a th:href="@{/staff/orders}" class="block px-4 py-2 hover:bg-neutral-50">Đơn hàng</a></li>
+
             </ul>
             <div class="py-2 border-t border-neutral-100">
               <a th:href="@{/authority/logout}" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">Đăng xuất</a>

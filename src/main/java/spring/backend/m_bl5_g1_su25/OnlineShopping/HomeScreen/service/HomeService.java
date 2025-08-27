@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public interface HomeService {
     Optional<ProductResponse> findFirstByOrderByCreatedDateDesc();
-    Page<ProductResponse> findAllProduct(Pageable page);
+    Page<ProductResponse> findAllProduct(int page, int size, String sort);
     Page<ProductResponse> getRecentProducts(Pageable page);
     Page<ProductResponse> getProductsByCategory(Pageable page, String categories);
     Page<ProductResponse> getProductsByPriceDesc(Pageable page);

@@ -25,7 +25,7 @@ public class ReportResponse {
     @JoinColumn(name = "report_id", nullable = false)
     ReportForm reportForm;
 
-    @Column
+    @Column(columnDefinition = "NVARCHAR(1000)")
     String response;
 
     @ManyToOne

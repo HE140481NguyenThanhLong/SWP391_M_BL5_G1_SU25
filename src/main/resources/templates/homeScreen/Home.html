@@ -5,7 +5,7 @@
     <title>Smart Shop - Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="min-h-screen overflow-x-hidden bg-white-50 dark:bg-white-900">
+<body class="min-h-screen overflow-x-hidden bg-gray-100 ">
 
 <div th:replace="~{component/header::header}"></div>
 <div th:replace="~{homeScreen/Top-Seller::hotproduct}"></div>
@@ -18,7 +18,7 @@
     <!-- Favorite section -->
     <section th:if="${session.loggedInUser!=null}"
              class="relative py-6 px-4 rounded-xl mb-12 overflow-hidden border-2 border-gray-500 bg-white shadow-sm">
-        <!-- UX IMPROVED: stronger contrast blob, more subtle -->
+
         <div aria-hidden="true"
              class="pointer-events-none absolute inset-0 z-0 opacity-50
          [background:radial-gradient(40rem_40rem_at_10%_0%,rgba(99,102,241,0.06),transparent_70%),
@@ -96,14 +96,18 @@
 
                     <!-- Quick filter buttons -->
                     <div id="filter-accordion" class="space-y-2">
-                        <a th:href="@{/guest/getRecent}"
-                           class="block w-full text-center rounded-lg bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium hover:bg-indigo-50 hover:text-indigo-700">Newest</a>
-                        <a th:href="@{/guest/getLastest}"
-                           class="block w-full text-center rounded-lg bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium hover:bg-indigo-50 hover:text-indigo-700">Oldest</a>
-                        <a th:href="@{/guest/byPriceDesc}"
-                           class="block w-full text-center rounded-lg bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium hover:bg-indigo-50 hover:text-indigo-700">Price ↓</a>
-                        <a th:href="@{/guest/byPriceAsc}"
-                           class="block w-full text-center rounded-lg bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium hover:bg-indigo-50 hover:text-indigo-700">Price ↑</a>
+                        <a th:href="@{/guest(sort='createdAt,desc')}"
+                           th:classappend="${currentSort == 'createdAt,desc' ? 'active-class' : ''}"
+                           class="block w-full text-center rounded-lg bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium hover:bg-indigo-50 hover:text-indigo-700">Mới nhất</a>
+                        <a th:href="@{/guest(sort='createdAt,asc')}"
+                           th:classappend="${currentSort == 'createdAt,asc' ? 'active-class' : ''}"
+                           class="block w-full text-center rounded-lg bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium hover:bg-indigo-50 hover:text-indigo-700">Cũ nhất </a>
+                        <a th:href="@{/guest(sort='price,desc')}"
+                           th:classappend="${currentSort == 'price,desc' ? 'active-class' : ''}"
+                           class="block w-full text-center rounded-lg bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium hover:bg-indigo-50 hover:text-indigo-700">Giá ↓</a>
+                        <a th:href="@{/guest(sort='price,asc')}"
+                           th:classappend="${currentSort == 'price,asc' ? 'active-class' : ''}"
+                           class="block w-full text-center rounded-lg bg-gray-100 text-gray-700 px-4 py-2 text-sm font-medium hover:bg-indigo-50 hover:text-indigo-700">Giá ↑</a>
                     </div>
 
                     <!-- Submit -->
@@ -122,16 +126,18 @@
                     <article th:each="product : ${products}"
                              class="group relative overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
                         <div class="overflow-hidden">
+                            <a th:onclick="|window.location.href='/product/detailproduct/${product.product_id}'|">
                             <img th:src="${product.imageUrl}"
                                  src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop"
                                  alt="Wireless Headphones"
                                  class="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                  loading="lazy" />
+                            </a>
                         </div>
                         <div class="p-4">
                             <div class="mb-1 flex items-start justify-between gap-3">
                                 <h3 th:text="${product.name}" class="text-base font-semibold text-gray-900 truncate">Wireless Headphones</h3>
-                                <span th:text="${product.price}" class="shrink-0 rounded-md bg-indigo-50 px-2.5 py-1 text-sm font-medium text-indigo-700">$89.00</span>
+                                <span th:text="${#numbers.formatInteger(product.price, 0, 'COMMA')} + '₫'" class="shrink-0 rounded-md bg-indigo-50 px-2.5 py-1 text-sm font-medium text-indigo-700">$89.00</span>
                             </div>
                             <p th:text="${product.description}" class="text-sm text-gray-600 line-clamp-2">Noise-cancelling, 30h battery, ultra-soft cushions.</p>
 
@@ -164,7 +170,7 @@
     <div class="relative z-10 w-full max-w-xl overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-800">
         <!-- Click image to open product detail -->
         <section th:if="${latestProduct!=null}">
-            <a href="#" class="block">
+            <a  th:onclick="|window.location.href='/product/detailproduct/${latestProduct.product_id}'|" class="block">
 
                 <img th:src="${latestProduct.imageUrl}"
                      class="h-auto w-full object-cover" loading="lazy" />

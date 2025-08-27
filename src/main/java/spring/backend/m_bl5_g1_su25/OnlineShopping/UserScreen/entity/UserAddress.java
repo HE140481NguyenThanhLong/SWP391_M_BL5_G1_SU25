@@ -21,14 +21,14 @@ public class UserAddress {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String recipientName;
 
-    @Column
+    @Column(columnDefinition = "NVARCHAR(255)")
     private String phoneNumber;
 
     // Đây chính là phần "tổ dân phố", số nhà, tên đường
-    @Column(name = "street_address")
+    @Column(name = "street_address",columnDefinition = "NVARCHAR(255)")
     private String streetAddress;
 
     // Liên kết tới Phường/Xã cụ thể

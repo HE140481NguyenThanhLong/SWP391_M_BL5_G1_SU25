@@ -7,37 +7,37 @@
 </head>
 <body>
 <div th:replace="~{component/header::header}"/>
-<section class="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center px-4">
-    <div class="w-full max-w-2xl bg-white rounded-lg shadow-md p-8 dark:bg-gray-800">
+<section class="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+    <div class="w-full max-w-2xl bg-white rounded-lg shadow-md p-8 ">
         <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Submit a Report</h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Let us know what issue you're facing</p>
+            <h1 class="text-2xl font-bold text-gray-900 ">Submit a Report</h1>
+            <p class="text-sm text-gray-500 ">Let us know what issue you're facing</p>
         </div>
 
         <form th:action="@{/customerService/reportForm}" method="POST" th:object="${ReportFormRequest}" enctype="multipart/form-data" class="space-y-6">
             <!-- Title -->
             <div>
-                <label for="title" class="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Title</label>
+                <label for="title" class="block mb-1 text-sm font-medium text-gray-700 ">Title</label>
                 <input type="text" id="title" name="title" required
                        th:field="*{title}"
-                       class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                       class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                 <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
             </div>
 
             <!-- Description -->
             <div>
-                <label for="description" class="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Description</label>
+                <label for="description" class="block mb-1 text-sm font-medium text-gray-700">Description</label>
                 <textarea id="description" name="description" rows="4" required placeholder="Detailed explanation of the issue"
                           th:field="*{description}"
-                          class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+                          class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 "></textarea>
             </div>
 
             <!-- Issue Type (Dropdown) -->
             <div>
-                <label for="issueType" class="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Issue Type</label>
+                <label for="issueType" class="block mb-1 text-sm font-medium text-gray-700 ">Issue Type</label>
                 <select id="issueType" name="issueType"
                         th:field="*{issues}"
-                        class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                        class="w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 ">
                     <option value="" disabled selected>Select issue type</option>
                     <option
                        th:each="type: ${issueTypes}"
@@ -50,16 +50,16 @@
 
             <!-- Image Upload -->
             <div>
-                <label for="image" class="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-200">Upload Screenshot (optional)</label>
+                <label for="image" class="block mb-1 text-sm font-medium text-gray-700 ">Upload Screenshot (optional)</label>
                 <input type="file" id="image" name="image" accept="image/*"
 
-                       class="block w-full text-sm text-gray-900 bg-gray-50 rounded-md border border-gray-300 cursor-pointer focus:outline-none dark:text-gray-300 dark:bg-gray-700 dark:border-gray-600" />
+                       class="block w-full text-sm text-gray-900 bg-gray-50 rounded-md border border-gray-300 cursor-pointer focus:outline-none " />
             </div>
 
             <!-- Submit Button -->
             <div>
                 <button type="submit"
-                        class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                        class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ">
                     Submit Report
                 </button>
             </div>

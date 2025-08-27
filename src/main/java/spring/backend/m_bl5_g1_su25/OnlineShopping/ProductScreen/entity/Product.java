@@ -27,22 +27,22 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer product_id;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 255,columnDefinition = "NVARCHAR(255)")
     String name;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 255,columnDefinition = "NVARCHAR(255)")
     String description;
 
-    @Column(length = 300)
+    @Column(length = 255,columnDefinition = "NVARCHAR(255)")
     String instruc;
 
-    @Column(length = 300)
+    @Column(length = 255,columnDefinition = "NVARCHAR(255)")
     String feature;
 
-    @Column(length = 300)
+    @Column(length = 255,columnDefinition = "NVARCHAR(255)")
     String expiry;
 
-    @Column(length = 300)
+    @Column(length = 255,columnDefinition = "NVARCHAR(255)")
     String origin;
 
     @Column(nullable = false, precision = 18, scale = 2)
@@ -88,7 +88,7 @@ public class Product {
     @Column(nullable = false, precision = 18, scale = 2)
     BigDecimal salePrice;
 
-    @Column(length = 255)
+    @Column(length = 255,columnDefinition = "NVARCHAR(255)")
     String brand;
 
     double rating;

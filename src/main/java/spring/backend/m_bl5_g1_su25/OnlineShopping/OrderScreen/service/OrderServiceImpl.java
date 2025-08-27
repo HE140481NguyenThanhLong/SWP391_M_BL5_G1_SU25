@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Cart.repository.CartItemRepository;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.Cart.service.CartItemService;
 import spring.backend.m_bl5_g1_su25.OnlineShopping.OrderScreen.dto.OrderRequest;
@@ -69,6 +70,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
+    @Transactional
     public Integer checkout(OrderRequest request) {
         try {
 
@@ -82,7 +84,7 @@ public class OrderServiceImpl implements OrderService{
             Ward ward = wardRepository.findById(request.getWard())
                     .orElseThrow(() -> new RuntimeException("Ward not found"));
 
-            List<Cart_Items> cartItems = cartItemService.getCartByUser(2);
+            List<Cart_Items> cartItems = cartItemService.getCartByUser(1);
             if (cartItems.isEmpty()) {
                 throw new RuntimeException("Cart is empty!");
             }
@@ -153,6 +155,7 @@ public class OrderServiceImpl implements OrderService{
             return order.getOrder_id();
 
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
